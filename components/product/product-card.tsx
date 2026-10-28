@@ -1,42 +1,45 @@
-import Image from 'next/image'
 import { formatPrice } from '@/lib/format'
 import type { Product } from '@/lib/types'
-import { NavLink } from '../nav-link'
+import { NavLink } from '../nav-link';
+import Image from 'next/image'
 
-// const sizes = '(min-width: 1024px) 33vw, 50vw'
+//TODO: Can we make some of these images eager for above-the-fold loading?
 
-const sizes = ''
-/** eager: above-the-fold cards (likely LCP), otherwise lazy. */
-export function ProductCard({ product, eager }: { product: Product; eager?: boolean }) {
+// Mirrors gridClassName (2 cols, 3 at lg) inside max-w-6xl; keep in sync if the layout changes.
+const sizes = '(min-width: 1152px) 340px, (min-width: 1024px) 33vw, 50vw'
+
+export function ProductCard({ product }: { product: Product; eager?: boolean }) {
   return (
     <li>
-      <NavLink href={`/products/${product.slug}`} prefetch className="group relative block">
-        <div className="relative aspect-square overflow-hidden rounded-lg bg-foreground/5">
+      <NavLink href={`/products/${product.slug}`} prefetch className="surface-card group relative block overflow-hidden p-2.5">
+        <div className="relative aspect-square overflow-hidden rounded-[17px] bg-background">
           <Image
             src={product.images[0]}
             alt={product.name}
             fill
             sizes={sizes}
-            loading={eager ? 'eager' : undefined}
-            className="object-cover transition-transform group-hover:scale-105"
+            className="object-cover mix-blend-multiply transition-transform duration-500 group-hover:scale-105"
           />
         </div>
-        <h3 className="mt-3 line-clamp-2 min-h-10 text-sm font-medium">{product.name}</h3>
-        <p className="mt-1 h-5 text-sm text-foreground/70">{formatPrice(product.price)}</p>
+        <div className="px-2 pt-4 pb-2">
+          <h3 className="line-clamp-2 min-h-10 text-base leading-tight">{product.name}</h3>
+          <p className="mt-1 h-5 font-sans text-sm tracking-tight text-foreground/60">{formatPrice(product.price)}</p>
+        </div>
       </NavLink>
     </li>
   )
 }
 
-// Same file as ProductCard so the footprints stay in sync.
 export function ProductCardSkeleton() {
   return (
-    <li aria-hidden>
-      <div className="aspect-square animate-pulse rounded-lg bg-foreground/5" />
-      <div className="mt-3 min-h-10">
-        <div className="h-4 w-3/4 animate-pulse rounded bg-foreground/5" />
+    <li aria-hidden className="surface-card p-2.5">
+      <div className="aspect-square animate-pulse rounded-[17px] bg-background" />
+      <div className="px-2 pt-4 pb-2">
+        <div className="min-h-10">
+          <div className="h-4 w-3/4 animate-pulse rounded bg-background" />
+        </div>
+        <div className="mt-1 h-5 w-16 animate-pulse rounded bg-background" />
       </div>
-      <div className="mt-1 h-5 w-16 animate-pulse rounded bg-foreground/5" />
     </li>
   )
 }

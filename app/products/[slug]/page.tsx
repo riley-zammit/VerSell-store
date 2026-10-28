@@ -2,15 +2,13 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { DeliveryEstimate, DeliveryLine } from "@/components/product/delivery-estimate";
-import { PurchaseForm, StockLine } from "@/components/product/purchase-form";
-import { StockStatus } from "@/components/product/stock-status";
-import { getProduct, getProductsByCategory } from "@/lib/api";
-import { Category } from "@/lib/constants";
+import { Category, getProduct, getProductsByCategory } from "@/lib/api";
 import { formatPrice } from "@/lib/format";
 
-// Pretend-large catalog: prerender only the hottest categories. Everything else serves the
-// App Shell on its first visit, then ISR stores the concrete page.
+/* 
+    Mocking a large product catalog here; We don't want to generate a large number of static params at build time, 
+    so pick the three most visited categories. Everything else gets dynamically rendered
+*/
 export async function generateStaticParams() {
   const lists = await Promise.all([Category.Bottles, Category.Cups, Category.Mugs].map(getProductsByCategory));
   return lists.flat().map(({ slug }) => ({ slug }));
@@ -30,7 +28,7 @@ export async function generateMetadata({ params }: PageProps<"/products/[slug]">
   };
 }
 
-export default function ProductPage({ params }: PageProps<"/products/[slug]">) {
+export default function Page({ params }: PageProps<"/products/[slug]">) {
   // params is awaited inside Suspense so unknown slugs still get the generic App Shell.
   return (
     <Suspense fallback={<ProductSkeleton />}>
@@ -43,30 +41,19 @@ async function ProductDetails({ params }: Pick<PageProps<"/products/[slug]">, "p
   const { slug } = await params;
   const product = await getProduct(slug);
   if (!product) notFound();
-  const { id, name, price, images, description } = product;
+  const { name, price, images, description } = product;
 
   return (
     <article className="grid gap-8 md:grid-cols-2 md:gap-12">
-      <div className="relative aspect-square overflow-hidden rounded-2xl bg-foreground/5">
-        <Image src={images[0]} alt={name} fill preload sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" />
+      <div className="surface-card p-2.5">
+        <div className="relative aspect-square overflow-hidden rounded-[17px] bg-background">
+          <Image src={images[0]} alt={name} fill preload sizes="(min-width: 768px) 50vw, 100vw" className="object-cover mix-blend-multiply" />
+        </div>
       </div>
-      <div>
-        <h1 className="text-3xl font-semibold tracking-tight">{name}</h1>
-        <p className="mt-2 text-xl">{formatPrice(price)}</p>
-        <p className="mt-4 text-foreground/70">{description}</p>
-        <PurchaseForm
-          product={{ id, name, slug, price, images }}
-          stock={
-            <Suspense fallback={<StockLine />}>
-              <StockStatus slug={slug} />
-            </Suspense>
-          }
-          delivery={
-            <Suspense fallback={<DeliveryLine />}>
-              <DeliveryEstimate productId={id} />
-            </Suspense>
-          }
-        />
+      <div className="md:pt-6">
+        <h1 className="text-4xl md:text-5xl">{name}</h1>
+        <p className="mt-4 font-sans text-2xl font-bold tracking-tighter md:text-3xl">{formatPrice(price)}</p>
+        <p className="mt-6 text-lg text-foreground/70">{description}</p>
       </div>
     </article>
   );
@@ -75,11 +62,11 @@ async function ProductDetails({ params }: Pick<PageProps<"/products/[slug]">, "p
 function ProductSkeleton() {
   return (
     <div className="grid gap-8 md:grid-cols-2 md:gap-12" aria-busy>
-      <div className="aspect-square animate-pulse rounded-2xl bg-foreground/5" />
-      <div>
-        <div className="h-9 w-3/4 animate-pulse rounded bg-foreground/5" />
-        <div className="mt-2 h-7 w-20 animate-pulse rounded bg-foreground/5" />
-        <div className="mt-4 h-24 animate-pulse rounded bg-foreground/5" />
+      <div className="surface-card aspect-square animate-pulse" />
+      <div className="md:pt-6">
+        <div className="h-12 w-3/4 animate-pulse rounded-lg bg-foreground/5" />
+        <div className="mt-4 h-8 w-24 animate-pulse rounded-lg bg-foreground/5" />
+        <div className="mt-6 h-28 animate-pulse rounded-lg bg-foreground/5" />
       </div>
     </div>
   );

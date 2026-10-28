@@ -1,60 +1,80 @@
 @import "tailwindcss";
 
+/* Nomad-style: light grey page, white floating cards, bold tight headings, serif body. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f3f3f3;
+  --foreground: #000000;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
+  --font-serif: var(--font-aleo);
+  --shadow-card: 0 0 0 1px #0000000f, 0 1px 1px -0.5px #0000000f, 0 3px 3px -1.5px #0000000f,
+    0 6px 6px -3px #0000000f, 0 12px 12px -6px #0000000f, 0 24px 24px -12px #0000000f;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@utility surface-card {
+  background-color: #fff;
+  border-radius: 25px;
+  box-shadow: var(--shadow-card);
+}
+
+@utility button-dark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  padding: 0 1.5rem;
+  border-radius: 9999px;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: #fff;
+  background: #2f2f2f;
+  border: 1px solid #000;
+  box-shadow: inset 0 -10px 15px 1px #0e0e0e, inset 0 0 0 1px #676767;
+  &:disabled {
+    background: #adadad;
+    border-color: #adadad;
+    box-shadow: none;
+  }
+}
+
+@utility button-light {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  padding: 0 1.5rem;
+  border-radius: 9999px;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: #000;
+  background: linear-gradient(180deg, #fff 15%, #f1f1f1);
+  box-shadow: inset 0 10px 15px 2px #fff, var(--shadow-card);
+}
+
+@layer base {
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
   }
 }
 
 html {
-  scrollbar-gutter: stable; /* also covers the drawer's scroll lock: no page shift */
-}
-
-html:has(dialog[open]) {
-  overflow: hidden;
+  scrollbar-gutter: stable;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-}
-
-/* Cart drawer: CSS-only slide-in on the native <dialog> */
-.drawer {
-  translate: 100% 0;
-  transition: translate 200ms ease, overlay 200ms allow-discrete, display 200ms allow-discrete;
-}
-.drawer[open] {
-  translate: 0 0;
-}
-@starting-style {
-  .drawer[open] {
-    translate: 100% 0;
-  }
-}
-.drawer::backdrop {
-  background: rgb(0 0 0 / 0);
-  transition: background 200ms, overlay 200ms allow-discrete, display 200ms allow-discrete;
-}
-.drawer[open]::backdrop {
-  background: rgb(0 0 0 / 0.4);
-}
-@starting-style {
-  .drawer[open]::backdrop {
-    background: rgb(0 0 0 / 0);
-  }
 }
 
 /* NavLink pending hint: delayed so fast navigations never flash it */

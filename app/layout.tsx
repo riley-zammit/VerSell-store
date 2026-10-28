@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
-import { CartOps } from "@/components/cart/cart-ops";
-import { Footer } from "@/components/footer";
-import { Header } from "@/components/header";
-import { SITE_NAME } from "@/lib/constants";
+import { Aleo, Geist } from "next/font/google";
+import { Footer } from "@/components/layout/root/footer";
+import { Header } from "@/components/layout/root/header";
 import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const aleo = Aleo({
+  variable: "--font-aleo",
   subsets: ["latin"],
 });
 
@@ -19,21 +22,19 @@ export const metadata: Metadata = {
       ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
       : "http://localhost:3000",
   ),
-  title: { default: SITE_NAME, template: `%s | ${SITE_NAME}` },
+  title: { default: 'Versell', template: "%s | Versell" },
   description,
-  openGraph: { siteName: SITE_NAME, type: "website", locale: "en_US", description },
+  openGraph: { siteName: 'Versell', type: "website", locale: "en_US", description },
   twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
+    <html lang="en" className={`${geistSans.variable} ${aleo.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">
-        <CartOps>
-          <Header />
-          <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">{children}</main>
-          <Footer />
-        </CartOps>
+        <Header />
+        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 font-serif">{children}</main>
+        <Footer />
       </body>
     </html>
   );

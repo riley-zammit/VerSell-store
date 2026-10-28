@@ -3,7 +3,6 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useRef, useState, useTransition } from 'react'
 import type { CategoryInfo } from '@/lib/types'
-import { Spinner } from './notify-form'
 
 const toUrl = (q: string, category: string) => {
   const params = new URLSearchParams()
@@ -51,6 +50,10 @@ export function SearchForm({ categories }: { categories: CategoryInfo[] }) {
   )
 }
 
+const Spinner = () => (
+  <span aria-hidden className="block size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+)
+
 type FieldsProps = {
   categories: CategoryInfo[]
   q?: string
@@ -81,7 +84,7 @@ export function SearchFields({ categories, q, category, pending, disabled, onSub
         disabled={disabled}
         placeholder="Search products…"
         aria-label="Search products"
-        className="h-11 min-w-0 flex-1 rounded-full border border-foreground/20 bg-transparent px-4 disabled:opacity-60"
+        className="h-12 min-w-0 rounded-full bg-white px-5 shadow-card outline-none focus-visible:ring-2 focus-visible:ring-foreground disabled:opacity-60 flex-1"
       />
       <div className="flex gap-2">
         <select
@@ -90,7 +93,7 @@ export function SearchFields({ categories, q, category, pending, disabled, onSub
           onChange={onCategoryChange && ((e) => onCategoryChange(e.target.value))}
           disabled={disabled}
           aria-label="Category"
-          className="h-11 min-w-0 flex-1 rounded-full border border-foreground/20 bg-background px-4 disabled:opacity-60 sm:w-44"
+          className="h-12 min-w-0 rounded-full bg-white px-5 shadow-card outline-none focus-visible:ring-2 focus-visible:ring-foreground disabled:opacity-60 flex-1 sm:w-48"
         >
           <option value="">All categories</option>
           {categories.map((c) => (
@@ -101,7 +104,7 @@ export function SearchFields({ categories, q, category, pending, disabled, onSub
         </select>
         <button
           disabled={disabled}
-          className="flex h-11 items-center gap-2 rounded-full bg-foreground px-5 font-medium text-background disabled:opacity-60"
+          className="button-dark gap-2"
         >
           <span className="w-4">{pending && <Spinner />}</span>
           Search

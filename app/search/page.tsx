@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { gridClassName } from "@/components/product/product-grid";
 import { ProductCard, ProductCardSkeleton } from "@/components/product/product-card";
-import { ProductGrid } from "@/components/product/product-grid";
 import { SearchFields, SearchForm } from "@/components/search-form";
-import { getCategories, searchProducts } from "@/lib/api";
-import { SEARCH_LIMIT } from "@/lib/constants";
+import { getCategories, SEARCH_LIMIT, searchProducts } from "@/lib/api";
 
 export const metadata: Metadata = { title: "Search", openGraph: { title: "Search" } };
 
@@ -13,17 +12,18 @@ export default async function SearchPage({ searchParams }: PageProps<"/search">)
   const categories = await getCategories();
   return (
     <div className="group">
-      <h1 className="mb-6 text-3xl font-semibold tracking-tight">Search</h1>
+      <h1 className="mb-8 text-4xl md:text-5xl">Search</h1>
       {/* useSearchParams suspends on a hard load; the fallback is honestly disabled, since it isn't hydrated yet */}
       <Suspense fallback={<SearchFields categories={categories} disabled />}>
         <SearchForm categories={categories} />
       </Suspense>
       <div className="mt-8 transition-opacity group-has-[[data-pending]]:opacity-50">
-        <ProductGrid>
+        {/* <ul> stays outside Suspense so the grid never reflows */}
+        <ul className={gridClassName}>
           <Suspense fallback={<ResultsSkeleton />}>
             <SearchResults searchParams={searchParams} />
           </Suspense>
-        </ProductGrid>
+        </ul>
       </div>
     </div>
   );
