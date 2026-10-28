@@ -12,10 +12,8 @@ export default function HomePage() {
             <Hero />
             <section className="mt-16">
                 <h2 className="mb-8 text-4xl md:text-5xl">Featured</h2>
-                {/* TODO: PRobably don't need suspsense here - compare this with productrow below */}
-                <Suspense fallback={<RowSkeleton slots={3} />}>
-                    <ProductRow query="featured=true" slots={3} />
-                </Suspense>
+                {/*TODO: Confirm prerender */}
+                <ProductRow query="featured=true" slots={3} />
             </section>
             <section className="mt-16">
                 <h2 className="mb-8 text-4xl md:text-5xl">Mugs for the Holidays</h2>
