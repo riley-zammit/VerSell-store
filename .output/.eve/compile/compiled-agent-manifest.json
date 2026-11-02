@@ -1,0 +1,1029 @@
+{
+  "agentRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/agent",
+  "appRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store",
+  "bindings": {
+    "eve:defaults:sandbox.ts": {
+      "backing": {
+        "kind": "programmatic",
+        "moduleId": "sandbox.ts",
+        "registryId": "eve:defaults",
+        "revision": "eve@1.0.0-rc.1:compiled-manifest-v53",
+        "semanticRevision": "eve:default-sandbox:v1"
+      },
+      "logicalPath": "sandbox.ts",
+      "owner": {
+        "feature": "eve:defaults",
+        "kind": "framework"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": true
+      }
+    },
+    "eve:defaults:tools/bash.ts": {
+      "backing": {
+        "kind": "programmatic",
+        "moduleId": "tools/bash.ts",
+        "registryId": "eve:defaults",
+        "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+      },
+      "logicalPath": "tools/bash.ts",
+      "owner": {
+        "feature": "eve:defaults",
+        "kind": "framework"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": true
+      }
+    },
+    "eve:defaults:tools/read_file.ts": {
+      "backing": {
+        "kind": "programmatic",
+        "moduleId": "tools/read_file.ts",
+        "registryId": "eve:defaults",
+        "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+      },
+      "logicalPath": "tools/read_file.ts",
+      "owner": {
+        "feature": "eve:defaults",
+        "kind": "framework"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": true
+      }
+    },
+    "eve:defaults:tools/write_file.ts": {
+      "backing": {
+        "kind": "programmatic",
+        "moduleId": "tools/write_file.ts",
+        "registryId": "eve:defaults",
+        "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+      },
+      "logicalPath": "tools/write_file.ts",
+      "owner": {
+        "feature": "eve:defaults",
+        "kind": "framework"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": true
+      }
+    },
+    "eve:defaults:tools/web_fetch.ts": {
+      "backing": {
+        "kind": "programmatic",
+        "moduleId": "tools/web_fetch.ts",
+        "registryId": "eve:defaults",
+        "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+      },
+      "logicalPath": "tools/web_fetch.ts",
+      "owner": {
+        "feature": "eve:defaults",
+        "kind": "framework"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": true
+      }
+    },
+    "eve:defaults:tools/web_search.ts": {
+      "backing": {
+        "kind": "programmatic",
+        "moduleId": "tools/web_search.ts",
+        "registryId": "eve:defaults",
+        "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+      },
+      "logicalPath": "tools/web_search.ts",
+      "owner": {
+        "feature": "eve:defaults",
+        "kind": "framework"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": false
+      }
+    },
+    "eve:root-defaults:tools/agent.ts": {
+      "backing": {
+        "kind": "programmatic",
+        "moduleId": "tools/agent.ts",
+        "registryId": "eve:root-defaults",
+        "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+      },
+      "logicalPath": "tools/agent.ts",
+      "owner": {
+        "feature": "eve:root-defaults",
+        "kind": "framework"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": true
+      }
+    },
+    "eve:root-defaults:channels/home.ts": {
+      "backing": {
+        "kind": "programmatic",
+        "moduleId": "channels/home.ts",
+        "registryId": "eve:root-defaults",
+        "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+      },
+      "logicalPath": "channels/home.ts",
+      "owner": {
+        "feature": "eve:root-defaults",
+        "kind": "framework"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": true
+      }
+    },
+    "agent.ts": {
+      "backing": {
+        "externalDependencies": [],
+        "kind": "filesystem",
+        "sourcePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/agent/agent.ts"
+      },
+      "logicalPath": "agent.ts",
+      "owner": {
+        "kind": "application"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": true
+      }
+    },
+    "channels/eve.ts": {
+      "backing": {
+        "externalDependencies": [],
+        "kind": "filesystem",
+        "sourcePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/agent/channels/eve.ts"
+      },
+      "logicalPath": "channels/eve.ts",
+      "owner": {
+        "kind": "application"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": true
+      }
+    }
+  },
+  "channelRoutes": {
+    "effective": [
+      {
+        "kind": "channel",
+        "name": "home",
+        "logicalPath": "channels/home.ts",
+        "method": "GET",
+        "urlPath": "/",
+        "sourceId": "eve:root-defaults:channels/home.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "home",
+        "logicalPath": "channels/home.ts",
+        "method": "HEAD",
+        "urlPath": "/",
+        "sourceId": "eve:root-defaults:channels/home.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "GET",
+        "urlPath": "/eve/v1/health",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "HEAD",
+        "urlPath": "/eve/v1/health",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "GET",
+        "urlPath": "/eve/v1/info",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "GET",
+        "urlPath": "/eve/v1/connections/:name/callback/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/connections/:name/callback/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "GET",
+        "urlPath": "/eve/v1/connections/:name/callback/:attemptId/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/connections/:name/callback/:attemptId/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/callback/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "GET",
+        "urlPath": "/.well-known/workflow/v1/webhook/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/.well-known/workflow/v1/webhook/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "PUT",
+        "urlPath": "/.well-known/workflow/v1/webhook/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "PATCH",
+        "urlPath": "/.well-known/workflow/v1/webhook/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "DELETE",
+        "urlPath": "/.well-known/workflow/v1/webhook/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/session",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/session/:sessionId",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/session/:sessionId/cancel",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/session/:sessionId/compact",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/session/:sessionId/clear",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/session/:sessionId/end",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/session/:sessionId/reset",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "GET",
+        "urlPath": "/eve/v1/session/:sessionId/stubs",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "GET",
+        "urlPath": "/eve/v1/session/:sessionId/stream",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "GET",
+        "urlPath": "/eve/v1/session/:sessionId/descendants/stream",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "GET",
+        "urlPath": "/eve/v1/session/:parentSessionId/subagents/:callId/:childSessionId/stream",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      }
+    ],
+    "preflight": [],
+    "shadowed": []
+  },
+  "connections": [],
+  "dynamicConnections": [],
+  "diagnosticsSummary": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "sourceComposition": {
+    "entries": [
+      {
+        "kind": "shadowed",
+        "source": {
+          "backing": {
+            "kind": "programmatic",
+            "moduleId": "agent.ts",
+            "registryId": "eve:defaults",
+            "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+          },
+          "form": "direct",
+          "layer": "framework-default",
+          "logicalPath": "agent.ts",
+          "owner": {
+            "feature": "eve:defaults",
+            "kind": "framework"
+          },
+          "sourceId": "eve:defaults:agent.ts"
+        },
+        "winnerSourceId": "agent.ts"
+      },
+      {
+        "kind": "shadowed",
+        "source": {
+          "backing": {
+            "kind": "programmatic",
+            "moduleId": "channels/eve.ts",
+            "registryId": "eve:root-defaults",
+            "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+          },
+          "form": "direct",
+          "layer": "framework-default",
+          "logicalPath": "channels/eve.ts",
+          "owner": {
+            "feature": "eve:root-defaults",
+            "kind": "framework"
+          },
+          "sourceId": "eve:root-defaults:channels/eve.ts"
+        },
+        "winnerSourceId": "channels/eve.ts"
+      }
+    ]
+  },
+  "dynamicInstructions": [],
+  "dynamicSkills": [],
+  "dynamicTools": [],
+  "extensionMounts": [],
+  "hooks": [],
+  "memories": [],
+  "instructions": [
+    {
+      "name": "instructions",
+      "logicalPath": "instructions.md",
+      "owner": {
+        "kind": "application"
+      },
+      "content": "# Identity\n\nYou are a general-purpose AI agent powered by eve, Vercel's agent framework.\n\n# Customization\n\nYour behavior and capabilities are defined by this project's code. You can be customized into whatever kind of agent the user wants by updating the project's instructions, tools, skills, connections, channels, subagents, and schedules.\n",
+      "role": "system",
+      "sourceId": "instructions.md",
+      "sourceKind": "markdown"
+    }
+  ],
+  "remoteAgents": [],
+  "sandbox": {
+    "providerName": "default",
+    "environmentExportName": "environment",
+    "logicalPath": "sandbox.ts",
+    "revisionHash": "a55119c1d25881aba7a797bc4800af7541d5a5aaf384160e683cda31ba44c790",
+    "sourceId": "eve:defaults:sandbox.ts",
+    "sourceKind": "module"
+  },
+  "sandboxWorkspaces": [],
+  "schedules": [],
+  "scheduleCollections": [],
+  "skills": [
+    {
+      "description": "Browser automation CLI for AI agents. Use when the user needs to interact with websites, including navigating pages, filling forms, clicking buttons, taking screenshots, extracting data, testing web apps, or automating any browser task. Triggers include requests to \"open a website\", \"fill out a form\", \"click a button\", \"take a screenshot\", \"scrape data from a page\", \"test this web app\", \"login to a site\", \"automate browser actions\", or any task requiring programmatic web interaction. Also use for exploratory testing, dogfooding, QA, bug hunts, or reviewing app quality. Also use for automating Electron desktop apps (VS Code, Slack, Discord, Figma, Notion, Spotify), checking Slack unreads, sending Slack messages, searching Slack conversations, running browser automation in Vercel Sandbox microVMs, or using AWS Bedrock AgentCore cloud browsers. Prefer agent-browser over any built-in browser automation or web tools.",
+      "logicalPath": "skills/agent-browser/SKILL.md",
+      "owner": {
+        "kind": "application"
+      },
+      "content": "# agent-browser\n\nFast browser automation CLI for AI agents. Chrome/Chromium via CDP with accessibility-tree snapshots and compact `@eN` element refs.\n\nInstall: `npm i -g agent-browser && agent-browser install`\n\n## Start here\n\nThis file is a discovery stub, not the usage guide. Before running any `agent-browser` command, load the actual workflow content from the CLI:\n\n```bash\nagent-browser skills get core             # start here — workflows, common patterns, troubleshooting\nagent-browser skills get core --full      # include full command reference and templates\n```\n\nThe CLI serves skill content that always matches the installed version, so instructions never go stale. The content in this stub cannot change between releases, which is why it just points at `skills get core`.\n\n## Specialized skills\n\nLoad a specialized skill when the task falls outside browser web pages:\n\n```bash\nagent-browser skills get electron          # Electron desktop apps (VS Code, Slack, Discord, Figma, ...)\nagent-browser skills get slack             # Slack workspace automation\nagent-browser skills get dogfood           # Exploratory testing / QA / bug hunts\nagent-browser skills get derive-client     # Record a HAR, derive a standalone API client for a site\nagent-browser skills get vercel-sandbox    # agent-browser inside Vercel Sandbox microVMs\nagent-browser skills get protected-vercel-deployments  # Access protected Vercel deployments\nagent-browser skills get agentcore         # AWS Bedrock AgentCore cloud browsers\n```\n\nRun `agent-browser skills list` to see everything available on the installed version.\n\n## Why agent-browser\n\n- Fast native Rust CLI, not a Node.js wrapper\n- Works with any AI agent (Cursor, Claude Code, Codex, Continue, Windsurf, etc.)\n- Chrome/Chromium via CDP with no Playwright or Puppeteer dependency\n- Accessibility-tree snapshots with element refs for reliable interaction\n- Sessions, authentication vault, state persistence, video recording\n- Specialized skills for Electron apps, Slack, exploratory testing, cloud providers\n\n## Observability Dashboard\n\nThe dashboard runs independently of browser sessions on port 4848 and can also be opened through a proxied or forwarded URL such as `https://dashboard.agent-browser.localhost`. Agents should stay on the dashboard origin: session tabs, status, and stream traffic are proxied internally, so session ports do not need to be exposed.\n",
+      "name": "agent-browser",
+      "rootPath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/agent/skills/agent-browser",
+      "skillId": "agent-browser",
+      "skillFilePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/agent/skills/agent-browser/SKILL.md",
+      "sourceId": "skills/agent-browser/SKILL.md",
+      "sourceKind": "skill-package"
+    }
+  ],
+  "tools": [
+    {
+      "behavior": {
+        "availability": [],
+        "shape": {
+          "suspend": "none"
+        }
+      },
+      "description": "Execute a shell command in the shared workspace environment. A command still running after 30 seconds keeps running in the background and returns status \"running\" with its output so far and how to check on or stop it.",
+      "hasExecute": true,
+      "hasModelOutputProjection": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "The shell command to execute."
+          }
+        },
+        "required": [
+          "command"
+        ],
+        "additionalProperties": false
+      },
+      "logicalPath": "tools/bash.ts",
+      "modelInputSchema": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "The shell command to execute."
+          }
+        },
+        "required": [
+          "command"
+        ],
+        "additionalProperties": false
+      },
+      "name": "bash",
+      "outputSchema": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "status": {
+                "const": "completed"
+              },
+              "exitCode": {
+                "type": "number"
+              },
+              "stderr": {
+                "type": "string"
+              },
+              "stdout": {
+                "type": "string"
+              },
+              "truncated": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "status",
+              "exitCode",
+              "stderr",
+              "stdout",
+              "truncated"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "status": {
+                "const": "running"
+              },
+              "pid": {
+                "type": "number"
+              },
+              "outputDirectory": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "stderr": {
+                "type": "string"
+              },
+              "stdout": {
+                "type": "string"
+              },
+              "truncated": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "status",
+              "pid",
+              "outputDirectory",
+              "message",
+              "stderr",
+              "stdout",
+              "truncated"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "requiresApproval": false,
+      "sourceId": "eve:defaults:tools/bash.ts",
+      "sourceKind": "module"
+    },
+    {
+      "behavior": {
+        "availability": [],
+        "shape": {
+          "suspend": "none"
+        }
+      },
+      "description": "Read a file from the local filesystem. If the path does not exist, an error is returned.\n\nUsage:\n- The filePath parameter is an absolute path, a path relative to the workspace root (where `bash` commands start), or a path beginning with $HOME/.\n- By default, this tool returns up to 2000 lines from the start of the file.\n- The offset parameter is the line number to start from (1-indexed).\n- To read later sections, call this tool again with a larger offset.\n- Contents are returned with each line prefixed by its line number as `<line>: <content>`. For example, if a file has contents \"foo\\n\", you will receive \"1: foo\\n\".\n- Any line longer than 2000 characters is truncated.\n- PNG, JPEG, GIF, and WebP images up to 3 MiB and PDFs up to 20 MiB are shown to you as files, including files named in `Attached file <path>` references.\n- Call this tool in parallel when you know there are multiple files you want to read.\n- Avoid tiny repeated slices (30 line chunks). If you need more context, read a larger window.",
+      "hasExecute": true,
+      "hasModelOutputProjection": true,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filePath": {
+            "type": "string",
+            "description": "The path to the file to read: absolute, relative to the workspace root, or beginning with $HOME/."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum number of lines to return. Defaults to 2000."
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "1-based line number to start from. Defaults to 1."
+          }
+        },
+        "required": [
+          "filePath"
+        ],
+        "additionalProperties": false
+      },
+      "logicalPath": "tools/read_file.ts",
+      "modelInputSchema": {
+        "type": "object",
+        "properties": {
+          "filePath": {
+            "type": "string",
+            "description": "The path to the file to read: absolute, relative to the workspace root, or beginning with $HOME/."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum number of lines to return. Defaults to 2000."
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "1-based line number to start from. Defaults to 1."
+          }
+        },
+        "required": [
+          "filePath"
+        ],
+        "additionalProperties": false
+      },
+      "name": "read_file",
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "file": {
+            "type": "object",
+            "properties": {
+              "height": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "mediaType": {
+                "type": "string"
+              },
+              "pages": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "size": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "width": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "mediaType",
+              "size"
+            ],
+            "additionalProperties": false
+          },
+          "nextOffset": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "path": {
+            "type": "string"
+          },
+          "totalLines": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "truncated": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "content",
+          "path",
+          "totalLines",
+          "truncated"
+        ],
+        "additionalProperties": false
+      },
+      "requiresApproval": false,
+      "sourceId": "eve:defaults:tools/read_file.ts",
+      "sourceKind": "module"
+    },
+    {
+      "behavior": {
+        "availability": [],
+        "shape": {
+          "suspend": "none"
+        }
+      },
+      "description": "Writes a file to the local filesystem.\n\nUsage:\n- This tool will overwrite the existing file if there is one at the provided path.\n- If this is an existing file, you MUST use the read_file tool first to read the file's contents. This tool will fail if you did not read the file first.\n- ALWAYS prefer editing existing files in the codebase. NEVER write new files unless explicitly required.\n- NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.\n- Only use emojis if the user explicitly requests it. Avoid writing emojis to files unless asked.",
+      "hasExecute": true,
+      "hasModelOutputProjection": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Complete replacement file contents."
+          },
+          "filePath": {
+            "type": "string",
+            "description": "The path to the file to write: absolute, relative to the workspace root, or beginning with $HOME/."
+          }
+        },
+        "required": [
+          "content",
+          "filePath"
+        ],
+        "additionalProperties": false
+      },
+      "logicalPath": "tools/write_file.ts",
+      "modelInputSchema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Complete replacement file contents."
+          },
+          "filePath": {
+            "type": "string",
+            "description": "The path to the file to write: absolute, relative to the workspace root, or beginning with $HOME/."
+          }
+        },
+        "required": [
+          "content",
+          "filePath"
+        ],
+        "additionalProperties": false
+      },
+      "name": "write_file",
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "existed": {
+            "type": "boolean"
+          },
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "existed",
+          "path"
+        ],
+        "additionalProperties": false
+      },
+      "requiresApproval": false,
+      "sourceId": "eve:defaults:tools/write_file.ts",
+      "sourceKind": "module"
+    },
+    {
+      "behavior": {
+        "availability": [],
+        "shape": {
+          "suspend": "none"
+        }
+      },
+      "description": "Fetch a webpage and return its content in the requested format. Use this to retrieve and analyze content from URLs.\n\nUsage notes:\n- The URL must be a fully-formed valid URL starting with https://\n- HTML responses are automatically converted to markdown or plain text based on the requested format\n- Format options: \"markdown\" (default), \"text\", or \"html\"\n- Default timeout is 30 seconds (max 120 seconds)\n- Maximum response size is 5 MB; content is further capped at the shared tool-output budget (50 KB / 2000 lines)\n- This tool is read-only and does not modify any files",
+      "hasExecute": true,
+      "hasModelOutputProjection": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "format": {
+            "type": "string",
+            "enum": [
+              "markdown",
+              "text",
+              "html"
+            ],
+            "description": "The format to return the content in (text, markdown, or html). HTML responses are automatically converted to the requested format. Defaults to \"markdown\"."
+          },
+          "timeout": {
+            "type": "number",
+            "description": "Optional timeout in seconds, greater than 0. Defaults to 30, max 120."
+          },
+          "url": {
+            "type": "string",
+            "description": "The fully-formed URL to fetch content from. Must start with https://."
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "additionalProperties": false
+      },
+      "logicalPath": "tools/web_fetch.ts",
+      "modelInputSchema": {
+        "type": "object",
+        "properties": {
+          "format": {
+            "type": "string",
+            "enum": [
+              "markdown",
+              "text",
+              "html"
+            ],
+            "description": "The format to return the content in (text, markdown, or html). HTML responses are automatically converted to the requested format. Defaults to \"markdown\"."
+          },
+          "timeout": {
+            "type": "number",
+            "description": "Optional timeout in seconds, greater than 0. Defaults to 30, max 120."
+          },
+          "url": {
+            "type": "string",
+            "description": "The fully-formed URL to fetch content from. Must start with https://."
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "additionalProperties": false
+      },
+      "name": "web_fetch",
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "truncated": {
+            "type": "boolean"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "content",
+          "contentType",
+          "truncated",
+          "url"
+        ],
+        "additionalProperties": false
+      },
+      "requiresApproval": false,
+      "sourceId": "eve:defaults:tools/web_fetch.ts",
+      "sourceKind": "module"
+    },
+    {
+      "behavior": {
+        "availability": [],
+        "handling": {
+          "kind": "provider-tool",
+          "provider": "exa"
+        }
+      },
+      "description": "Search the web for real-time information. Use this to find up-to-date information about current events, recent developments, or topics that may have changed since the knowledge cutoff.",
+      "hasExecute": false,
+      "hasModelOutputProjection": false,
+      "inputSchema": null,
+      "logicalPath": "tools/web_search.ts",
+      "name": "web_search",
+      "sourceId": "eve:defaults:tools/web_search.ts",
+      "sourceKind": "module",
+      "requiresApproval": false
+    },
+    {
+      "behavior": {
+        "availability": [
+          "root-session"
+        ],
+        "handling": {
+          "action": "self-agent",
+          "kind": "dispatch"
+        },
+        "shape": {
+          "suspend": "none"
+        }
+      },
+      "description": "Delegate a focused subtask to a copy of yourself. Use it to isolate complex work or split a large task into independent pieces. Each call starts a task, so several agents can work at once: start every independent one before you wait. A new child has fresh history and state but reuses your tools and sandbox, so give parallel writers non-overlapping scopes. In message, state the goal, what to return, and whether it may change files.",
+      "hasExecute": true,
+      "hasModelOutputProjection": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "The message to send to the agent, with everything it needs to do the work."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "additionalProperties": false
+      },
+      "logicalPath": "tools/agent.ts",
+      "modelInputSchema": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "The message to send to the agent, with everything it needs to do the work."
+          },
+          "taskId": {
+            "description": "The id of a task this tool started, copied from its \"Started task\" receipt or the [Tasks] note, to send it this input. Omit it to start a new task.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "additionalProperties": false
+      },
+      "name": "agent",
+      "requiresApproval": false,
+      "sourceId": "eve:root-defaults:tools/agent.ts",
+      "sourceKind": "module"
+    }
+  ],
+  "workspaceResourceRoot": {
+    "contentHash": "235f9f157fe89fee3ba28627a0417a8e37a9ceac9359e0f09bca3cab97c4bf16",
+    "logicalPath": "workspace-resources/__root__",
+    "rootEntries": []
+  },
+  "config": {
+    "compaction": {},
+    "name": "versell",
+    "reasoning": "high",
+    "source": {
+      "logicalPath": "agent.ts",
+      "sourceId": "agent.ts",
+      "sourceKind": "module"
+    },
+    "model": {
+      "id": "openai/gpt-6.1-terra",
+      "routing": {
+        "kind": "external",
+        "provider": "openai"
+      },
+      "contextWindowTokens": 1050000,
+      "source": {
+        "sourceKind": "module",
+        "logicalPath": "agent.ts",
+        "sourceId": "agent.ts"
+      }
+    }
+  },
+  "kind": "eve-agent-compiled-manifest",
+  "subagents": [],
+  "version": 55
+}

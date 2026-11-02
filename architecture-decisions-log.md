@@ -1,6 +1,5 @@
 # Principles
 - Optimistic UI
-- Progressive enhancement (full-page cart fallback + form)
 
 # Assumptions
 - Product names can change
@@ -15,10 +14,11 @@
 - Keep productRow as generic instead of wrapping it in CategoryRow or FeaturedRow.
 
 ## Cart
-- Soft navigation to `/cart` is intercepted into a drawer. A hard load, or a submit with JavaScript off, renders the full page. That page blocks on the cart so the lines are in the HTML, because a Suspense hole is revealed by a script. The `@cart` default and catch-all also set `instant` to false. An unconfigured page segment counts as instant, and that rejects the blocking fetch.
-- Two httpOnly cookies: the API cart token, and the item count. The count paints the header badge without `GET /cart`. Line items stay on the API.
-- Add, quantity, and remove are forms. Checkout is an inert button, disabled until the cart on screen is the API response.
+- Soft navigation to `/cart` is intercepted into a drawer. A hard load renders the full page, with the cart streamed behind a focused Suspense fallback.
+- Keep only the API cart token in an httpOnly cookie. The header streams the numeric badge from `GET /cart` and shows the plain cart icon while it resolves.
+- Cart mutations are client-handled controls that call validated Server Actions. Checkout is an inert button, disabled until the cart on screen is the API response.
 - The add POST waits until the drawer is open. The navigation and the action share one router queue, so sending the POST in the click holds the drawer until the response. 
+- The cart requires JavaScript. Products come from an API and use Suspense, so optimize the flow for the vast majority of users with JavaScript rather than keep a parallel no-JS path.
 
 ## Agent
 ### Ideas

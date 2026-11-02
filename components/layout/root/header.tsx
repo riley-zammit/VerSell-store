@@ -1,10 +1,10 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
-import { CartBadge, CartLinkSkeleton } from '@/components/cart/cart'
+import { CartBadge } from '@/components/cart/cart-parts'
 import { NavLink } from '@/components/nav-link'
 import { PromoBanner } from '@/components/promo-banner'
 import { ScrollHeader } from '@/components/layout/root/scroll-header'
-import { getCartCount } from '@/lib/cart'
+import { getCart } from '@/lib/cart'
 
 const linkClass = 'relative rounded px-2 py-1 text-sm hover:bg-foreground/5'
 
@@ -29,8 +29,7 @@ export function Header() {
                     <NavLink href="/chat" prefetch className={linkClass}>
                         Chat
                     </NavLink>
-                    {/* Count cookie only, so the badge does not wait on GET /cart. */}
-                    <Suspense fallback={<CartLinkSkeleton />}>
+                    <Suspense fallback={<CartBadge />}>
                         <CartCount />
                     </Suspense>
                 </nav>
@@ -40,5 +39,5 @@ export function Header() {
 }
 
 async function CartCount() {
-    return <CartBadge count={await getCartCount()} />
+    return <CartBadge count={(await getCart())?.totalItems} />
 }

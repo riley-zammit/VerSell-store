@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Aleo, Geist } from "next/font/google";
-import { CartProvider } from "@/components/cart/cart";
+import { CartProvider } from "@/components/cart/cart-provider";
 import { Footer } from "@/components/layout/root/footer";
 import { Header } from "@/components/layout/root/header";
 import "./globals.css";

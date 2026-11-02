@@ -1,0 +1,13 @@
+{
+  "entries": [
+    {
+      "artifact": {
+        "provider": null
+      },
+      "nodeId": "__root__",
+      "providerName": "default"
+    }
+  ],
+  "kind": "eve-sandbox-prepared-artifacts",
+  "version": 2
+}

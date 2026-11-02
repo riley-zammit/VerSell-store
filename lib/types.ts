@@ -38,11 +38,6 @@ export type ApiResponse<T> =
   | { success: true; data: T; meta?: { pagination: Pagination } } // meta: list endpoints only
   | { success: false; error: { code?: string; message: string } }
 
-export enum CartField {
-  ProductId = 'productId',
-  Quantity = 'quantity',
-}
-
 export type CartItem = {
   productId: string
   quantity: number

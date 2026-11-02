@@ -1,0 +1,277 @@
+{
+  "kind": "vercel-eve-agent-summary",
+  "schemaVersion": 5,
+  "generatorVersion": "1.0.0-rc.1",
+  "agent": {
+    "name": "versell",
+    "modelId": "openai/gpt-6.1-terra"
+  },
+  "instructions": [
+    {
+      "content": "# Identity\n\nYou are a general-purpose AI agent powered by eve, Vercel's agent framework.\n\n# Customization\n\nYour behavior and capabilities are defined by this project's code. You can be customized into whatever kind of agent the user wants by updating the project's instructions, tools, skills, connections, channels, subagents, and schedules.\n",
+      "logicalPath": "instructions.md",
+      "role": "system",
+      "sourceKind": "markdown"
+    }
+  ],
+  "schedules": [],
+  "tools": [
+    {
+      "name": "bash",
+      "description": "Execute a shell command in the shared workspace environment. A command still running after 30 seconds keeps running in the background and returns status \"running\" with its output so far and how to check on or stop it.",
+      "logicalPath": "tools/bash.ts"
+    },
+    {
+      "name": "read_file",
+      "description": "Read a file from the local filesystem. If the path does not exist, an error is returned.\n\nUsage:\n- The filePath parameter is an absolute path, a path relative to the workspace root (where `bash` commands start), or a path beginning with $HOME/.\n- By default, this tool returns up to 2000 lines from the start of the file.\n- The offset parameter is the line number to start from (1-indexed).\n- To read later sections, call this tool again with a larger offset.\n- Contents are returned with each line prefixed by its line number as `<line>: <content>`. For example, if a file has contents \"foo\\n\", you will receive \"1: foo\\n\".\n- Any line longer than 2000 characters is truncated.\n- PNG, JPEG, GIF, and WebP images up to 3 MiB and PDFs up to 20 MiB are shown to you as files, including files named in `Attached file <path>` references.\n- Call this tool in parallel when you know there are multiple files you want to read.\n- Avoid tiny repeated slices (30 line chunks). If you need more context, read a larger window.",
+      "logicalPath": "tools/read_file.ts"
+    },
+    {
+      "name": "write_file",
+      "description": "Writes a file to the local filesystem.\n\nUsage:\n- This tool will overwrite the existing file if there is one at the provided path.\n- If this is an existing file, you MUST use the read_file tool first to read the file's contents. This tool will fail if you did not read the file first.\n- ALWAYS prefer editing existing files in the codebase. NEVER write new files unless explicitly required.\n- NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.\n- Only use emojis if the user explicitly requests it. Avoid writing emojis to files unless asked.",
+      "logicalPath": "tools/write_file.ts"
+    },
+    {
+      "name": "web_fetch",
+      "description": "Fetch a webpage and return its content in the requested format. Use this to retrieve and analyze content from URLs.\n\nUsage notes:\n- The URL must be a fully-formed valid URL starting with https://\n- HTML responses are automatically converted to markdown or plain text based on the requested format\n- Format options: \"markdown\" (default), \"text\", or \"html\"\n- Default timeout is 30 seconds (max 120 seconds)\n- Maximum response size is 5 MB; content is further capped at the shared tool-output budget (50 KB / 2000 lines)\n- This tool is read-only and does not modify any files",
+      "logicalPath": "tools/web_fetch.ts"
+    },
+    {
+      "name": "web_search",
+      "description": "Search the web for real-time information. Use this to find up-to-date information about current events, recent developments, or topics that may have changed since the knowledge cutoff.",
+      "logicalPath": "tools/web_search.ts"
+    },
+    {
+      "name": "agent",
+      "description": "Delegate a focused subtask to a copy of yourself. Use it to isolate complex work or split a large task into independent pieces. Each call starts a task, so several agents can work at once: start every independent one before you wait. A new child has fresh history and state but reuses your tools and sandbox, so give parallel writers non-overlapping scopes. In message, state the goal, what to return, and whether it may change files.",
+      "logicalPath": "tools/agent.ts"
+    }
+  ],
+  "skills": [
+    {
+      "name": "agent-browser",
+      "description": "Browser automation CLI for AI agents. Use when the user needs to interact with websites, including navigating pages, filling forms, clicking buttons, taking screenshots, extracting data, testing web apps, or automating any browser task. Triggers include requests to \"open a website\", \"fill out a form\", \"click a button\", \"take a screenshot\", \"scrape data from a page\", \"test this web app\", \"login to a site\", \"automate browser actions\", or any task requiring programmatic web interaction. Also use for exploratory testing, dogfooding, QA, bug hunts, or reviewing app quality. Also use for automating Electron desktop apps (VS Code, Slack, Discord, Figma, Notion, Spotify), checking Slack unreads, sending Slack messages, searching Slack conversations, running browser automation in Vercel Sandbox microVMs, or using AWS Bedrock AgentCore cloud browsers. Prefer agent-browser over any built-in browser automation or web tools.",
+      "logicalPath": "skills/agent-browser/SKILL.md",
+      "sourceKind": "skill-package"
+    }
+  ],
+  "connections": [],
+  "channels": [
+    {
+      "name": "home",
+      "method": "GET",
+      "urlPath": "/",
+      "type": "http",
+      "logicalPath": "channels/home.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "home",
+      "method": "HEAD",
+      "urlPath": "/",
+      "type": "http",
+      "logicalPath": "channels/home.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "GET",
+      "urlPath": "/eve/v1/health",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "HEAD",
+      "urlPath": "/eve/v1/health",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "GET",
+      "urlPath": "/eve/v1/info",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "GET",
+      "urlPath": "/eve/v1/connections/:name/callback/:token",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "POST",
+      "urlPath": "/eve/v1/connections/:name/callback/:token",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "GET",
+      "urlPath": "/eve/v1/connections/:name/callback/:attemptId/:token",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "POST",
+      "urlPath": "/eve/v1/connections/:name/callback/:attemptId/:token",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "POST",
+      "urlPath": "/eve/v1/callback/:token",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "GET",
+      "urlPath": "/.well-known/workflow/v1/webhook/:token",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "POST",
+      "urlPath": "/.well-known/workflow/v1/webhook/:token",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "PUT",
+      "urlPath": "/.well-known/workflow/v1/webhook/:token",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "PATCH",
+      "urlPath": "/.well-known/workflow/v1/webhook/:token",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "DELETE",
+      "urlPath": "/.well-known/workflow/v1/webhook/:token",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "POST",
+      "urlPath": "/eve/v1/session",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "POST",
+      "urlPath": "/eve/v1/session/:sessionId",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "POST",
+      "urlPath": "/eve/v1/session/:sessionId/cancel",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "POST",
+      "urlPath": "/eve/v1/session/:sessionId/compact",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "POST",
+      "urlPath": "/eve/v1/session/:sessionId/clear",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "POST",
+      "urlPath": "/eve/v1/session/:sessionId/end",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "POST",
+      "urlPath": "/eve/v1/session/:sessionId/reset",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "GET",
+      "urlPath": "/eve/v1/session/:sessionId/stubs",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "GET",
+      "urlPath": "/eve/v1/session/:sessionId/stream",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "GET",
+      "urlPath": "/eve/v1/session/:sessionId/descendants/stream",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    },
+    {
+      "name": "eve",
+      "method": "GET",
+      "urlPath": "/eve/v1/session/:parentSessionId/subagents/:callId/:childSessionId/stream",
+      "type": "http",
+      "logicalPath": "channels/eve.ts",
+      "adapterKind": "http"
+    }
+  ],
+  "sandbox": {
+    "logicalPath": "sandbox.ts"
+  },
+  "subagents": [],
+  "diagnostics": {
+    "errors": 0,
+    "warnings": 0
+  }
+}

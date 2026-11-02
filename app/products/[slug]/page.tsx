@@ -1,8 +1,7 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { AddToCartForm } from "@/components/cart/cart";
+import { AddToCartForm } from "@/components/cart/add-to-cart-form";
 import { Category, getProduct, getProductsByCategory } from "@/lib/api";
 import { formatPrice } from "@/lib/format";
 
@@ -13,20 +12,6 @@ import { formatPrice } from "@/lib/format";
 export async function generateStaticParams() {
   const lists = await Promise.all([Category.Bottles, Category.Cups, Category.Mugs].map(getProductsByCategory));
   return lists.flat().map(({ slug }) => ({ slug }));
-}
-
-export async function generateMetadata({ params }: PageProps<"/products/[slug]">): Promise<Metadata> {
-  const product = await getProduct((await params).slug);
-  if (!product) return { title: "Product not found" };
-  return {
-    title: product.name,
-    description: product.description,
-    openGraph: {
-      title: product.name,
-      description: product.description,
-      images: [{ url: product.images[0], width: 1024, height: 1024, alt: product.name }],
-    },
-  };
 }
 
 export default function Page({ params }: PageProps<"/products/[slug]">) {

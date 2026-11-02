@@ -5,10 +5,7 @@ import { cookies } from 'next/headers'
 import { ApiError, apiFetch } from './api'
 import type { Cart, CartResult } from './types'
 
-export enum CartCookie {
-    Token = 'cart-token',
-    Count = 'cart-count',
-}
+const cartCookie = 'cart-token'
 
 enum CartHeader {
     Token = 'x-cart-token',
@@ -29,23 +26,9 @@ const cookieOptions = {
     maxAge: 60 * 60 * 24 * 30,
 }
 
-// Token addresses the API cart. Count mirrors totalItems so the header badge
-// can render from the request without GET /cart. Line items are not stored here.
-async function writeCartCookies(token: string, count: number) {
+async function writeCartCookie(token: string) {
     const jar = await cookies()
-    jar.set(CartCookie.Token, token, cookieOptions)
-    jar.set(CartCookie.Count, String(count), cookieOptions)
-}
-
-export async function clearCartCookies() {
-    const jar = await cookies()
-    jar.delete(CartCookie.Token)
-    jar.delete(CartCookie.Count)
-}
-
-export async function getCartCount() {
-    const count = Number((await cookies()).get(CartCookie.Count)?.value)
-    return Number.isInteger(count) && count > 0 ? count : 0
+    jar.set(cartCookie, token, cookieOptions)
 }
 
 function withoutToken(data: ApiCart): Cart {
@@ -74,7 +57,7 @@ function definitive(error: unknown): error is ApiError {
 }
 
 export const getCart = cache(async (): Promise<Cart | null> => {
-    const token = (await cookies()).get(CartCookie.Token)?.value
+    const token = (await cookies()).get(cartCookie)?.value
     if (!token) return null
     try {
         const { data } = await apiFetch<ApiCart>(CartPath.Root, cartInit(token))
@@ -87,7 +70,7 @@ export const getCart = cache(async (): Promise<Cart | null> => {
 
 async function createCart() {
     const { data } = await apiFetch<ApiCart>(CartPath.Create, { method: 'POST', cache: 'no-store' })
-    await writeCartCookies(data.token, data.totalItems)
+    await writeCartCookie(data.token)
     return data.token
 }
 
@@ -97,7 +80,7 @@ async function postItem(token: string, productId: string, quantity: number) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ productId, quantity }),
     }))
-    await writeCartCookies(data.token, data.totalItems)
+    await writeCartCookie(data.token)
     return withoutToken(data)
 }
 
@@ -112,7 +95,7 @@ async function cartExists(token: string) {
 }
 
 export async function addItem(productId: string, quantity: number): Promise<CartResult> {
-    let token = (await cookies()).get(CartCookie.Token)?.value
+    let token = (await cookies()).get(cartCookie)?.value
     if (!token) token = await createCart()
 
     try {
@@ -133,7 +116,7 @@ export async function addItem(productId: string, quantity: number): Promise<Cart
 }
 
 async function sendItem(method: 'PATCH' | 'DELETE', productId: string, quantity?: number): Promise<CartResult> {
-    const token = (await cookies()).get(CartCookie.Token)?.value
+    const token = (await cookies()).get(cartCookie)?.value
     if (!token) return { error: 'Your cart expired. Add the item again.' }
     try {
         const { data } = await apiFetch<ApiCart>(`${CartPath.Root}/${encodeURIComponent(productId)}`, cartInit(token, {
@@ -141,7 +124,7 @@ async function sendItem(method: 'PATCH' | 'DELETE', productId: string, quantity?
             headers: quantity === undefined ? undefined : { 'Content-Type': 'application/json' },
             body: quantity === undefined ? undefined : JSON.stringify({ quantity }),
         }))
-        await writeCartCookies(data.token, data.totalItems)
+        await writeCartCookie(data.token)
         return { cart: withoutToken(data) }
     } catch (error) {
         if (definitive(error)) return { error: error.message }
