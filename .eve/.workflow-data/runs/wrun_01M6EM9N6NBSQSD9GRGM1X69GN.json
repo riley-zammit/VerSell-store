@@ -1,0 +1,42 @@
+{
+  "runId": "wrun_01M6EM9N6NBSQSD9GRGM1X69GN",
+  "status": "running",
+  "deploymentId": "mvzhehw2-ba4bde34-34c7-44cd-8548-aada4c3e8c02",
+  "workflowName": "workflow//eve//workflowEntry",
+  "specVersion": 8,
+  "executionContext": {
+    "traceCarrier": {
+      "traceparent": "00-b825143d908b4f26b0eebbd3873a772c-995b9dcea40f8ecd-01"
+    },
+    "workflowCoreVersion": "5.2.3",
+    "queueNamespace": "eve76657273656c6c",
+    "nodeVersion": "24.22.1",
+    "features": {
+      "encryption": false
+    },
+    "hookResumeInputVersion": 1
+  },
+  "input": {
+    "__type": "Uint8Array",
+    "data": "enN0ZCi1L/1gHgQVGADWsIwkII/zjHC0zfYmhJ4fkd2uXcDfHmD6BiFZ8WtLMcgPSwEDADMigwB+AIYAjsNAnMMYh/mLOB1hloXiFAuqsrzzGbW6c81wqimMaV4Y8zFqnPMZ3xTLctUVp7iGn6SfJp1fIcUtO2190rV6ZS94Y8OH1aPtV/jLGfDcAsaG1Ovy0/YVvPTKZUbJBahLy1xmbX+SJFxebZ+EE8sN0/biBhcn/adU8Qf3giWaiIhI+QsUfNfUH2pbq9P3ei+4eualD/z7K7RipOVA9J+s7XNvcNc0Wk7B6AKQ1bY6fBhhpKV2AHT+s9pSfuqHDnLCWr06VqVOyematnLC74l+lQVO0za6lE1xTdPW45NThCFtv/pE4QyUC8R2MzZiS+ovYcMpXw4HOXNOv24Gch6IeS4MScuUE3JarpzVEnQSUmmZNU1OCinpy2u1bZZ0+KZ2yhtXUdO2v1+/V5ah5pEuDhe80j9luXo0bVea0Sl/yxVrlqPTrP6mdDgwUDwTy8QgIjw4TBMRO4ABlQqImVCZOCd9cQ9gEegFSgG6Za+xJbxNw9FwNCCrWa4cdPqWE1iXo7YvHcYADxIbMclij3aw5ZHTkYQ5WDeQ99zjWLvkWW54o8jdgrQjcRF7HMla3uqnBOjR6Zwus0eddCT4ZUe2VJcXawudv+cBPSCPRxOBIhIG0h0xEYccph8IYhgUOXdfy9Xzl5YdDAEy8Ik+V9AqoM5q6+BLX378FIH0vyl/zPJWbLX1SssNVqjhIEIQIUIzQyNJQUGrASCCpZjdDRBgVTVJMQdXLCu2cocGoL7o8h4B8ShImaQ/llacfkUJdjpXTBbQ6x2Yu1qeNHweq725s/B2UQ85gW52wjt+DeK8wLA13WChBEb33BopI4qy6WZ1Y1seBRYf+xSXfpjWwoGTBcOEZ+DjMfOoZa1xT41SA+Kv40WwufgPRLfiBem03OPRMrhuook2PQq7t6QQJUDQszo/OH5nG2iugSNrE21AoBiZcPwHInSCeBmCTT+n/3LCdxoHNQ=="
+  },
+  "attributes": {
+    "$eve.is_otel_trace_enabled": "true",
+    "$eve.is_trace_content_visible": "true",
+    "$eve.trace_id": "5fea3c5cdd71a303f9a49e230a632f39",
+    "$eve.type": "session",
+    "$eve.trigger": "http",
+    "$eve.title": "what tools do you have access to",
+    "$eve.prewarm": "1",
+    "$eve.version": "1.0.0-rc.1",
+    "$eve.model": "openai/gpt-6.1-terra",
+    "$eve.input_tokens": "7164",
+    "$eve.output_tokens": "198",
+    "$eve.cache_read_tokens": "0",
+    "$eve.cache_write_tokens": "7161",
+    "$eve.tool_count": "6"
+  },
+  "startedAt": "2026-11-02T17:18:16.291Z",
+  "createdAt": "2026-11-02T17:18:16.279Z",
+  "updatedAt": "2026-11-02T17:18:20.446Z"
+}

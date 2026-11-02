@@ -20,4 +20,27 @@
 - Add, quantity, and remove are forms. Checkout is an inert button, disabled until the cart on screen is the API response.
 - The add POST waits until the drawer is open. The navigation and the action share one router queue, so sending the POST in the click holds the drawer until the response. 
 
+## Agent
+### Ideas
+- Swag creator & drop
+- Private store-within-a-store
+
+### Reqs
+- Durable turns based on Workflows
+- Blob storage for files
+- 
+
+“We’re having a company offsite next Friday. Use our website to create a three-product capsule collection for 20 contributors under $1,200. Keep it tasteful, generate print-ready artwork, build an approval page, and prepare the cart.”
+
+ That single workflow can showcase:
+
+ - Web browsing: go to the company's site and get logos and colors
+ - Blob Storage
+ - Image generation
+ - Iteration and validation & recovery
+ - Budget reasoning/decision making
+ - Page deployment
+ - Commerce actions
+ - Email when complete?
+
 # Opportunities

@@ -26,6 +26,9 @@ export function Header() {
                     <NavLink href="/search" prefetch className={linkClass}>
                         Search
                     </NavLink>
+                    <NavLink href="/chat" prefetch className={linkClass}>
+                        Chat
+                    </NavLink>
                     {/* Count cookie only, so the badge does not wait on GET /cart. */}
                     <Suspense fallback={<CartLinkSkeleton />}>
                         <CartCount />

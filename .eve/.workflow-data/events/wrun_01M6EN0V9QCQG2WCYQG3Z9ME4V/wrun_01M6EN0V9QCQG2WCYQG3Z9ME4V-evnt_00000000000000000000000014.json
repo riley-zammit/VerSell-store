@@ -1,0 +1,41 @@
+{
+  "eventType": "attr_set",
+  "specVersion": 8,
+  "eventData": {
+    "changes": [
+      {
+        "key": "$eve.model",
+        "value": "openai/gpt-6.1-terra"
+      },
+      {
+        "key": "$eve.input_tokens",
+        "value": "7158"
+      },
+      {
+        "key": "$eve.output_tokens",
+        "value": "13"
+      },
+      {
+        "key": "$eve.cache_read_tokens",
+        "value": "0"
+      },
+      {
+        "key": "$eve.cache_write_tokens",
+        "value": "7155"
+      },
+      {
+        "key": "$eve.tool_count",
+        "value": "6"
+      }
+    ],
+    "writer": {
+      "type": "step",
+      "stepId": "step_01M6EN0V9Q4WB5J9T02G15VKCX",
+      "attempt": 1
+    },
+    "allowReservedAttributes": true
+  },
+  "runId": "wrun_01M6EN0V9QCQG2WCYQG3Z9ME4V",
+  "eventId": "evnt_00000000000000000000000014",
+  "createdAt": "2026-11-02T17:30:57.818Z"
+}

@@ -1,0 +1,10 @@
+{
+  "eventType": "run_cancelled",
+  "specVersion": 8,
+  "eventData": {
+    "cancelReason": "Development runtime snapshot is no longer available"
+  },
+  "runId": "wrun_01M6EHC89C9DQ2YTD6QXDXNP07",
+  "eventId": "evnt_00000000000000000000000004",
+  "createdAt": "2026-11-02T17:30:50.185Z"
+}

@@ -1,0 +1,23 @@
+{
+  "eventType": "step_completed",
+  "specVersion": 8,
+  "correlationId": "step_01M6EHC861ZES8NNNTQVM9WC5F",
+  "eventData": {
+    "stepName": "step//eve@1.0.0-rc.1//createSessionStep",
+    "workflowName": "workflow//eve//workflowEntry",
+    "result": {
+      "__type": "Uint8Array",
+      "data": "enN0ZCi1L/1gEAedIgAqQYALNkBvkg7DMAzDMAzDYxw/v39jjewtOYiUNIuWfJL2btlRb2gfJNSqZBCBUB2q/p8YQCBCnmF4Xb4AmwCeAFiZ4DqfshBiJAPfC/GDCrTk6zkw8Zz4VkMlKqk45vQrggBUQoANwFaPXWtkSR8WF5DluetKJwaQxek5cvFIHwsgi0cykBYNjAwaFjQOMMiQcbHBgoMMGi4wFjyQEAGjwoWFCH1MWdK7ZZOWJX0ogCxunYZSe0kYkIUfLSkBZFkRXdb9XhICyNKu/0hcg3uQRiolljF0Oks6AFn0HctBl7l8ypyuWjxSCBDpwwBkuUvXS7qALBVe18xZPEC06Csuj3roC50A3YUuHVdpuugolxPcxtTeWnJC+hjfulCf8bqoDLu1VE+9xLHtcui3t+6oTj15fdV0FKarrmqsozF123WYOJS5XNBrp0lBfj+845rFpawD+dFdOhRcpwzXFX6CmgqZr1XYApz6iGUImzlOWfPVZ441NkkoFS5N5GVROp8gv9UwwZ51/R4gAKaDl/InuWkB7YrvAdOjBw0mXcZ3TQYyHZ2ulXtjy4cpe54g5tp7OJStX/E2nyCBD/QYIELEozuGK7dhomz7BBtirPpr+w9WmkJO7CaiEkZZPmdcbhx7dgMyf1LxT7bjGAUbvxjzo+2FfNY436AzPlf6VjVRsSe1AqGxbLDSWj7oKqHu4KUgL0bMqcTuN31KJcOGiQ/LptCt4kJARh8ry3XXjIJK3ibZWEYZDN8JIRYCFQhxXEIDkOmW0V9iJ0sTxYkUqMnB8SZfia1jOqt3B3z05LdwNfYcIKTAo2MBlTCKNUxZVnidOrO1DtsZn6htnzFtrIfZbSr6Ss9vzhuOeo24HoYChciEDbieH1TC6NvQOxTsUDlpLZtEt8sbaaOiwYMDFhZPUtEVTEWEChckBNhA/opYw35jzYaIuVS+a4muP3mlNWdcycb0LH3L2Sxahh6W5+fOlG1tA4CdqBEhUkqZGZoZSQrSDGMQFIMYSzsRcL1UM7RJreEiQx6cBhJ8fSfOkiisFWqwtkArxKwm1aQJL2duIvHtjlKFvUct4VN5Ao6Vbr2k7Y63k0SwNYDcTGiWqABH12yDuFg/0SuqyEDdlyVJkaICM+e0sCFuNgj24zCxr61EHJ7pidEwWEDFu7gs2M+0KDAXofswDEKodTOJL+tbwHuuLcWUk1Cj3lOEpZGS3CWQvty1B9y1SEj8M1Nr8Gz/1ilPDuiLMxyf8zmQwy2yByn2KWg3bYinaGIhMDaOrZueG0zB5EtRN3vfteSKeAJJJYRNvaw4PpWKVSpOX1Pw+E6aAYgvfyBDUiAFxkbJlMQM7LRHfADhO7W3Ccz3mLS4c9KzoyBW7ymZjaFVo2d9zH13NVsTBChoWnrowSbVvgQxgx2yj3yte4crJJk8FdWZsmP+oQGxyZOCZbKVxE6NWK9hQFN5TnPYFAipUCD7qzEsVwU="
+    },
+    "ttfs": 50,
+    "rsfs": 42,
+    "finalSchedulingReplay": 6,
+    "optimizations": [
+      "turbo",
+      "lazyStepStart"
+    ]
+  },
+  "runId": "wrun_01M6EHC861RQBNS1AQ93YNYQ6Y",
+  "eventId": "evnt_00000000000000000000000008",
+  "createdAt": "2026-11-02T16:27:15.602Z"
+}

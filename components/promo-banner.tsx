@@ -5,6 +5,8 @@ const barClass = 'flex h-10 items-center justify-center gap-x-3 overflow-hidden 
 
 // getPromotion is cached, so this renders into the static shell: no Suspense or skeleton needed.
 export async function PromoBanner() {
+    // The shared header must not block Eve's chat when the storefront API is unconfigured.
+    if (!process.env.SWAG_API_URL) return null
     const promo = await getPromotion()
     return (
         <aside className={barClass}>

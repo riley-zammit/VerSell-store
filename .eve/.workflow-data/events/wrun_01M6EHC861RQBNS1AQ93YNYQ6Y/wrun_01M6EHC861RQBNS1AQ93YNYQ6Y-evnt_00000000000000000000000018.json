@@ -1,0 +1,15 @@
+{
+  "eventType": "hook_received",
+  "specVersion": 8,
+  "correlationId": "hook_01M6EHC861ZES8NNNTQVM9WC5M",
+  "eventData": {
+    "token": "eve:inbox:v1:eve:session:wrun_01M6EHC861RQBNS1AQ93YNYQ6Y:inbox",
+    "payload": {
+      "__type": "Uint8Array",
+      "data": "ZGV2bFt7ImlkZW1wb3RlbmN5S2V5IjotMSwiYXV0aCI6MSwiZGVsaXZlcnkiOjQsImtpbmQiOjksInBheWxvYWQiOjEwLCJyZXF1ZXN0SWQiOi0xLCJ0dXJuUG9saWN5IjoxMiwidGl0bGUiOi0xfSx7ImF0dHJpYnV0ZXMiOjIsImF1dGhlbnRpY2F0b3IiOjMsInByaW5jaXBhbElkIjozLCJwcmluY2lwYWxUeXBlIjozfSx7fSwibG9jYWwtZGV2Iix7ImNoYW5uZWxLaW5kIjo1LCJjaGFubmVsTmFtZSI6NiwiZGVsaXZlcnlJZCI6NywiYWNjZXB0ZWREZXBsb3ltZW50SWQiOjh9LCJjaGFubmVsOmV2ZSIsImV2ZSIsIjUzY2EwNzM2LThhOTYtNGE0MS04Yjk3LWIzNjFjMjdkZTQ1MiIsIm12emgyNm82LTkwYTMwN2ZjLThlNzktNDdlNy1iZjlkLTM4Y2MyNTUzOGI1MyIsInNlbmQiLHsibWVzc2FnZSI6MTF9LCJob3cncyBpdCBnb2luZyIsInF1ZXVlIl0="
+    }
+  },
+  "runId": "wrun_01M6EHC861RQBNS1AQ93YNYQ6Y",
+  "eventId": "evnt_00000000000000000000000018",
+  "createdAt": "2026-11-02T16:27:21.165Z"
+}

@@ -1,0 +1,20 @@
+{
+  "runId": "wrun_01M6EHAZDQGJNHYT0GHWK6V664",
+  "stepId": "step_01M6EHAZDQBWYRBHVJ03KBMSN1",
+  "stepName": "step//eve@1.0.0-rc.1//closeSessionStreamStep",
+  "status": "completed",
+  "input": {
+    "__type": "Uint8Array",
+    "data": "ZGV2bFt7ImFyZ3MiOjEsImNsb3N1cmVWYXJzIjotMSwidGhpc1ZhbCI6LTF9LFsyXSx7InNlc3Npb25Xcml0YWJsZSI6M30sWyJXcml0YWJsZVN0cmVhbSIsNF0seyJuYW1lIjo1fSwic3RybV8wMU02RUhBWkRRR0pOSFlUMEdIV0s2VjY2NF91c2VyIl0="
+  },
+  "attempt": 1,
+  "startedAt": "2026-11-02T16:26:34.401Z",
+  "createdAt": "2026-11-02T16:26:34.401Z",
+  "updatedAt": "2026-11-02T16:26:34.409Z",
+  "specVersion": 8,
+  "output": {
+    "__type": "Uint8Array",
+    "data": "ZGV2bC0x"
+  },
+  "completedAt": "2026-11-02T16:26:34.409Z"
+}

@@ -1,0 +1,2343 @@
+{
+  "agentRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mvzhaurl-5a75feba-d603-4704-8782-2ce01efd26f9/source/agent",
+  "appRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mvzhaurl-5a75feba-d603-4704-8782-2ce01efd26f9/source",
+  "bindings": {
+    "eve:defaults:sandbox.ts": {
+      "backing": {
+        "kind": "programmatic",
+        "moduleId": "sandbox.ts",
+        "registryId": "eve:defaults",
+        "revision": "eve@1.0.0-rc.1:compiled-manifest-v53",
+        "semanticRevision": "eve:default-sandbox:v1"
+      },
+      "logicalPath": "sandbox.ts",
+      "owner": {
+        "feature": "eve:defaults",
+        "kind": "framework"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": true
+      }
+    },
+    "eve:defaults:tools/bash.ts": {
+      "backing": {
+        "kind": "programmatic",
+        "moduleId": "tools/bash.ts",
+        "registryId": "eve:defaults",
+        "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+      },
+      "logicalPath": "tools/bash.ts",
+      "owner": {
+        "feature": "eve:defaults",
+        "kind": "framework"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": true
+      }
+    },
+    "eve:defaults:tools/read_file.ts": {
+      "backing": {
+        "kind": "programmatic",
+        "moduleId": "tools/read_file.ts",
+        "registryId": "eve:defaults",
+        "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+      },
+      "logicalPath": "tools/read_file.ts",
+      "owner": {
+        "feature": "eve:defaults",
+        "kind": "framework"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": true
+      }
+    },
+    "eve:defaults:tools/write_file.ts": {
+      "backing": {
+        "kind": "programmatic",
+        "moduleId": "tools/write_file.ts",
+        "registryId": "eve:defaults",
+        "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+      },
+      "logicalPath": "tools/write_file.ts",
+      "owner": {
+        "feature": "eve:defaults",
+        "kind": "framework"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": true
+      }
+    },
+    "eve:defaults:tools/web_fetch.ts": {
+      "backing": {
+        "kind": "programmatic",
+        "moduleId": "tools/web_fetch.ts",
+        "registryId": "eve:defaults",
+        "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+      },
+      "logicalPath": "tools/web_fetch.ts",
+      "owner": {
+        "feature": "eve:defaults",
+        "kind": "framework"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": true
+      }
+    },
+    "eve:defaults:tools/web_search.ts": {
+      "backing": {
+        "kind": "programmatic",
+        "moduleId": "tools/web_search.ts",
+        "registryId": "eve:defaults",
+        "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+      },
+      "logicalPath": "tools/web_search.ts",
+      "owner": {
+        "feature": "eve:defaults",
+        "kind": "framework"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": false
+      }
+    },
+    "eve:root-defaults:tools/agent.ts": {
+      "backing": {
+        "kind": "programmatic",
+        "moduleId": "tools/agent.ts",
+        "registryId": "eve:root-defaults",
+        "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+      },
+      "logicalPath": "tools/agent.ts",
+      "owner": {
+        "feature": "eve:root-defaults",
+        "kind": "framework"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": true
+      }
+    },
+    "eve:root-defaults:channels/home.ts": {
+      "backing": {
+        "kind": "programmatic",
+        "moduleId": "channels/home.ts",
+        "registryId": "eve:root-defaults",
+        "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+      },
+      "logicalPath": "channels/home.ts",
+      "owner": {
+        "feature": "eve:root-defaults",
+        "kind": "framework"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": true
+      }
+    },
+    "eve:development-extension:self-modification:extensions/self-modification.ts": {
+      "backing": {
+        "kind": "programmatic",
+        "moduleId": "extensions/self-modification.ts",
+        "registryId": "eve:development-extension:self-modification",
+        "revision": "eve@1.0.0-rc.1:development-extensions-v1",
+        "mountId": "extensions/self-modification"
+      },
+      "logicalPath": "extensions/self-modification.ts",
+      "owner": {
+        "feature": "eve:development-extension:self-modification",
+        "kind": "framework"
+      },
+      "usage": {
+        "compile": false,
+        "runtimeEntry": true
+      }
+    },
+    "agent.ts": {
+      "backing": {
+        "externalDependencies": [],
+        "kind": "filesystem",
+        "sourcePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/agent/agent.ts"
+      },
+      "logicalPath": "agent.ts",
+      "owner": {
+        "kind": "application"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": true
+      }
+    },
+    "channels/eve.ts": {
+      "backing": {
+        "externalDependencies": [],
+        "kind": "filesystem",
+        "sourcePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/agent/channels/eve.ts"
+      },
+      "logicalPath": "channels/eve.ts",
+      "owner": {
+        "kind": "application"
+      },
+      "usage": {
+        "compile": true,
+        "runtimeEntry": true
+      }
+    }
+  },
+  "channelRoutes": {
+    "effective": [
+      {
+        "kind": "channel",
+        "name": "home",
+        "logicalPath": "channels/home.ts",
+        "method": "GET",
+        "urlPath": "/",
+        "sourceId": "eve:root-defaults:channels/home.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "home",
+        "logicalPath": "channels/home.ts",
+        "method": "HEAD",
+        "urlPath": "/",
+        "sourceId": "eve:root-defaults:channels/home.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "GET",
+        "urlPath": "/eve/v1/health",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "HEAD",
+        "urlPath": "/eve/v1/health",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "GET",
+        "urlPath": "/eve/v1/info",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "GET",
+        "urlPath": "/eve/v1/connections/:name/callback/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/connections/:name/callback/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "GET",
+        "urlPath": "/eve/v1/connections/:name/callback/:attemptId/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/connections/:name/callback/:attemptId/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/callback/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "GET",
+        "urlPath": "/.well-known/workflow/v1/webhook/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/.well-known/workflow/v1/webhook/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "PUT",
+        "urlPath": "/.well-known/workflow/v1/webhook/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "PATCH",
+        "urlPath": "/.well-known/workflow/v1/webhook/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "DELETE",
+        "urlPath": "/.well-known/workflow/v1/webhook/:token",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/session",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/session/:sessionId",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/session/:sessionId/cancel",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/session/:sessionId/compact",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/session/:sessionId/clear",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/session/:sessionId/end",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "POST",
+        "urlPath": "/eve/v1/session/:sessionId/reset",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "GET",
+        "urlPath": "/eve/v1/session/:sessionId/stubs",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "GET",
+        "urlPath": "/eve/v1/session/:sessionId/stream",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "GET",
+        "urlPath": "/eve/v1/session/:sessionId/descendants/stream",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      },
+      {
+        "kind": "channel",
+        "name": "eve",
+        "logicalPath": "channels/eve.ts",
+        "method": "GET",
+        "urlPath": "/eve/v1/session/:parentSessionId/subagents/:callId/:childSessionId/stream",
+        "sourceId": "channels/eve.ts",
+        "sourceKind": "module",
+        "adapterKind": "http"
+      }
+    ],
+    "preflight": [],
+    "shadowed": []
+  },
+  "connections": [],
+  "dynamicConnections": [],
+  "diagnosticsSummary": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "sourceComposition": {
+    "entries": [
+      {
+        "kind": "shadowed",
+        "source": {
+          "backing": {
+            "kind": "programmatic",
+            "moduleId": "agent.ts",
+            "registryId": "eve:defaults",
+            "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+          },
+          "form": "direct",
+          "layer": "framework-default",
+          "logicalPath": "agent.ts",
+          "owner": {
+            "feature": "eve:defaults",
+            "kind": "framework"
+          },
+          "sourceId": "eve:defaults:agent.ts"
+        },
+        "winnerSourceId": "agent.ts"
+      },
+      {
+        "kind": "shadowed",
+        "source": {
+          "backing": {
+            "kind": "programmatic",
+            "moduleId": "channels/eve.ts",
+            "registryId": "eve:root-defaults",
+            "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+          },
+          "form": "direct",
+          "layer": "framework-default",
+          "logicalPath": "channels/eve.ts",
+          "owner": {
+            "feature": "eve:root-defaults",
+            "kind": "framework"
+          },
+          "sourceId": "eve:root-defaults:channels/eve.ts"
+        },
+        "winnerSourceId": "channels/eve.ts"
+      }
+    ]
+  },
+  "dynamicInstructions": [],
+  "dynamicSkills": [],
+  "dynamicTools": [],
+  "extensionMounts": [
+    {
+      "externalDependencies": [],
+      "mountLogicalPath": "extensions/self-modification.ts",
+      "mountSourceId": "eve:development-extension:self-modification:extensions/self-modification.ts",
+      "programmaticImport": {
+        "specifier": "eve/extensions/self-modification/local",
+        "entryPath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/node_modules/eve/dist/src/self-modification/extension/extension.js",
+        "config": {
+          "local": {
+            "enabled": true
+          }
+        }
+      },
+      "mountSourcePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/agent/extensions/self-modification.ts",
+      "namespace": "self-modification",
+      "packageName": "eve",
+      "specifier": "eve/self-modification",
+      "mountId": "extensions/self-modification",
+      "sourceRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mvzhaurl-5a75feba-d603-4704-8782-2ce01efd26f9/source/node_modules/eve/dist/src/self-modification/extension"
+    }
+  ],
+  "hooks": [],
+  "memories": [],
+  "instructions": [
+    {
+      "name": "instructions",
+      "logicalPath": "instructions.md",
+      "owner": {
+        "kind": "application"
+      },
+      "content": "# Identity\n\nYou are a general-purpose AI agent powered by eve, Vercel's agent framework.\n\n# Customization\n\nYour behavior and capabilities are defined by this project's code. You can be customized into whatever kind of agent the user wants by updating the project's instructions, tools, skills, connections, channels, subagents, and schedules.\n",
+      "role": "system",
+      "sourceId": "instructions.md",
+      "sourceKind": "markdown"
+    }
+  ],
+  "remoteAgents": [],
+  "sandbox": {
+    "providerName": "default",
+    "environmentExportName": "environment",
+    "logicalPath": "sandbox.ts",
+    "revisionHash": "a55119c1d25881aba7a797bc4800af7541d5a5aaf384160e683cda31ba44c790",
+    "sourceId": "eve:defaults:sandbox.ts",
+    "sourceKind": "module"
+  },
+  "sandboxWorkspaces": [],
+  "schedules": [],
+  "scheduleCollections": [],
+  "skills": [
+    {
+      "description": "Build durable backend AI agents with the eve framework. Use when creating, editing, or debugging an eve project — agent instructions, skills, tools, connections, channels, sandboxes, subagents, schedules, or evals.",
+      "logicalPath": "skills/eve-framework/SKILL.md",
+      "owner": {
+        "kind": "application"
+      },
+      "content": "# eve\n\neve is a filesystem-first framework for durable backend AI agents. An agent is\na directory on disk — instructions, skills, tools, connections, channels,\nsubagents, and schedules are all files — and eve compiles and runs it.\n\n## Source of truth\n\nThe complete documentation ships inside the `eve` package. Do not rely on this\nskill for guidance — always read the bundled docs, which match the installed\nversion exactly:\n\n```\nnode_modules/eve/docs/\n```\n\nStart with `node_modules/eve/docs/README.md`. It contains the full\nindex and recommended reading order. Before writing any eve code, read the\nrelevant guide there first.\n\nIf `eve` is not installed yet, install it (`npm install eve`) or scaffold a new\nagent with `npx eve init <agent-name>`, then read the bundled docs.\n",
+      "name": "eve-framework",
+      "rootPath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/agent/skills/eve-framework",
+      "skillId": "eve-framework",
+      "skillFilePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/agent/skills/eve-framework/SKILL.md",
+      "sourceId": "skills/eve-framework/SKILL.md",
+      "sourceKind": "skill-package"
+    },
+    {
+      "description": "Turn on Cache Components in a Next.js app and resolve the blocking routes it surfaces. Use when the user wants to enable, adopt, or migrate to Cache Components, flip the `cacheComponents` flag, work through a flood of blocking-prerender / instant validation errors, run the `cache-components-instant-false` codemod, or decide between opting routes out with `export const instant = false` and fixing them in place.\n",
+      "logicalPath": "skills/next-cache-components-adoption/SKILL.md",
+      "owner": {
+        "kind": "application"
+      },
+      "content": "# next-cache-components-adoption\n\nEnable Cache Components on an app and walk it to a passing build. This skill sequences the work; per-error recipes live in the dev overlay fix cards and the build's terminal output. The [migrating to Cache Components guide](https://nextjs.org/docs/app/guides/migrating-to-cache-components) is the canonical reference for the concepts and per-API recipes this skill applies — consult it whenever the skill steps reference a pattern (`\"use cache\"`, `cacheLife`, `<Suspense>` placement, etc.) and you want the full explanation.\n\n## requires\n\n- **App Router project.** Cache Components is an App Router feature; `cacheComponents: true` does nothing for `pages/` routes. If the project has a `pages/` or `src/pages/` tree but no `app/` or `src/app/` tree, stop and tell the user — Pages → App migration is its own project, not part of this skill. A hybrid app (both `pages/` and `app/`) is fine: the flag affects the `app/` routes; `pages/` routes are unaffected and don't need opt-outs.\n\n- **A resolved app directory.** Locate `next.config.{js,ts,mjs,cjs}` first: that's the project root, and an agent invoked from a subdirectory would otherwise test for `app/` against the wrong `cwd` and find nothing. Look for `app/` and `src/app/` under it, and treat every command and glob in this skill as relative to whichever one exists. If both exist, Next.js builds `app/` and never looks at `src/app/`, so its routes are shadowed and unbuilt — tell the user that and ask which tree to migrate instead of picking one.\n\n- **A runnable app.** The whole loop verifies against `next dev` and a browser, so the app has to boot. If it reads a database or required env at import (e.g. an `env.ts` that throws on a missing `DATABASE_URL`), confirm it actually starts — with the real environment, or local data you stand up — before step 1. Adoption can't be verified against an app that won't run.\n\n- **Next.js 16.3 or later.** That release is where the pieces this skill relies on land: top-level `cacheComponents`, `export const instant`, the dev-overlay instant-navigation validation warnings, and the `cache-components-instant-false` codemod. If `next --version` reports below 16.3, upgrade first:\n  - `npx @next/codemod@latest upgrade latest` to apply the version-to-version codemods.\n  - Read the relevant [version upgrade guide](https://nextjs.org/docs/app/guides/upgrading) (e.g. [Version 16](https://nextjs.org/docs/app/guides/upgrading/version-16)) for what the codemod doesn't cover.\n\n- **No incompatible config keys.** `cacheComponents: true` errors on any file that still exports `dynamic`, `revalidate`, or `fetchCache`. Inventory these exports before running the codemod, then follow the [migration guide's per-key sections](https://nextjs.org/docs/app/guides/migrating-to-cache-components). The guide is the source of truth for translating each value. The `cache-components-instant-false` codemod does not remove these configs.\n\n- **`experimental.dynamicIO` is fatal.** It was renamed to top-level `cacheComponents` and the old key now aborts before any build can run — remove it (or replace with `cacheComponents: true`) first. `experimental.useCache` is still accepted as a deprecated alias; redundant once `cacheComponents: true` is set, so remove it for clarity.\n\n### notes\n\n- **No passing baseline before the flag.** If the app already uses `\"use cache\"`, the pre-flag build errors with `please enable the feature flag cacheComponents`. Enabling the flag is the first thing you do (in Incremental, before the codemod; in Direct, before fixing routes) — not a thing to do _after_ getting a passing build. Note this in your starting summary so it doesn't read as a regression.\n\n- **Existing caches can stay.** Follow the migration guide's [`fetch` and `unstable_cache` sections](https://nextjs.org/docs/app/guides/migrating-to-cache-components#fetch-cache-options). Do not rewrite them solely to enable Cache Components.\n\n- **Offline docs.** Guide links have offline copies under `node_modules/next/dist/docs/` (bundled since Next.js 16.2), with the directory layout numbered for ordering (e.g. `node_modules/next/dist/docs/01-app/02-guides/migrating-to-cache-components.md`). If you can't predict the numbered prefix, `find node_modules/next/dist/docs -name '<slug>.md'` resolves it. The `/docs/messages/*` error pages are not bundled.\n\n- **Older versions without bundled docs.** Suggest `npx @next/codemod@latest agents-md` to the user before starting: it downloads a version-matched copy to `.next-docs/` and writes an index into `AGENTS.md`. It touches files in their repo, so ask first and run it only if they want it.\n\n## the shape of the work\n\nThere's one loop: walk the route tree top-down, one feature at a time, adopting each route against `next dev` + a browser. The build is a final check for each feature, not the working surface.\n\nThe choice in step 1 is whether to opt every route out of validation first or fix routes as you go. Either way the loop is the same:\n\n- **With a quiet pre-step (Incremental).** Run the codemod, fix what it can't, and fully migrate routes that previously required static rendering. Other routes keep their opt-outs for follow-up PRs.\n- **Without (Direct).** Enable `cacheComponents` and start the loop on whatever the build flags first. Same loop, but every fix sits on one branch until adoption is complete.\n\nIn both, the per-route success bar is the same: **dev loop reports no errors AND `next build` passes**. Check in with the user after every feature, and suggest a commit but never make one without their confirmation. Expect to spend most of the time in the loop, not in the pre-step.\n\n## background\n\n`cacheComponents: true` requires every route to be prerenderable. A route that reads request-time data outside `<Suspense>` is \"blocking\" and fails the build. `export const instant = false` marks a route as allowed to block, which clears it in both dev and build; on a layout it covers the whole subtree during the build, but client navigations still validate each descendant segment on its own. Reads wrapped in a [`\"use cache\"`](https://nextjs.org/docs/app/api-reference/directives/use-cache) function count as cache boundaries, not blocking reads.\n\nWhen a fix introduces `\"use cache\"`, follow the Caching guide for [choosing a data-level or UI-level boundary and setting its lifetime](https://nextjs.org/docs/app/getting-started/caching#usage) and [revalidating after mutations](https://nextjs.org/docs/app/getting-started/revalidating). Use the [`use cache` cache-key reference](https://nextjs.org/docs/app/api-reference/directives/use-cache#cache-keys) when the result varies by arguments or captured values.\n\nThree classes of blocker come up, usually in this order:\n\nWhenever a fix introduces `<Suspense>`, follow the Streaming guide's [granular streaming pattern](https://nextjs.org/docs/app/guides/streaming#granular-streaming-with-suspense) and [guidance for preventing CLS](https://nextjs.org/docs/app/guides/streaming#cls-cumulative-layout-shift).\n\n1. **Request-time reads** (`cookies()`, `headers()`, `await params`, `await searchParams`). All four block when awaited at the top of a page or layout. `params` and `searchParams` often get missed because they're not framed as \"request data\" the way cookies and headers are. The fix is to push the read into a `<Suspense>`-wrapped child — and for `params`/`searchParams`, forward the promise into the child and await it there; don't `await` at the page top.\n2. **Sync-IO at module/render time** (`new Date()`, `Date.now()`, `Math.random()`, `crypto.randomUUID()`). These fail the build even with `instant = false` — the opt-out doesn't suppress them. If they're in a shared layout, they block every route under it. The codemod can't fix them; after running it, use each build error and its linked documentation to identify which reported calls to translate by hand (see the [incremental pre-step](#incremental)).\n3. **`\"use cache\"` files that read request data.** A file with a top-level `\"use cache\"` directive can't export `instant`; combining the two errors with `Only async functions are allowed to be exported in a \"use cache\" file.`, which means the directive was wrong for that route. Remove it before running the codemod.\n\n## working surfaces\n\n### finding blocking routes\n\nPrefer `next dev` over `next build` while you work.\n\n- **`next dev`** — the working surface. Visit a route; its blocking errors surface in the dev overlay with full stack traces and fix cards linking the per-error docs. Work one route at a time — errors don't accumulate in one place. The route itself still returns HTTP 200, so read the overlay (or `.next-dev.log`), not status codes. A cleared overlay is one half of calling a route clean — the other half is browser verification (see [step 2](#step-2-the-inner-loop-remove-opt-outs-one-feature-at-a-time)) and a passing build for that route.\n- **`next build`** — detection only. The build is `next dev`'s authoritative check, not its replacement. Use it as the last gate on each feature in the loop (a passing build is part of the per-route success bar) and as the final verification across the whole app. In Incremental, the build also confirms the pre-step (codemod opted every route out, no shared layout still has a sync-IO blocker) before you ship that PR. Don't reach for the build instead of the dev loop while you're working a route — a passing compile doesn't tell you what ended up in the static shell and what streamed. By default the build stops at the first blocking route, so it's also poor for sizing the work. Two flags help when iterating: `--debug-build-paths` builds only the routes you name (comma-separated glob patterns of file paths relative to the project root, e.g. `--debug-build-paths=\"app/admin/**/page.tsx\"` — not URL paths; `--debug-build-paths=\"app/(marketing)/about/page.tsx\"` — not `/about`; `--debug-build-paths=\"app/admin\"` matches nothing and silently builds zero routes), and `--debug-prerender` disables the early exit so the build continues past the first prerender failure, reports every blocking route, and prints a fuller stack trace that names the originating file and line.\n\nEvery blocking error has a docs page — open it. Both the dev overlay and the build terminal print a `https://nextjs.org/docs/messages/<slug>` link with each error. That page is the canonical recipe for the fix; the inline message is a summary. Fetch the link for every distinct error you encounter, even if you think you know the pattern — the recipes evolve, and the same error class can have different correct fixes depending on what the route reads. Don't improvise from the inline message alone. (`/docs/messages/*` pages aren't bundled offline; if you have no network, fall back to the per-API guides under `node_modules/next/dist/docs/` and note the limitation when you report back.)\n\n### verifying each fix at runtime\n\nA passing build or a cleared overlay isn't proof the route actually behaves — Cache Components is a runtime concern (a static shell with streamed data). Verify after every fix, not only at the end.\n\nIn preference order:\n\n1. **[`next-dev-loop`](https://github.com/vercel/next.js/tree/canary/skills/next-dev-loop) — strongly preferred.** Cross-checks `/_next/mcp` against the live browser via `agent-browser` and surfaces both compile and runtime issues in one pass. The diagnostics (React tree, suspense boundaries, console + network) are richer than poking at `next dev` by hand.\n\n   Install it before starting the loop. Don't wait until you hit something `next dev` alone can't explain. It ships alongside this skill, so check whether it is already available first, and install it only if it is not:\n\n   ```bash\n   npx skills add https://github.com/vercel/next.js/tree/canary/skills/next-dev-loop\n   ```\n\n   The skill states its required `agent-browser` version and walks you through it.\n\n   **Requires Turbopack.** If `package.json`'s `dev` script passes `--webpack`, flag it to the user and ask whether there's a reason to stay on webpack. If not, switch to Turbopack (the Next.js 16.3+ default). If they want to keep webpack, skip this install and use the [build-only loop](#the-loop-build-only-fallback) instead.\n\n   You don't need permission to install `next-dev-loop` itself. It's a tool, like installing a dev dependency. If a user is present, briefly tell them you're installing it for verification. In a non-interactive run (CI, dashboard, sandbox), install it without asking — \"can't prompt the user\" is not a reason to skip. The only legitimate skip is a real technical blocker: no network, no npm, read-only filesystem, a stated no-new-deps policy, or a webpack-only dev script. If you skip, name the specific blocker in your final report.\n\n2. **A browser you can drive yourself.** Playwright, `agent-browser` directly, any browser-automation tool. Use only when `next-dev-loop` is genuinely blocked. You'll miss the framework-side checks (`/_next/mcp`), so DOM assertions alone don't catch every regression — be more cautious about what you call \"verified.\"\n\n3. **Build-only.** If you can't run a dev server at all, the build is your only signal. `○ (Static)` routes with no `<Suspense>` are fully verified by the build (nothing streamed to test). `◐ (Partial Prerender)` routes are only shell-verified — flag them when you report back.\n\n4. **No tooling at all.** Ask the user to run the dev server (or build) and report what they see, or hand off the milestone you've reached.\n\n## step 1: choose a strategy\n\nAsk the user, in terms of the PRs they want, not the size of the job. Never use the internal labels (Incremental, Direct) when talking to the user — those are your own scaffolding. Ask in terms of PRs and features, e.g.: _\"Do you want me to first open a PR that turns on Cache Components and opts every route out of validation, then handle the actual route adoptions feature-by-feature in follow-up PRs? Or do everything on one branch?\"_ Even on a tiny app, the incremental path still has value (review-sized PR, revertible, the `// TODO: Cache Components adoption` markers double as your work queue for next session). Don't pick on their behalf.\n\nIf there's no user to ask, default to **Incremental** and document the choice.\n\nHonor an explicit choice in the request. If the user asks to migrate incrementally and also asks you to complete the migration, establish and verify the incremental checkpoint before continuing to the remaining routes in the same task. “Complete” sets the stopping point; it does not change the chosen strategy.\n\n- **Incremental** — quiet pre-step + the loop. Run the codemod to opt every page and layout out of validation, get the build passing, stop and check in with the user (see [end of the pre-step](#end-of-the-pre-step-check-in)), then enter [step 2's loop](#step-2-the-inner-loop-remove-opt-outs-one-feature-at-a-time) and ship each feature as a follow-up PR.\n- **Direct** — skip the pre-step. Enable `cacheComponents` and go straight to [step 2's loop](#step-2-the-inner-loop-remove-opt-outs-one-feature-at-a-time); the build's blocking routes are the work queue.\n\n### incremental\n\nBefore invoking the codemod, grep for `^export const (revalidate|dynamic|fetchCache)` across the app directory and follow the migration guide for every match. Mark routes that use `dynamic = 'force-static'` or `dynamic = 'error'` for full migration in this PR. The codemod does not remove incompatible configs.\n\nThe codemod refuses to run on a dirty working tree. Commit or stash unrelated work first, or pass `--force` to let its edits land alongside your WIP. Common false positive: if you recently upgraded Next.js, `package.json` and the lockfile will already be dirty — commit those first.\n\n```bash\nnpx @next/codemod@latest cache-components-instant-false ./app\n```\n\nPass the app directory you resolved in [requires](#requires). A wrong path is not an error: it reports `0 ok` and exits `0`, so read the file count and treat zero as a failed run, not an adopted app.\n\nInserts `export const instant = false` (with a `// TODO: Cache Components adoption` comment) into every `{page,layout,default}` file under that directory, skipping files that already declare `instant` and any module marked `\"use client\"` or `\"use server\"`. Then set `cacheComponents: true`. The TODO comments are the work queue for the loop.\n\nIf the codemod isn't available (older `@next/codemod`, sandboxed environment, offline run), reproduce it by hand: for every `{page,layout,default}.{js,jsx,ts,tsx}` in the app directory that isn't `\"use client\"` or `\"use server\"` and doesn't already declare `instant`, insert this after the imports:\n\n```ts\n// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.\n// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components\nexport const instant = false\n```\n\nThe codemod opts every segment out, not only the root, on purpose. Resolution is top-down, first-explicit-config-wins: the highest `instant = false` decides the whole subtree. With an opt-out on every segment, removing one segment's opt-out validates only that segment; descendants keep their own opt-outs and stay passing. If only the root were opted out, removing it would re-arm validation for the entire app at once.\n\nBecause the highest opt-out wins, remove them top-down (root layout first, then descend). Removing a leaf's opt-out does nothing while an ancestor still holds one.\n\nRemove the opt-outs from the previously static routes and any shared segments that mask their validation. Resolve their errors and confirm they still prerender. A cached data call alone does not prove the route remains static.\n\nNext, run `next build` to surface blockers the codemod could not handle. The build is the proof, not the codemod run — a shared layout that calls `new Date()` / `Math.random()` directly still fails regardless of the opt-out (see [background](#background)). If the normal build reports a sync-IO error without locating the call, rerun that route with `next build --debug-prerender --debug-build-paths=\"app/path/to/page.tsx\"`. For each sync-IO error it reports:\n\n1. **Sync-IO at module/render time.** Use the route, originating file and line, and `/docs/messages/` link in the build output to locate the error. If needed, grep the whole repo for `new Date()`, `Date.now()`, `Math.random()`, and `crypto.randomUUID()` (not only `app/**/layout.{js,jsx,ts,tsx}` — the read might live in any component imported by a layout). Do not change unreported matches. Apply the appropriate option from the linked error page, then add this comment above a temporary boundary introduced only to unblock the build:\n\n   ```tsx\n   // TODO: Cache Components adoption. Added to unblock the build: remove this boundary to re-trigger the error and review the documented options.\n   ```\n\n   It shares the `TODO: Cache Components adoption` prefix with the comments the codemod writes, so the check-in grep finds both. Removing the boundary makes the error fire again with its fix cards — the same motion as removing an opt-out in the loop.\n\nAfter each fix, rerun the scoped build when available, then run `next build` again to find the next blocker. Repeat until the normal build passes.\n\nAfter the build passes, confirm every deferred route is still covered by an opt-out and no shared opt-out covers a previously static route. If the app has no previously static routes and the root layout remains deferred, confirm it got an opt-out (`grep -n \"export const instant\" <app dir>/layout.*`). The root layout renders every route, including framework routes like `/_not-found`, so if it was missed, add `export const instant = false` to it by hand.\n\nSynthetic routes like `/_not-found` have no user file — when they block, fix the root layout's opt-out, not the synthetic route. Client Components (`\"use client\"`) get no opt-out (it's a build error to export `instant` from them), but they are not a rare blocker. The high-frequency case is a client component in the root layout's nav or header calling `usePathname()`/`useSearchParams()`: it blocks _every_ dynamic route with `blocking-prerender-client-hook`, and static routes pass (the pathname is known at prerender), which masks it until you reach a dynamic segment. It's not an ancestor-data fix — follow the [error's docs page](https://nextjs.org/docs/messages/blocking-prerender-client-hook) for the `<Suspense>` recipe. Only when a client route blocks on _server_ data do you fix that data in its ancestor.\n\n### end of the pre-step: check in\n\nIncremental only. The pre-step is the shippable PR. Record the passing checkpoint before starting step 2. Unless the user already asked you to continue through the full migration in the same task, stop and check in. Talk to the user in their language; don't say \"Incremental\" or other internal labels; talk about adoption, PRs, and what the app does now. Tell them:\n\n- What you did: turned on Cache Components, ran the codemod, migrated the previously static routes, fixed the remaining blockers, and confirmed the build passes.\n- What changed: the previously static routes still prerender. Other pages and layouts keep a `// TODO: Cache Components adoption` opt-out.\n- What to sanity-check: the previously static routes stay fully prerendered and prefetchable, and request-specific data on the deferred routes remains request-specific.\n- The question: \"Want to open this as its own PR before we start adopting Cache Components route by route? Or keep going on this branch?\" Wait for the answer.\n\nIf the user already asked you to complete the migration, continue after recording this checkpoint instead of asking the same question again.\n\n### direct\n\nSet `cacheComponents: true` and move to [step 2](#step-2-the-inner-loop-remove-opt-outs-one-feature-at-a-time). The build's blocking routes are the work queue.\n\n## step 2: the inner loop, remove opt-outs one feature at a time\n\nA \"feature\" is a single product surface — `app/settings/profile/**`, `app/posts/[slug]/**` — not a whole top-level app like `app/dashboard/**`. Finish one end-to-end before starting the next.\n\nWithin a feature, walk top-down (layouts before pages, root layout first). Removing a layout's opt-out before its descendants exposes the layout's own blocking reads. (Direct: there are no opt-outs to remove — fix each failing route; if a hand-written opt-out on an ancestor shadows it, remove that first.)\n\nA passing build mid-walk doesn't mean the layout is clean. Removing a layout's opt-out while its descendant pages still have theirs keeps the build passing — each page shadows the inherited validation. The layout's actual blocking reads only surface once nothing below it shadows them. Don't call a feature done at the layout boundary.\n\nUse the **with-a-browser** loop unless a browser is genuinely unreachable. The [`next-dev-loop`](#verifying-each-fix-at-runtime) skill is the source of truth for what counts as \"browser available\" and how to install it.\n\n### the loop, with a browser (preferred)\n\nPer route:\n\n- Remove the opt-out (Incremental) or target the failing route (Direct).\n- Reload in dev. Overlay clean? Skip to verify. Overlay still red? Fix.\n- Fix — fetch the docs page linked from the error (`https://nextjs.org/docs/messages/<slug>`), apply the recipe from there. The inline overlay text is a summary; the docs page is the source of truth.\n- Verify in the browser. Confirm the visible content on first paint is what you intended in the shell — not stuck on a fallback, not silently streaming everything out of an empty shell.\n- Re-check siblings if the fix touched shared code (a layout, a sidebar component). A shared-shell change can fix the route you're on and break a sibling.\n\n### the loop, build-only (fallback)\n\nUsed when there's no way to drive a browser — CI, sandbox, the user has no `next dev` running and you can't start one. Weaker signal: confirms the build passes and the route prerenders, but not what ended up in the static shell vs streamed.\n\nPer route:\n\n- Remove the opt-out (Incremental) or target the failing route (Direct).\n- Rebuild with `--debug-build-paths app/<route>/**` (only that route) or `--debug-prerender` (full build, but past the first failure). Route passing? Move on. Still blocking? Fix.\n- Fix — fetch the docs page linked from the error (`https://nextjs.org/docs/messages/<slug>`), apply the recipe from there.\n- Re-check siblings if the fix touched shared code.\n- Flag the route as build-only-verified when you hand the feature off. Each `◐` route still needs a browser pass before the feature is done.\n\n### loop notes\n\n- The [three blocker classes from background](#background) often get missed when fixing in place. Caching a downstream fetch (`getThing(id)`) doesn't clear an `await params` at the top of the page body — push the param promise into the `<Suspense>`-wrapped child.\n- Ambiguous calls are user check-ins, not agent judgment. When you're not sure which fix fits, the blocking code looks security-sensitive, or the user might want to keep the route blocking on purpose — read [references/per-page-decisions.md](./references/per-page-decisions.md) before editing. Show the route while you ask using `next-dev-loop`'s browser handoff, with a screenshot as the fallback. \"Should this stay blocking?\" is much easier to answer while looking at the page than at a file path.\n- Don't narrate the refactor with comments. The only comment the codemod (or you) should leave is `// TODO: Cache Components adoption` on opt-outs, and the user's existing comments. Don't annotate every `<Suspense>` boundary or `\"use cache\"` call with what it does — the code says that. Drop a comment only when the _why_ isn't clear from the code (e.g. a deliberate Block with a reason).\n- For many routes with the same mechanical fix, verify one representative route first. Then batch disjoint route groups using the same recipe, and run the shared build and browser checks together.\n\nKeep a todo list of the feature's routes. When every route in the feature is clean, move to step 3.\n\n## step 3: verify the feature\n\nChecklist before checking in with the user:\n\n- `next build` completes without blocking-route errors.\n- No bare TODOs in the feature: `grep -rn \"TODO: Cache Components adoption\"` finds both the codemod's opt-out comments and the sync-IO unblocks from the pre-step. Any `instant = false` left behind is a deliberate, documented Block — comment rewritten to a reason (see [references/per-page-decisions.md](./references/per-page-decisions.md) → \"when to leave a Block in place\"). Any `await io()` or `await connection()` left behind has been reviewed and kept on purpose, not left over from the pre-step.\n- Each route visited in the browser: confirm the static shell renders first and every `<Suspense>` fallback resolves to its real content. Capture both states if you can — the fallback (mid-stream) and the final paint — so you have a streaming-experience demo to show the user. Throttle the network in the browser if streaming is too fast to observe.\n- After populating any new cache whose data can be updated, a mutation check confirms the next read returns the expected data.\n- If runtime verification fails, reproduce the same route on the pre-adoption branch or with its opt-out restored. A failure that already exists is an environment or data problem, not an adoption regression.\n\nThen check in with the user. Same rule as the pre-step: speak their language. Don't say \"feature-by-feature loop\" or other internal labels; talk about the feature you adopted and what the user will see.\n\n- What you did: which routes you touched, and the user-visible result per route (e.g. \"the post page now streams the article body behind a skeleton while the layout stays static\").\n- What changed: opt-outs removed, fallbacks added, caching boundaries introduced.\n- Show, don't tell. Follow `next-dev-loop`'s browser handoff and drive the route live so the user sees the static shell → fallback → final content sequence. If live presentation is unavailable, attach the before/after screenshots you captured.\n- Give them the click-through: a short table of the feature's routes — the URL to open and what to look for (what renders instantly, which fallbacks appear, what streams in) — so they can verify each one themselves.\n- The question: \"Want to open this feature as a PR and move on to the next, or stop here?\" Wait for the answer.\n\n**Trivial features can skip the check-in.** If adopting a feature only meant removing its `// TODO: Cache Components adoption` opt-out (no `<Suspense>` added, no `'use cache'` introduced, no render order change), the user sees nothing different. Move on to the next feature without stopping; mention it in passing the next time you do check in.\n\nWhen the loop has run on every feature — every remaining `instant = false` sits under a reason comment, `grep -rln \"TODO: Cache Components adoption\" app` returns nothing — point the user at [further reading](#further-reading) if they want to push the experience further, or stop and ship.\n\n### route table glyphs\n\n`ƒ` → `◐` is where adoption usually lands. `◐ (Partial Prerender)` means a static shell prerenders and the request-time content streams in — the goal state for any route that reads `cookies()`, `headers()`, `params`, or `searchParams`. Some routes legitimately stay `ƒ` when they do request-time work through a documented escape hatch (e.g. a layout that uses `await connection()`); the page is no longer _opted out_, it's genuinely dynamic. Don't remove the escape hatch only to chase a `◐`. The inverse holds: `instant = false` does not force a route to be `ƒ`. The glyph reflects what the route does at prerender time, not which validation knobs it exports.\n\n`◐` tells you a shell exists, not what's in it. A `<Suspense>` boundary placed too high (e.g. wrapping the entire page body, or `<Suspense fallback={null}>` around the article content) pushes the visible content out of the static shell into the streamed payload; the build still reports `◐` because _some_ shell prerendered (often only `<html><body>` with framework markup). The route table can't tell you what's in the shell; a browser can. If the shell is empty and everything streams, pull the `<Suspense>` boundary down closer to the actual dynamic read.\n\n## further reading\n\nThe work below is optional and lives in the docs — link the user to them and let them decide which to take on next. Don't walk these through inside this skill.\n\n- [Sweep for more instant navigations](./references/dev-only-validations.md) — an optional follow-up once adoption is done, never required. A passing build is not the last word, because dev validates every route on each page load (simulating both page loads and client navigations) and catches what the build's first-error exit and descendant shadowing skipped. Offer it as the smaller path to instant navigation for a user who doesn't want to adopt Partial Prefetching. Adopting Partial Prefetching (below) runs the same kind of loop and meets these insights anyway, so recommend both and let the user pick which, or whether. The reference is the loop to execute.\n- [`next-partial-prefetching-adoption`](https://github.com/vercel/next.js/tree/canary/skills/next-partial-prefetching-adoption) — the follow-up skill that adopts Partial Prefetching: it enables `partialPrefetching` and audits every `<Link prefetch={true}>` against a decision table (or adopts incrementally with the flag off, driven by the `instant-link-prefetch-partial` insight). It sequences this the same way this skill sequences Cache Components, but the insights are dev-only, so it's a browser click-through, not a build loop. Recommended after instant navigation, since those fixes feed directly into how much of each route the shell can prefetch. Concepts live in the [Adopting Partial Prefetching guide](https://nextjs.org/docs/app/guides/adopting-partial-prefetching).\n- [Prevent regressions with e2e tests](https://nextjs.org/docs/app/guides/instant-navigation#prevent-regressions-with-e2e-tests) — the `@next/playwright` [`instant()`](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/instant#testing-instant-navigation) helper asserts on the UI that's available immediately on navigation, so regressions surface in CI. Recommend it once a route is instant: `next-dev-loop` confirms it _now_; an `instant()` test keeps it that way.\n- [`next-cache-components-optimizer`](https://github.com/vercel/next.js/tree/canary/skills/next-cache-components-optimizer) — a separate skill that grows each route's static shell so more of the page prerenders and less streams in. Pure optimization, not part of adoption.\n",
+      "name": "next-cache-components-adoption",
+      "referencesPath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/agent/skills/next-cache-components-adoption/references",
+      "rootPath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/agent/skills/next-cache-components-adoption",
+      "skillId": "next-cache-components-adoption",
+      "skillFilePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/agent/skills/next-cache-components-adoption/SKILL.md",
+      "sourceId": "skills/next-cache-components-adoption/SKILL.md",
+      "sourceKind": "skill-package"
+    },
+    {
+      "description": "Guides deployment, configuration, and troubleshooting with the Vercel CLI. Use when operating Vercel projects or resources through the CLI, especially for workflows spanning multiple commands, including deployments, CI, build failures, logs, metrics, Speed Insights, traces, environment variables, domains and DNS, firewall and WAF rules, Global Config (Edge Config), feature flags, storage and Blob, Container Registry (VCR), microfrontends, Sandbox, and `vercel api` fallback.",
+      "logicalPath": "skills/vercel-cli/SKILL.md",
+      "owner": {
+        "kind": "application"
+      },
+      "content": "# Vercel CLI Skill\n\nUse the installed CLI's help for command discovery, arguments, flags, defaults, and examples: start with `vercel --help`, then narrow to the command or subcommand. Reuse help already read for that version. These references cover decisions, dependencies, and recovery across operations.\n\nIf an older installation lacks a command or needed guidance, retain the workflow caveats and consult the matching documentation. Preserve the project's chosen CLI version; do not upgrade it merely to make a remembered command work.\n\n## Setup\n\nReuse the project's installed CLI and authenticated context. If the CLI is missing, follow the project's package-manager and version conventions; for a standalone installation, use `npm install --global vercel`. If authentication is missing, run `vercel login` and wait for the user to complete the login or SAML flow. In automation, use an existing `VERCEL_TOKEN` through the environment rather than command-line arguments.\n\n## Execution Context\n\n- Parse stdout for URLs, structured results, and help. Recognized help exits 0; warnings and progress use stderr. JSON and streaming support vary by command.\n- Non-interactive mode suppresses prompts but does not imply consent. Detected agents without a TTY can receive it automatically; plain CI may need it explicitly. Confirmation flags are command-specific. Preserve interactive-only handoffs.\n- Structured errors can contain `status`, `reason`, `hint`, and suggested `next` commands. Follow a suggestion only when its target and action fit the task; it does not independently authorize linking, authentication, purchases, or mutations.\n- Prefer first-class CLI operations when they expose the required data or mutation. For gaps, use [API fallback](references/advanced.md) to discover the endpoint and preserve request/response types.\n\n## Project Targeting\n\n`vercel ci` is repository/team-scoped and does not require a project link; follow [Vercel CI](references/ci.md) for its target resolution instead of the project-link checks below.\n\nWhen relying on a local link, inspect the resolved owner/project from the directory where subsequent commands will run, for example with `vercel project inspect --non-interactive`. Stop on `link_required` or a mismatch. A supported explicit project/team selector can target one operation without changing local links.\n\n- `<cwd>/.vercel/project.json` takes precedence over repository mappings; a root single-project link is not generally inherited by arbitrary subdirectories.\n- `<repo-root>/.vercel/repo.json` selects the deepest mapped directory containing the working directory. Use repository mappings for multiple apps when that matches the repository's setup; a single-app working-directory link remains valid.\n- An unmatched repository path may select the sole mapped project non-interactively. Multiple candidates may remain unresolved, and commands that perform setup can enter a linking flow.\n\nAn app directory or successful authentication check is not proof of the project target. Use the resolved identity before consequential operations, without imposing relinking or unrelated account discovery on a task that already has an explicit target.\n\n## Workflow References\n\nRead only the references needed for the user's task. A syntax-only question can be answered from help without loading a workflow reference.\n\n| Task                                                             | References                                                                                                                                          |\n| ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |\n| Ship or validate a deployment; transfer CI artifacts             | [Deployment](references/deployment.md), [project infrastructure](references/project-infra.md) for rolling releases and related effects              |\n| Inspect, diagnose, search, or rerun Vercel CI runs               | [Vercel CI](references/ci.md)                                                                                                                       |\n| Diagnose a failed build, regression, or live request             | [Monitoring and debugging](references/monitoring-and-debugging.md), [API fallback and traces](references/advanced.md)                               |\n| Prepare local development or application credentials             | [Environment variables](references/environment-variables.md), [project/team discovery](references/projects-and-teams.md) when the target is unclear |\n| Assign domains; configure or troubleshoot DNS in any environment | [Domains and DNS](references/domains-and-dns.md)                                                                                                    |\n| Change production routing or protections                         | [Routing](references/routing.md), [Firewall](references/firewall.md)                                                                                |\n| Provision or connect application resources                       | [Integrations](references/integrations.md), [storage](references/storage.md), [connectors](references/connectors.md)                                |\n| Ship container images or coordinate multiple apps                | [Container registry](references/container-registry.md), [monorepos](references/monorepos.md), [microfrontends](references/microfrontends.md)        |\n| Change feature behavior or review application feedback           | [Feature flags](references/flags.md), [Toolbar comments](references/comments.md)                                                                    |\n| Configure framework/runtime behavior                             | [Node backends](references/node-backends.md), [Bun](references/bun.md)                                                                              |\n| Set up development tooling or external compute                   | [Agent/MCP/Gateway setup](references/agent-and-ai.md), [Sandbox](references/sandbox.md)                                                             |\n| Inspect alerts, usage, billing, or CLI maintenance               | [Platform operations](references/platform-ops.md)                                                                                                   |\n",
+      "name": "vercel-cli",
+      "referencesPath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/agent/skills/vercel-cli/references",
+      "rootPath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/agent/skills/vercel-cli",
+      "skillId": "vercel-cli",
+      "skillFilePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/agent/skills/vercel-cli/SKILL.md",
+      "sourceId": "skills/vercel-cli/SKILL.md",
+      "sourceKind": "skill-package"
+    }
+  ],
+  "tools": [
+    {
+      "behavior": {
+        "availability": [],
+        "shape": {
+          "suspend": "none"
+        }
+      },
+      "description": "Execute a shell command in the shared workspace environment. A command still running after 30 seconds keeps running in the background and returns status \"running\" with its output so far and how to check on or stop it.",
+      "hasExecute": true,
+      "hasModelOutputProjection": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "The shell command to execute."
+          }
+        },
+        "required": [
+          "command"
+        ],
+        "additionalProperties": false
+      },
+      "logicalPath": "tools/bash.ts",
+      "modelInputSchema": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "The shell command to execute."
+          }
+        },
+        "required": [
+          "command"
+        ],
+        "additionalProperties": false
+      },
+      "name": "bash",
+      "outputSchema": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "status": {
+                "const": "completed"
+              },
+              "exitCode": {
+                "type": "number"
+              },
+              "stderr": {
+                "type": "string"
+              },
+              "stdout": {
+                "type": "string"
+              },
+              "truncated": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "status",
+              "exitCode",
+              "stderr",
+              "stdout",
+              "truncated"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "status": {
+                "const": "running"
+              },
+              "pid": {
+                "type": "number"
+              },
+              "outputDirectory": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "stderr": {
+                "type": "string"
+              },
+              "stdout": {
+                "type": "string"
+              },
+              "truncated": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "status",
+              "pid",
+              "outputDirectory",
+              "message",
+              "stderr",
+              "stdout",
+              "truncated"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "requiresApproval": false,
+      "sourceId": "eve:defaults:tools/bash.ts",
+      "sourceKind": "module"
+    },
+    {
+      "behavior": {
+        "availability": [],
+        "shape": {
+          "suspend": "none"
+        }
+      },
+      "description": "Read a file from the local filesystem. If the path does not exist, an error is returned.\n\nUsage:\n- The filePath parameter is an absolute path, a path relative to the workspace root (where `bash` commands start), or a path beginning with $HOME/.\n- By default, this tool returns up to 2000 lines from the start of the file.\n- The offset parameter is the line number to start from (1-indexed).\n- To read later sections, call this tool again with a larger offset.\n- Contents are returned with each line prefixed by its line number as `<line>: <content>`. For example, if a file has contents \"foo\\n\", you will receive \"1: foo\\n\".\n- Any line longer than 2000 characters is truncated.\n- PNG, JPEG, GIF, and WebP images up to 3 MiB and PDFs up to 20 MiB are shown to you as files, including files named in `Attached file <path>` references.\n- Call this tool in parallel when you know there are multiple files you want to read.\n- Avoid tiny repeated slices (30 line chunks). If you need more context, read a larger window.",
+      "hasExecute": true,
+      "hasModelOutputProjection": true,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filePath": {
+            "type": "string",
+            "description": "The path to the file to read: absolute, relative to the workspace root, or beginning with $HOME/."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum number of lines to return. Defaults to 2000."
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "1-based line number to start from. Defaults to 1."
+          }
+        },
+        "required": [
+          "filePath"
+        ],
+        "additionalProperties": false
+      },
+      "logicalPath": "tools/read_file.ts",
+      "modelInputSchema": {
+        "type": "object",
+        "properties": {
+          "filePath": {
+            "type": "string",
+            "description": "The path to the file to read: absolute, relative to the workspace root, or beginning with $HOME/."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum number of lines to return. Defaults to 2000."
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "1-based line number to start from. Defaults to 1."
+          }
+        },
+        "required": [
+          "filePath"
+        ],
+        "additionalProperties": false
+      },
+      "name": "read_file",
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "file": {
+            "type": "object",
+            "properties": {
+              "height": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "mediaType": {
+                "type": "string"
+              },
+              "pages": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "size": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "width": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "mediaType",
+              "size"
+            ],
+            "additionalProperties": false
+          },
+          "nextOffset": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "path": {
+            "type": "string"
+          },
+          "totalLines": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "truncated": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "content",
+          "path",
+          "totalLines",
+          "truncated"
+        ],
+        "additionalProperties": false
+      },
+      "requiresApproval": false,
+      "sourceId": "eve:defaults:tools/read_file.ts",
+      "sourceKind": "module"
+    },
+    {
+      "behavior": {
+        "availability": [],
+        "shape": {
+          "suspend": "none"
+        }
+      },
+      "description": "Writes a file to the local filesystem.\n\nUsage:\n- This tool will overwrite the existing file if there is one at the provided path.\n- If this is an existing file, you MUST use the read_file tool first to read the file's contents. This tool will fail if you did not read the file first.\n- ALWAYS prefer editing existing files in the codebase. NEVER write new files unless explicitly required.\n- NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.\n- Only use emojis if the user explicitly requests it. Avoid writing emojis to files unless asked.",
+      "hasExecute": true,
+      "hasModelOutputProjection": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Complete replacement file contents."
+          },
+          "filePath": {
+            "type": "string",
+            "description": "The path to the file to write: absolute, relative to the workspace root, or beginning with $HOME/."
+          }
+        },
+        "required": [
+          "content",
+          "filePath"
+        ],
+        "additionalProperties": false
+      },
+      "logicalPath": "tools/write_file.ts",
+      "modelInputSchema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Complete replacement file contents."
+          },
+          "filePath": {
+            "type": "string",
+            "description": "The path to the file to write: absolute, relative to the workspace root, or beginning with $HOME/."
+          }
+        },
+        "required": [
+          "content",
+          "filePath"
+        ],
+        "additionalProperties": false
+      },
+      "name": "write_file",
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "existed": {
+            "type": "boolean"
+          },
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "existed",
+          "path"
+        ],
+        "additionalProperties": false
+      },
+      "requiresApproval": false,
+      "sourceId": "eve:defaults:tools/write_file.ts",
+      "sourceKind": "module"
+    },
+    {
+      "behavior": {
+        "availability": [],
+        "shape": {
+          "suspend": "none"
+        }
+      },
+      "description": "Fetch a webpage and return its content in the requested format. Use this to retrieve and analyze content from URLs.\n\nUsage notes:\n- The URL must be a fully-formed valid URL starting with https://\n- HTML responses are automatically converted to markdown or plain text based on the requested format\n- Format options: \"markdown\" (default), \"text\", or \"html\"\n- Default timeout is 30 seconds (max 120 seconds)\n- Maximum response size is 5 MB; content is further capped at the shared tool-output budget (50 KB / 2000 lines)\n- This tool is read-only and does not modify any files",
+      "hasExecute": true,
+      "hasModelOutputProjection": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "format": {
+            "type": "string",
+            "enum": [
+              "markdown",
+              "text",
+              "html"
+            ],
+            "description": "The format to return the content in (text, markdown, or html). HTML responses are automatically converted to the requested format. Defaults to \"markdown\"."
+          },
+          "timeout": {
+            "type": "number",
+            "description": "Optional timeout in seconds, greater than 0. Defaults to 30, max 120."
+          },
+          "url": {
+            "type": "string",
+            "description": "The fully-formed URL to fetch content from. Must start with https://."
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "additionalProperties": false
+      },
+      "logicalPath": "tools/web_fetch.ts",
+      "modelInputSchema": {
+        "type": "object",
+        "properties": {
+          "format": {
+            "type": "string",
+            "enum": [
+              "markdown",
+              "text",
+              "html"
+            ],
+            "description": "The format to return the content in (text, markdown, or html). HTML responses are automatically converted to the requested format. Defaults to \"markdown\"."
+          },
+          "timeout": {
+            "type": "number",
+            "description": "Optional timeout in seconds, greater than 0. Defaults to 30, max 120."
+          },
+          "url": {
+            "type": "string",
+            "description": "The fully-formed URL to fetch content from. Must start with https://."
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "additionalProperties": false
+      },
+      "name": "web_fetch",
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "truncated": {
+            "type": "boolean"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "content",
+          "contentType",
+          "truncated",
+          "url"
+        ],
+        "additionalProperties": false
+      },
+      "requiresApproval": false,
+      "sourceId": "eve:defaults:tools/web_fetch.ts",
+      "sourceKind": "module"
+    },
+    {
+      "behavior": {
+        "availability": [],
+        "handling": {
+          "kind": "provider-tool",
+          "provider": "exa"
+        }
+      },
+      "description": "Search the web for real-time information. Use this to find up-to-date information about current events, recent developments, or topics that may have changed since the knowledge cutoff.",
+      "hasExecute": false,
+      "hasModelOutputProjection": false,
+      "inputSchema": null,
+      "logicalPath": "tools/web_search.ts",
+      "name": "web_search",
+      "sourceId": "eve:defaults:tools/web_search.ts",
+      "sourceKind": "module",
+      "requiresApproval": false
+    },
+    {
+      "behavior": {
+        "availability": [
+          "root-session"
+        ],
+        "handling": {
+          "action": "self-agent",
+          "kind": "dispatch"
+        },
+        "shape": {
+          "suspend": "none"
+        }
+      },
+      "description": "Delegate a focused subtask to a copy of yourself. Use it to isolate complex work or split a large task into independent pieces. Each call starts a task, so several agents can work at once: start every independent one before you wait. A new child has fresh history and state but reuses your tools and sandbox, so give parallel writers non-overlapping scopes. In message, state the goal, what to return, and whether it may change files.",
+      "hasExecute": true,
+      "hasModelOutputProjection": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "The message to send to the agent, with everything it needs to do the work."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "additionalProperties": false
+      },
+      "logicalPath": "tools/agent.ts",
+      "modelInputSchema": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "The message to send to the agent, with everything it needs to do the work."
+          },
+          "taskId": {
+            "description": "The id of a task this tool started, copied from its \"Started task\" receipt or the [Tasks] note, to send it this input. Omit it to start a new task.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "additionalProperties": false
+      },
+      "name": "agent",
+      "requiresApproval": false,
+      "sourceId": "eve:root-defaults:tools/agent.ts",
+      "sourceKind": "module"
+    }
+  ],
+  "workspaceResourceRoot": {
+    "contentHash": "056ed7ee6e031c8161702318a19cbebf16e80a65d8ea203b3cfab1e744b406ab",
+    "logicalPath": "workspace-resources/__root__",
+    "rootEntries": []
+  },
+  "config": {
+    "compaction": {},
+    "name": "versell",
+    "reasoning": "high",
+    "source": {
+      "logicalPath": "agent.ts",
+      "sourceId": "agent.ts",
+      "sourceKind": "module"
+    },
+    "model": {
+      "id": "openai/gpt-6.1-terra",
+      "routing": {
+        "kind": "external",
+        "provider": "openai"
+      },
+      "contextWindowTokens": 1050000,
+      "source": {
+        "sourceKind": "module",
+        "logicalPath": "agent.ts",
+        "sourceId": "agent.ts"
+      }
+    }
+  },
+  "kind": "eve-agent-compiled-manifest",
+  "subagents": [
+    {
+      "backing": {
+        "kind": "resource",
+        "sourcePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/node_modules/eve/dist/src/self-modification/extension/subagents/agent"
+      },
+      "entryPath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/node_modules/eve/dist/src/self-modification/extension/subagents/agent",
+      "logicalPath": "subagents/self-modification__agent",
+      "name": "self-modification__agent",
+      "nodeId": "ext:self-modification:subagents/agent",
+      "owner": {
+        "kind": "extension",
+        "mountId": "extensions/self-modification",
+        "namespace": "self-modification",
+        "packageName": "eve"
+      },
+      "parentNodeId": "__root__",
+      "rootPath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/node_modules/eve/dist/src/self-modification/extension/subagents/agent",
+      "sourceId": "ext:self-modification:subagents/agent",
+      "sourceKind": "module",
+      "agent": {
+        "agentRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mvzhaurl-5a75feba-d603-4704-8782-2ce01efd26f9/source/node_modules/eve/dist/src/self-modification/extension/subagents/agent",
+        "appRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mvzhaurl-5a75feba-d603-4704-8782-2ce01efd26f9/source/node_modules/eve",
+        "bindings": {
+          "eve:defaults:tools/bash.ts": {
+            "backing": {
+              "kind": "programmatic",
+              "moduleId": "tools/bash.ts",
+              "registryId": "eve:defaults",
+              "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+            },
+            "logicalPath": "tools/bash.ts",
+            "owner": {
+              "feature": "eve:defaults",
+              "kind": "framework"
+            },
+            "usage": {
+              "compile": true,
+              "runtimeEntry": true
+            }
+          },
+          "eve:defaults:tools/read_file.ts": {
+            "backing": {
+              "kind": "programmatic",
+              "moduleId": "tools/read_file.ts",
+              "registryId": "eve:defaults",
+              "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+            },
+            "logicalPath": "tools/read_file.ts",
+            "owner": {
+              "feature": "eve:defaults",
+              "kind": "framework"
+            },
+            "usage": {
+              "compile": true,
+              "runtimeEntry": true
+            }
+          },
+          "eve:defaults:tools/write_file.ts": {
+            "backing": {
+              "kind": "programmatic",
+              "moduleId": "tools/write_file.ts",
+              "registryId": "eve:defaults",
+              "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+            },
+            "logicalPath": "tools/write_file.ts",
+            "owner": {
+              "feature": "eve:defaults",
+              "kind": "framework"
+            },
+            "usage": {
+              "compile": true,
+              "runtimeEntry": true
+            }
+          },
+          "eve:defaults:tools/web_fetch.ts": {
+            "backing": {
+              "kind": "programmatic",
+              "moduleId": "tools/web_fetch.ts",
+              "registryId": "eve:defaults",
+              "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+            },
+            "logicalPath": "tools/web_fetch.ts",
+            "owner": {
+              "feature": "eve:defaults",
+              "kind": "framework"
+            },
+            "usage": {
+              "compile": true,
+              "runtimeEntry": true
+            }
+          },
+          "eve:defaults:tools/web_search.ts": {
+            "backing": {
+              "kind": "programmatic",
+              "moduleId": "tools/web_search.ts",
+              "registryId": "eve:defaults",
+              "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+            },
+            "logicalPath": "tools/web_search.ts",
+            "owner": {
+              "feature": "eve:defaults",
+              "kind": "framework"
+            },
+            "usage": {
+              "compile": true,
+              "runtimeEntry": false
+            }
+          },
+          "agent.js": {
+            "backing": {
+              "externalDependencies": [],
+              "extensionScope": {
+                "namespace": "self-modification",
+                "sourceRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mvzhaurl-5a75feba-d603-4704-8782-2ce01efd26f9/source/node_modules/eve/dist/src/self-modification/extension"
+              },
+              "kind": "filesystem",
+              "mountId": "extensions/self-modification",
+              "sourcePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/node_modules/eve/dist/src/self-modification/extension/subagents/agent/agent.js"
+            },
+            "logicalPath": "agent.js",
+            "owner": {
+              "kind": "extension",
+              "mountId": "extensions/self-modification",
+              "namespace": "self-modification",
+              "packageName": "eve"
+            },
+            "usage": {
+              "compile": true,
+              "runtimeEntry": true
+            }
+          },
+          "sandbox.js": {
+            "backing": {
+              "externalDependencies": [],
+              "extensionScope": {
+                "namespace": "self-modification",
+                "sourceRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mvzhaurl-5a75feba-d603-4704-8782-2ce01efd26f9/source/node_modules/eve/dist/src/self-modification/extension"
+              },
+              "kind": "filesystem",
+              "mountId": "extensions/self-modification",
+              "sourcePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/node_modules/eve/dist/src/self-modification/extension/subagents/agent/sandbox.js"
+            },
+            "logicalPath": "sandbox.js",
+            "owner": {
+              "kind": "extension",
+              "mountId": "extensions/self-modification",
+              "namespace": "self-modification",
+              "packageName": "eve"
+            },
+            "usage": {
+              "compile": true,
+              "runtimeEntry": true
+            }
+          },
+          "tools/edit_file.js": {
+            "backing": {
+              "externalDependencies": [],
+              "extensionScope": {
+                "namespace": "self-modification",
+                "sourceRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mvzhaurl-5a75feba-d603-4704-8782-2ce01efd26f9/source/node_modules/eve/dist/src/self-modification/extension"
+              },
+              "kind": "filesystem",
+              "mountId": "extensions/self-modification",
+              "sourcePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/node_modules/eve/dist/src/self-modification/extension/subagents/agent/tools/edit_file.js"
+            },
+            "logicalPath": "tools/edit_file.js",
+            "owner": {
+              "kind": "extension",
+              "mountId": "extensions/self-modification",
+              "namespace": "self-modification",
+              "packageName": "eve"
+            },
+            "usage": {
+              "compile": true,
+              "runtimeEntry": true
+            }
+          },
+          "tools/inspect_trace.js": {
+            "backing": {
+              "externalDependencies": [],
+              "extensionScope": {
+                "namespace": "self-modification",
+                "sourceRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mvzhaurl-5a75feba-d603-4704-8782-2ce01efd26f9/source/node_modules/eve/dist/src/self-modification/extension"
+              },
+              "kind": "filesystem",
+              "mountId": "extensions/self-modification",
+              "sourcePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/node_modules/eve/dist/src/self-modification/extension/subagents/agent/tools/inspect_trace.js"
+            },
+            "logicalPath": "tools/inspect_trace.js",
+            "owner": {
+              "kind": "extension",
+              "mountId": "extensions/self-modification",
+              "namespace": "self-modification",
+              "packageName": "eve"
+            },
+            "usage": {
+              "compile": true,
+              "runtimeEntry": true
+            }
+          },
+          "tools/inspect_trace_spans.js": {
+            "backing": {
+              "externalDependencies": [],
+              "extensionScope": {
+                "namespace": "self-modification",
+                "sourceRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mvzhaurl-5a75feba-d603-4704-8782-2ce01efd26f9/source/node_modules/eve/dist/src/self-modification/extension"
+              },
+              "kind": "filesystem",
+              "mountId": "extensions/self-modification",
+              "sourcePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/node_modules/eve/dist/src/self-modification/extension/subagents/agent/tools/inspect_trace_spans.js"
+            },
+            "logicalPath": "tools/inspect_trace_spans.js",
+            "owner": {
+              "kind": "extension",
+              "mountId": "extensions/self-modification",
+              "namespace": "self-modification",
+              "packageName": "eve"
+            },
+            "usage": {
+              "compile": true,
+              "runtimeEntry": true
+            }
+          },
+          "tools/registry_add.js": {
+            "backing": {
+              "externalDependencies": [],
+              "extensionScope": {
+                "namespace": "self-modification",
+                "sourceRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mvzhaurl-5a75feba-d603-4704-8782-2ce01efd26f9/source/node_modules/eve/dist/src/self-modification/extension"
+              },
+              "kind": "filesystem",
+              "mountId": "extensions/self-modification",
+              "sourcePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/node_modules/eve/dist/src/self-modification/extension/subagents/agent/tools/registry_add.js"
+            },
+            "logicalPath": "tools/registry_add.js",
+            "owner": {
+              "kind": "extension",
+              "mountId": "extensions/self-modification",
+              "namespace": "self-modification",
+              "packageName": "eve"
+            },
+            "usage": {
+              "compile": true,
+              "runtimeEntry": true
+            }
+          },
+          "tools/search_models.js": {
+            "backing": {
+              "externalDependencies": [],
+              "extensionScope": {
+                "namespace": "self-modification",
+                "sourceRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mvzhaurl-5a75feba-d603-4704-8782-2ce01efd26f9/source/node_modules/eve/dist/src/self-modification/extension"
+              },
+              "kind": "filesystem",
+              "mountId": "extensions/self-modification",
+              "sourcePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/node_modules/eve/dist/src/self-modification/extension/subagents/agent/tools/search_models.js"
+            },
+            "logicalPath": "tools/search_models.js",
+            "owner": {
+              "kind": "extension",
+              "mountId": "extensions/self-modification",
+              "namespace": "self-modification",
+              "packageName": "eve"
+            },
+            "usage": {
+              "compile": true,
+              "runtimeEntry": true
+            }
+          },
+          "tools/search_registry.js": {
+            "backing": {
+              "externalDependencies": [],
+              "extensionScope": {
+                "namespace": "self-modification",
+                "sourceRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mvzhaurl-5a75feba-d603-4704-8782-2ce01efd26f9/source/node_modules/eve/dist/src/self-modification/extension"
+              },
+              "kind": "filesystem",
+              "mountId": "extensions/self-modification",
+              "sourcePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/node_modules/eve/dist/src/self-modification/extension/subagents/agent/tools/search_registry.js"
+            },
+            "logicalPath": "tools/search_registry.js",
+            "owner": {
+              "kind": "extension",
+              "mountId": "extensions/self-modification",
+              "namespace": "self-modification",
+              "packageName": "eve"
+            },
+            "usage": {
+              "compile": true,
+              "runtimeEntry": true
+            }
+          },
+          "tools/search_traces.js": {
+            "backing": {
+              "externalDependencies": [],
+              "extensionScope": {
+                "namespace": "self-modification",
+                "sourceRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mvzhaurl-5a75feba-d603-4704-8782-2ce01efd26f9/source/node_modules/eve/dist/src/self-modification/extension"
+              },
+              "kind": "filesystem",
+              "mountId": "extensions/self-modification",
+              "sourcePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/node_modules/eve/dist/src/self-modification/extension/subagents/agent/tools/search_traces.js"
+            },
+            "logicalPath": "tools/search_traces.js",
+            "owner": {
+              "kind": "extension",
+              "mountId": "extensions/self-modification",
+              "namespace": "self-modification",
+              "packageName": "eve"
+            },
+            "usage": {
+              "compile": true,
+              "runtimeEntry": true
+            }
+          },
+          "instructions.js": {
+            "backing": {
+              "externalDependencies": [],
+              "extensionScope": {
+                "namespace": "self-modification",
+                "sourceRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mvzhaurl-5a75feba-d603-4704-8782-2ce01efd26f9/source/node_modules/eve/dist/src/self-modification/extension"
+              },
+              "kind": "filesystem",
+              "mountId": "extensions/self-modification",
+              "sourcePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/node_modules/eve/dist/src/self-modification/extension/subagents/agent/instructions.js"
+            },
+            "logicalPath": "instructions.js",
+            "owner": {
+              "kind": "extension",
+              "mountId": "extensions/self-modification",
+              "namespace": "self-modification",
+              "packageName": "eve"
+            },
+            "usage": {
+              "compile": true,
+              "runtimeEntry": true
+            }
+          },
+          "skills/trace_analysis.js": {
+            "backing": {
+              "externalDependencies": [],
+              "extensionScope": {
+                "namespace": "self-modification",
+                "sourceRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mvzhaurl-5a75feba-d603-4704-8782-2ce01efd26f9/source/node_modules/eve/dist/src/self-modification/extension"
+              },
+              "kind": "filesystem",
+              "mountId": "extensions/self-modification",
+              "sourcePath": "/Users/rileyzammit/Documents/storefronts/VerSell-store/node_modules/eve/dist/src/self-modification/extension/subagents/agent/skills/trace_analysis.js"
+            },
+            "logicalPath": "skills/trace_analysis.js",
+            "owner": {
+              "kind": "extension",
+              "mountId": "extensions/self-modification",
+              "namespace": "self-modification",
+              "packageName": "eve"
+            },
+            "usage": {
+              "compile": true,
+              "runtimeEntry": true
+            }
+          }
+        },
+        "channelRoutes": {
+          "effective": [],
+          "preflight": [],
+          "shadowed": []
+        },
+        "connections": [],
+        "dynamicConnections": [],
+        "diagnosticsSummary": {
+          "errors": 0,
+          "warnings": 0
+        },
+        "sourceComposition": {
+          "entries": [
+            {
+              "kind": "shadowed",
+              "source": {
+                "backing": {
+                  "kind": "programmatic",
+                  "moduleId": "agent.ts",
+                  "registryId": "eve:defaults",
+                  "revision": "eve@1.0.0-rc.1:compiled-manifest-v53"
+                },
+                "form": "direct",
+                "layer": "framework-default",
+                "logicalPath": "agent.ts",
+                "owner": {
+                  "feature": "eve:defaults",
+                  "kind": "framework"
+                },
+                "sourceId": "eve:defaults:agent.ts"
+              },
+              "winnerSourceId": "agent.js"
+            },
+            {
+              "kind": "shadowed",
+              "source": {
+                "backing": {
+                  "kind": "programmatic",
+                  "moduleId": "sandbox.ts",
+                  "registryId": "eve:defaults",
+                  "revision": "eve@1.0.0-rc.1:compiled-manifest-v53",
+                  "semanticRevision": "eve:default-sandbox:v1"
+                },
+                "form": "direct",
+                "layer": "framework-default",
+                "logicalPath": "sandbox.ts",
+                "owner": {
+                  "feature": "eve:defaults",
+                  "kind": "framework"
+                },
+                "sourceId": "eve:defaults:sandbox.ts"
+              },
+              "winnerSourceId": "sandbox.js"
+            }
+          ]
+        },
+        "dynamicInstructions": [
+          {
+            "logicalPath": "instructions.js",
+            "slug": "instructions",
+            "sourceId": "instructions.js",
+            "sourceKind": "module"
+          }
+        ],
+        "dynamicSkills": [
+          {
+            "logicalPath": "skills/trace_analysis.js",
+            "slug": "trace_analysis",
+            "sourceId": "skills/trace_analysis.js",
+            "sourceKind": "module",
+            "extensionNamespace": "self-modification"
+          }
+        ],
+        "dynamicTools": [
+          {
+            "logicalPath": "tools/inspect_trace.js",
+            "slug": "inspect_trace",
+            "sourceId": "tools/inspect_trace.js",
+            "sourceKind": "module",
+            "extensionNamespace": "self-modification"
+          },
+          {
+            "logicalPath": "tools/inspect_trace_spans.js",
+            "slug": "inspect_trace_spans",
+            "sourceId": "tools/inspect_trace_spans.js",
+            "sourceKind": "module",
+            "extensionNamespace": "self-modification"
+          },
+          {
+            "logicalPath": "tools/registry_add.js",
+            "slug": "registry_add",
+            "sourceId": "tools/registry_add.js",
+            "sourceKind": "module",
+            "extensionNamespace": "self-modification"
+          },
+          {
+            "logicalPath": "tools/search_traces.js",
+            "slug": "search_traces",
+            "sourceId": "tools/search_traces.js",
+            "sourceKind": "module",
+            "extensionNamespace": "self-modification"
+          }
+        ],
+        "extensionMounts": [],
+        "hooks": [],
+        "memories": [],
+        "instructions": [],
+        "remoteAgents": [],
+        "sandbox": {
+          "providerName": "just-bash",
+          "logicalPath": "sandbox.js",
+          "revisionHash": "a4df1ed9ba6bc663ecf7d8d4b3621ee5347bc0c8c9c8cd4e0f9fcced4771f577",
+          "sourceId": "sandbox.js",
+          "sourceKind": "module"
+        },
+        "sandboxWorkspaces": [],
+        "schedules": [],
+        "scheduleCollections": [],
+        "skills": [],
+        "tools": [
+          {
+            "behavior": {
+              "availability": [],
+              "shape": {
+                "suspend": "none"
+              }
+            },
+            "description": "Execute a shell command in the shared workspace environment. A command still running after 30 seconds keeps running in the background and returns status \"running\" with its output so far and how to check on or stop it.",
+            "hasExecute": true,
+            "hasModelOutputProjection": false,
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "command": {
+                  "type": "string",
+                  "description": "The shell command to execute."
+                }
+              },
+              "required": [
+                "command"
+              ],
+              "additionalProperties": false
+            },
+            "logicalPath": "tools/bash.ts",
+            "modelInputSchema": {
+              "type": "object",
+              "properties": {
+                "command": {
+                  "type": "string",
+                  "description": "The shell command to execute."
+                }
+              },
+              "required": [
+                "command"
+              ],
+              "additionalProperties": false
+            },
+            "name": "bash",
+            "outputSchema": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "const": "completed"
+                    },
+                    "exitCode": {
+                      "type": "number"
+                    },
+                    "stderr": {
+                      "type": "string"
+                    },
+                    "stdout": {
+                      "type": "string"
+                    },
+                    "truncated": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "exitCode",
+                    "stderr",
+                    "stdout",
+                    "truncated"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "const": "running"
+                    },
+                    "pid": {
+                      "type": "number"
+                    },
+                    "outputDirectory": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "stderr": {
+                      "type": "string"
+                    },
+                    "stdout": {
+                      "type": "string"
+                    },
+                    "truncated": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "pid",
+                    "outputDirectory",
+                    "message",
+                    "stderr",
+                    "stdout",
+                    "truncated"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "requiresApproval": false,
+            "sourceId": "eve:defaults:tools/bash.ts",
+            "sourceKind": "module"
+          },
+          {
+            "behavior": {
+              "availability": [],
+              "shape": {
+                "suspend": "none"
+              }
+            },
+            "description": "Read a file from the local filesystem. If the path does not exist, an error is returned.\n\nUsage:\n- The filePath parameter is an absolute path, a path relative to the workspace root (where `bash` commands start), or a path beginning with $HOME/.\n- By default, this tool returns up to 2000 lines from the start of the file.\n- The offset parameter is the line number to start from (1-indexed).\n- To read later sections, call this tool again with a larger offset.\n- Contents are returned with each line prefixed by its line number as `<line>: <content>`. For example, if a file has contents \"foo\\n\", you will receive \"1: foo\\n\".\n- Any line longer than 2000 characters is truncated.\n- PNG, JPEG, GIF, and WebP images up to 3 MiB and PDFs up to 20 MiB are shown to you as files, including files named in `Attached file <path>` references.\n- Call this tool in parallel when you know there are multiple files you want to read.\n- Avoid tiny repeated slices (30 line chunks). If you need more context, read a larger window.",
+            "hasExecute": true,
+            "hasModelOutputProjection": true,
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "filePath": {
+                  "type": "string",
+                  "description": "The path to the file to read: absolute, relative to the workspace root, or beginning with $HOME/."
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Maximum number of lines to return. Defaults to 2000."
+                },
+                "offset": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "1-based line number to start from. Defaults to 1."
+                }
+              },
+              "required": [
+                "filePath"
+              ],
+              "additionalProperties": false
+            },
+            "logicalPath": "tools/read_file.ts",
+            "modelInputSchema": {
+              "type": "object",
+              "properties": {
+                "filePath": {
+                  "type": "string",
+                  "description": "The path to the file to read: absolute, relative to the workspace root, or beginning with $HOME/."
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Maximum number of lines to return. Defaults to 2000."
+                },
+                "offset": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "1-based line number to start from. Defaults to 1."
+                }
+              },
+              "required": [
+                "filePath"
+              ],
+              "additionalProperties": false
+            },
+            "name": "read_file",
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string"
+                },
+                "file": {
+                  "type": "object",
+                  "properties": {
+                    "height": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "mediaType": {
+                      "type": "string"
+                    },
+                    "pages": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "size": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "width": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "mediaType",
+                    "size"
+                  ],
+                  "additionalProperties": false
+                },
+                "nextOffset": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "path": {
+                  "type": "string"
+                },
+                "totalLines": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "truncated": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "content",
+                "path",
+                "totalLines",
+                "truncated"
+              ],
+              "additionalProperties": false
+            },
+            "requiresApproval": false,
+            "sourceId": "eve:defaults:tools/read_file.ts",
+            "sourceKind": "module"
+          },
+          {
+            "behavior": {
+              "availability": [],
+              "shape": {
+                "suspend": "none"
+              }
+            },
+            "description": "Writes a file to the local filesystem.\n\nUsage:\n- This tool will overwrite the existing file if there is one at the provided path.\n- If this is an existing file, you MUST use the read_file tool first to read the file's contents. This tool will fail if you did not read the file first.\n- ALWAYS prefer editing existing files in the codebase. NEVER write new files unless explicitly required.\n- NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.\n- Only use emojis if the user explicitly requests it. Avoid writing emojis to files unless asked.",
+            "hasExecute": true,
+            "hasModelOutputProjection": false,
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string",
+                  "description": "Complete replacement file contents."
+                },
+                "filePath": {
+                  "type": "string",
+                  "description": "The path to the file to write: absolute, relative to the workspace root, or beginning with $HOME/."
+                }
+              },
+              "required": [
+                "content",
+                "filePath"
+              ],
+              "additionalProperties": false
+            },
+            "logicalPath": "tools/write_file.ts",
+            "modelInputSchema": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string",
+                  "description": "Complete replacement file contents."
+                },
+                "filePath": {
+                  "type": "string",
+                  "description": "The path to the file to write: absolute, relative to the workspace root, or beginning with $HOME/."
+                }
+              },
+              "required": [
+                "content",
+                "filePath"
+              ],
+              "additionalProperties": false
+            },
+            "name": "write_file",
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "existed": {
+                  "type": "boolean"
+                },
+                "path": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "existed",
+                "path"
+              ],
+              "additionalProperties": false
+            },
+            "requiresApproval": false,
+            "sourceId": "eve:defaults:tools/write_file.ts",
+            "sourceKind": "module"
+          },
+          {
+            "behavior": {
+              "availability": [],
+              "shape": {
+                "suspend": "none"
+              }
+            },
+            "description": "Fetch a webpage and return its content in the requested format. Use this to retrieve and analyze content from URLs.\n\nUsage notes:\n- The URL must be a fully-formed valid URL starting with https://\n- HTML responses are automatically converted to markdown or plain text based on the requested format\n- Format options: \"markdown\" (default), \"text\", or \"html\"\n- Default timeout is 30 seconds (max 120 seconds)\n- Maximum response size is 5 MB; content is further capped at the shared tool-output budget (50 KB / 2000 lines)\n- This tool is read-only and does not modify any files",
+            "hasExecute": true,
+            "hasModelOutputProjection": false,
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "format": {
+                  "type": "string",
+                  "enum": [
+                    "markdown",
+                    "text",
+                    "html"
+                  ],
+                  "description": "The format to return the content in (text, markdown, or html). HTML responses are automatically converted to the requested format. Defaults to \"markdown\"."
+                },
+                "timeout": {
+                  "type": "number",
+                  "description": "Optional timeout in seconds, greater than 0. Defaults to 30, max 120."
+                },
+                "url": {
+                  "type": "string",
+                  "description": "The fully-formed URL to fetch content from. Must start with https://."
+                }
+              },
+              "required": [
+                "url"
+              ],
+              "additionalProperties": false
+            },
+            "logicalPath": "tools/web_fetch.ts",
+            "modelInputSchema": {
+              "type": "object",
+              "properties": {
+                "format": {
+                  "type": "string",
+                  "enum": [
+                    "markdown",
+                    "text",
+                    "html"
+                  ],
+                  "description": "The format to return the content in (text, markdown, or html). HTML responses are automatically converted to the requested format. Defaults to \"markdown\"."
+                },
+                "timeout": {
+                  "type": "number",
+                  "description": "Optional timeout in seconds, greater than 0. Defaults to 30, max 120."
+                },
+                "url": {
+                  "type": "string",
+                  "description": "The fully-formed URL to fetch content from. Must start with https://."
+                }
+              },
+              "required": [
+                "url"
+              ],
+              "additionalProperties": false
+            },
+            "name": "web_fetch",
+            "outputSchema": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string"
+                },
+                "contentType": {
+                  "type": "string"
+                },
+                "truncated": {
+                  "type": "boolean"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "content",
+                "contentType",
+                "truncated",
+                "url"
+              ],
+              "additionalProperties": false
+            },
+            "requiresApproval": false,
+            "sourceId": "eve:defaults:tools/web_fetch.ts",
+            "sourceKind": "module"
+          },
+          {
+            "behavior": {
+              "availability": [],
+              "handling": {
+                "kind": "provider-tool",
+                "provider": "exa"
+              }
+            },
+            "description": "Search the web for real-time information. Use this to find up-to-date information about current events, recent developments, or topics that may have changed since the knowledge cutoff.",
+            "hasExecute": false,
+            "hasModelOutputProjection": false,
+            "inputSchema": null,
+            "logicalPath": "tools/web_search.ts",
+            "name": "web_search",
+            "sourceId": "eve:defaults:tools/web_search.ts",
+            "sourceKind": "module",
+            "requiresApproval": false
+          },
+          {
+            "behavior": {
+              "availability": [],
+              "shape": {
+                "suspend": "none"
+              }
+            },
+            "description": "Edit a single file using exact text replacement. Every edits[].oldText must match a unique, non-overlapping region of the original file. If two changes affect the same block or nearby lines, merge them into one edit instead of emitting overlapping edits. Do not include large unchanged regions just to connect distant changes.",
+            "hasExecute": true,
+            "hasModelOutputProjection": false,
+            "inputSchema": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Absolute path below /source to edit."
+                },
+                "edits": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "oldText": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Unique exact text from the current file. Encode control characters, quotes, and backslashes as JSON escapes."
+                      },
+                      "newText": {
+                        "type": "string",
+                        "description": "Exact replacement text. Encode control characters, quotes, and backslashes as JSON escapes."
+                      }
+                    },
+                    "required": [
+                      "oldText",
+                      "newText"
+                    ]
+                  },
+                  "description": "One or more targeted replacements. Each edit is matched against the original file, not incrementally. Do not include overlapping or nested edits. If two changes touch the same block or nearby lines, merge them into one edit instead."
+                }
+              },
+              "required": [
+                "path",
+                "edits"
+              ]
+            },
+            "logicalPath": "tools/edit_file.js",
+            "modelInputSchema": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Absolute path below /source to edit."
+                },
+                "edits": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "oldText": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Unique exact text from the current file. Encode control characters, quotes, and backslashes as JSON escapes."
+                      },
+                      "newText": {
+                        "type": "string",
+                        "description": "Exact replacement text. Encode control characters, quotes, and backslashes as JSON escapes."
+                      }
+                    },
+                    "required": [
+                      "oldText",
+                      "newText"
+                    ]
+                  },
+                  "description": "One or more targeted replacements. Each edit is matched against the original file, not incrementally. Do not include overlapping or nested edits. If two changes touch the same block or nearby lines, merge them into one edit instead."
+                }
+              },
+              "required": [
+                "path",
+                "edits"
+              ]
+            },
+            "name": "edit_file",
+            "outputSchema": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "replacements": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "path",
+                "replacements"
+              ]
+            },
+            "requiresApproval": false,
+            "sourceId": "tools/edit_file.js",
+            "sourceKind": "module"
+          },
+          {
+            "behavior": {
+              "availability": [],
+              "shape": {
+                "suspend": "none"
+              }
+            },
+            "description": "Search the Vercel AI Gateway model catalog. Call this to list available AI Gateway models or resolve a model to its exact ID.",
+            "hasExecute": true,
+            "hasModelOutputProjection": false,
+            "inputSchema": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "query": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "description": "A full model ID, model name, or short name such as 'luna'."
+                }
+              },
+              "required": [
+                "query"
+              ]
+            },
+            "logicalPath": "tools/search_models.js",
+            "modelInputSchema": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "query": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "description": "A full model ID, model name, or short name such as 'luna'."
+                }
+              },
+              "required": [
+                "query"
+              ]
+            },
+            "name": "search_models",
+            "outputSchema": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "models": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "provider": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "provider"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "models"
+              ]
+            },
+            "requiresApproval": false,
+            "sourceId": "tools/search_models.js",
+            "sourceKind": "module"
+          },
+          {
+            "behavior": {
+              "availability": [],
+              "shape": {
+                "suspend": "none"
+              }
+            },
+            "description": "Search the eve registry for integrations this project can add: channels, MCP connections, extensions, memory providers, and observability. Read-only — it installs nothing. Call it before writing an integration by hand, then pass an exact item address (for example `channel/slack`) to registry_add.",
+            "hasExecute": true,
+            "hasModelOutputProjection": false,
+            "inputSchema": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "query": {
+                  "type": "string",
+                  "maxLength": 200,
+                  "description": "Free-text match against integration names, titles, and descriptions."
+                },
+                "category": {
+                  "type": "string",
+                  "enum": [
+                    "channel",
+                    "connection",
+                    "extension",
+                    "instrumentation",
+                    "memory"
+                  ],
+                  "description": "Restrict results to one registry category."
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 25,
+                  "description": "Maximum number of items to return (default 10, maximum 25)."
+                },
+                "offset": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "Number of matching items to skip. Use nextOffset from a prior result to retrieve the next page."
+                }
+              }
+            },
+            "logicalPath": "tools/search_registry.js",
+            "modelInputSchema": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "query": {
+                  "type": "string",
+                  "maxLength": 200,
+                  "description": "Free-text match against integration names, titles, and descriptions."
+                },
+                "category": {
+                  "type": "string",
+                  "enum": [
+                    "channel",
+                    "connection",
+                    "extension",
+                    "instrumentation",
+                    "memory"
+                  ],
+                  "description": "Restrict results to one registry category."
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 25,
+                  "description": "Maximum number of items to return (default 10, maximum 25)."
+                },
+                "offset": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "Number of matching items to skip. Use nextOffset from a prior result to retrieve the next page."
+                }
+              }
+            },
+            "name": "search_registry",
+            "outputSchema": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "address": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "category": {
+                        "type": "string"
+                      },
+                      "requires": {
+                        "type": "string"
+                      },
+                      "installed": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "address",
+                      "title"
+                    ]
+                  }
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "registry": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "registry",
+                      "message"
+                    ]
+                  }
+                },
+                "total": {
+                  "type": "integer"
+                },
+                "hasMore": {
+                  "type": "boolean"
+                },
+                "nextOffset": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "items",
+                "errors",
+                "total",
+                "hasMore"
+              ]
+            },
+            "requiresApproval": false,
+            "sourceId": "tools/search_registry.js",
+            "sourceKind": "module"
+          }
+        ],
+        "workspaceResourceRoot": {
+          "logicalPath": "workspace-resources/ext%3Aself-modification%3Asubagents%2Fagent",
+          "rootEntries": []
+        }
+      },
+      "configResolver": {
+        "logicalPath": "agent.js",
+        "sourceId": "agent.js",
+        "sourceKind": "module"
+      }
+    }
+  ],
+  "version": 55
+}

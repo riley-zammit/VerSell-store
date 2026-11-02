@@ -1,0 +1,38 @@
+{
+  "eventType": "run_created",
+  "specVersion": 8,
+  "eventData": {
+    "deploymentId": "mvzjbxpg-71c84abb-6ede-4f9f-a5e2-64c58ba23635",
+    "workflowName": "workflow//eve//workflowEntry",
+    "input": {
+      "__type": "Uint8Array",
+      "data": "enN0ZCi1L/1gAQSFFwBmL4kkEHH0zBB+s11lQxlkyG41htwLt22OEW/73+4KRbvh7qqqqgsCgAB6AIIATjnTmsZe9DBwaRTmzFMgEGRRPHqjRNFbHrgchULKiCo0KAk3TzzCXT2JR6DDT9JP1da/MgK5F8dO8e51CW80zydfVo3jz/CnVSC6hpxPWr/cjONo8NQlkzolH7BOMSp3c/yTRCU3cxyptOBeiuOJI0wg9a+SxKPkjZ5YEhKT8hiPUsjLDTl+6nIKOCUfPuv/OL7XbYyPN7pi6uQl+L+/D5vRowTTvzbH0d3B4bMQc0pOH3CY4+vy5ZTRkx4EsPUZ5jjy03v5QKu81++DXesUrXA5plX+m+xfarAsx9MpfRG4lmOfkU5RO47/+nThDZQPzAfrdMxHrT+Vjlw15tglj3I/FKNSCzpxVwt7koRUWom7LUerlRR1bsYcL0Zdxuk55a4raDl+/+J7l3A/i5EmDxvN0n+Eu2qWY5bqdMojd9UWg3aq12OlChgODBcCFM09+Ejg4mKiPBCKcjECIpoFTl4PJAPkEGSISPDn9jsfpHk5Ho6Hw2GLu3rY6QMT3CC2OK1xIAwDm2fFBT6NPRaGtegwJzbu1dyaA4E0D1qcFZfDINxc/cTwRFuhW+7WXIo3C557oU+63Kw5ltAjbMuJHkGaSPFmiZSnxUVpzSMqDAQhg5yIu4r+kkP4uB9t4UHwyX5XDzOwC3Ns6z8onzp381Mk7f+jPCrcAVSo8SBCzCBCZqZGkoKCFg4ggqWY5QEQWFY1STEHVywrugKHYlHPddgTJ+4DJubFH14rqX5Lgv7vXzKhV5kjLT7tvAc6vL9ZeLuotZpANznha78mcV92omVRgqY76VKVkaLsKazQ0o5cIcFHnyKPD1Y0IIaFCATCSfj9cZMj8N7Yu3YnBGLTkQsgf5gGolrl5b4tkNRxDnq3aa1Na83uubRCiVNrvINfnM9pC74T5Mh0idpzeKBTz88gK7V5v8Fsmjl3lqNmp4uqAg=="
+    },
+    "executionContext": {
+      "traceCarrier": {
+        "traceparent": "00-1bc164134a69d068e751f4e5ad724d78-edcf5112b5586d79-01"
+      },
+      "workflowCoreVersion": "5.2.3",
+      "queueNamespace": "eve76657273656c6c",
+      "nodeVersion": "24.22.1",
+      "features": {
+        "encryption": false
+      },
+      "hookResumeInputVersion": 1
+    },
+    "attributes": {
+      "$eve.is_otel_trace_enabled": "true",
+      "$eve.is_trace_content_visible": "true",
+      "$eve.trace_id": "3d727d32540238c4d186c55f76374293",
+      "$eve.type": "session",
+      "$eve.trigger": "http",
+      "$eve.title": "hey",
+      "$eve.prewarm": "1",
+      "$eve.version": "1.0.0-rc.1"
+    },
+    "allowReservedAttributes": true
+  },
+  "runId": "wrun_01M6EN0V9QCQG2WCYQG3Z9ME4V",
+  "eventId": "evnt_00000000000000000000000001",
+  "createdAt": "2026-11-02T17:30:56.190Z"
+}

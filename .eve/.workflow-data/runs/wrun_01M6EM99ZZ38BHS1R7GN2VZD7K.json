@@ -1,0 +1,42 @@
+{
+  "runId": "wrun_01M6EM99ZZ38BHS1R7GN2VZD7K",
+  "status": "running",
+  "deploymentId": "mvzhehw2-ba4bde34-34c7-44cd-8548-aada4c3e8c02",
+  "workflowName": "workflow//eve//workflowEntry",
+  "specVersion": 8,
+  "executionContext": {
+    "traceCarrier": {
+      "traceparent": "00-c62f4c3e3d157617d8360d00459b37a2-7525821d6c96c15f-01"
+    },
+    "workflowCoreVersion": "5.2.3",
+    "queueNamespace": "eve76657273656c6c",
+    "nodeVersion": "24.22.1",
+    "features": {
+      "encryption": false
+    },
+    "hookResumeInputVersion": 1
+  },
+  "input": {
+    "__type": "Uint8Array",
+    "data": "enN0ZCi1L/1gAQSFFwBGr4glEI/mAYxw/I56pmJDRGXbBT5gsB9spjeEwhCumg0eKBEBAAA4CH0AeQCBAJIzBjreoOvYvTiucZYInVsc0LXFNY+P62dhFIlLLKQJK664hNXUE5fAho+gj6qtf6UEsnKPPdL3+oQvFM+WL6fG46/wpzUguoWcLa1fVs3jWPDUJ5U6IRewTimVVXv8EUQlK/Y4UjnBai2PK25QgdS/QhOPki+UxIqImJLHEXlZPR4/dTkDXJIP2/o7j+91G2PzhZqaWukD//7rsPk0HZj+tT2O7g0O2z6YS3K6gIM9vi5fTvk01BDA1m/YY8lH/dKBVnmvX4Zd6xKtcD2mVX5H9i8tcOvxdEpbAtd67DPS6FGOx389onAGyQVmwzoZs6n1p5LhAeyxT5qyciil0gkasZoca0hCKi3Eqq1Hq5USdVaMPV6MuoxRu+RPTY/1uL9jv09YOauBKg4XiqF/CaupsR4zVKdLHllNbTFoo3o9Vso4MFA0EUrEYCI8OEQTj3YgAyYVEDXhLrNGugIfgCLQC5KChKz8zoYoXgyGwTAcbLGaGBt90xLMGGOe6O1pROiwBiQ2D9h4PItxzj2OWayWYgiBtMYw5xxIbJz1YMXTRwlOtBW6ZdUaN9KT4Fk52tBlxdpjCT221cvxeFrzQLY0DeIs7Hm4xXkebXGc1cx6HlZT9IccwmbFNATHwCP7anJYgXXsMZRPnVXjo0fa/5Y8Lqx4agFVqNEgQg4hQmamRpKCghYOIIKlmOUBEFhWNUkxB1ckK7Zih6JRz+mwJ0zcC6bOxx+GVlL6RgR9OndF6FXNgRabdtIDDd7PLHxd1FpN3k2G8KVfkzhfdmmZb2At4dBdZIHJqLVsRK2uaUuugOBjn+KPH060EMMKBALhxPz+cZEj4F7du3onAOLqCAogftgHorri5b4tkNRxDrhbaVVN62eXXVq2xKk12sEj5+H0AN8JcmS6RO05PNCp52eQldq832A2zZy7zFGz00VVAQ=="
+  },
+  "attributes": {
+    "$eve.is_otel_trace_enabled": "true",
+    "$eve.is_trace_content_visible": "true",
+    "$eve.trace_id": "104b44401b96c95df628cd6b3edb0222",
+    "$eve.type": "session",
+    "$eve.trigger": "http",
+    "$eve.title": "hey",
+    "$eve.prewarm": "1",
+    "$eve.version": "1.0.0-rc.1",
+    "$eve.model": "openai/gpt-6.1-terra",
+    "$eve.input_tokens": "7158",
+    "$eve.output_tokens": "11",
+    "$eve.cache_read_tokens": "0",
+    "$eve.cache_write_tokens": "7155",
+    "$eve.tool_count": "6"
+  },
+  "startedAt": "2026-11-02T17:18:04.875Z",
+  "createdAt": "2026-11-02T17:18:04.810Z",
+  "updatedAt": "2026-11-02T17:18:06.526Z"
+}

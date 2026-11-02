@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "skills": {
+    "agent-browser": {
+      "source": "vercel-labs/agent-browser",
+      "sourceType": "github",
+      "skillPath": "skills/agent-browser/SKILL.md",
+      "computedHash": "79add54dd6de82a262a88c94744d7decde000159c1d7f67c78eb9d4e523d54bb"
+    },
+    "eve-framework": {
+      "source": "vercel/eve",
+      "sourceType": "github",
+      "skillPath": "skills/eve-framework/SKILL.md",
+      "computedHash": "4833349453c45c606f79202e495b7bbc42ea380f329f3beee36b9927763f19ef"
+    },
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "computedHash": "b146008599c31057cef1c145774cea5d5afb30e8f43fa802e47a4b461419aaaf"
+    },
+    "next-cache-components-adoption": {
+      "source": "vercel/next.js",
+      "sourceType": "github",
+      "skillPath": "skills/next-cache-components-adoption/SKILL.md",
+      "computedHash": "38eb3cb9e625b46b54493459a106ac410bc0fe59b124903d55f5090c959d292f"
+    },
+    "sandbox": {
+      "source": "vercel/sandbox",
+      "sourceType": "github",
+      "skillPath": "skills/sandbox/SKILL.md",
+      "computedHash": "5956109a7ad9d8e0ce29f478c49e609d4e9284b429355c6f0c54a0ff4eddbea4"
+    },
+    "vercel-cli": {
+      "source": "vercel/vercel",
+      "sourceType": "github",
+      "skillPath": "skills/vercel-cli/SKILL.md",
+      "computedHash": "16c9ac1ab64908c6c0326459f5b8b6ae6af0b2590f1e71beb5be242ed3ce52ab"
+    },
+    "workflow": {
+      "source": "vercel/workflow",
+      "sourceType": "github",
+      "skillPath": "skills/workflow/SKILL.md",
+      "computedHash": "f74fc7d0b9584f03fdfc138a977d5eb632ca4f1310a8e590ef80cf5e67ccee20"
+    }
+  }
+}

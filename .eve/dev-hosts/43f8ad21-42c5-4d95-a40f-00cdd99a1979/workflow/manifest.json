@@ -1,0 +1,387 @@
+{
+  "version": "1.0.0",
+  "steps": {
+    "dist/src/execution/agent-sessions/steps.js": {
+      "openAgentSessionStep": {
+        "stepId": "step//eve@1.0.0-rc.1//openAgentSessionStep"
+      },
+      "sendAgentSessionMessageStep": {
+        "stepId": "step//eve@1.0.0-rc.1//sendAgentSessionMessageStep"
+      },
+      "cancelAgentSessionTurnStep": {
+        "stepId": "step//eve@1.0.0-rc.1//cancelAgentSessionTurnStep"
+      },
+      "endAgentSessionsStep": {
+        "stepId": "step//eve@1.0.0-rc.1//endAgentSessionsStep"
+      },
+      "stopLateAgentSessionStep": {
+        "stepId": "step//eve@1.0.0-rc.1//stopLateAgentSessionStep"
+      }
+    },
+    "dist/src/execution/close-session-stream-step.js": {
+      "closeSessionStreamStep": {
+        "stepId": "step//eve@1.0.0-rc.1//closeSessionStreamStep"
+      }
+    },
+    "dist/src/execution/continuation-conflict-step.js": {
+      "settleContinuationConflictStep": {
+        "stepId": "step//eve@1.0.0-rc.1//settleContinuationConflictStep"
+      }
+    },
+    "dist/src/execution/coordination-dispatch-step.js": {
+      "dispatchCoordinationStep": {
+        "stepId": "step//eve@1.0.0-rc.1//dispatchCoordinationStep"
+      },
+      "publishDispatchedCallsStep": {
+        "stepId": "step//eve@1.0.0-rc.1//publishDispatchedCallsStep"
+      }
+    },
+    "dist/src/execution/create-session-step.js": {
+      "createSessionStep": {
+        "stepId": "step//eve@1.0.0-rc.1//createSessionStep"
+      }
+    },
+    "dist/src/execution/dynamic-workflow/program-step.js": {
+      "runWorkflowProgramStep": {
+        "stepId": "step//eve@1.0.0-rc.1//runWorkflowProgramStep"
+      }
+    },
+    "dist/src/execution/dynamic-workflow/security-step.js": {
+      "createWorkflowProgramContinuationSecurityStep": {
+        "stepId": "step//eve@1.0.0-rc.1//createWorkflowProgramContinuationSecurityStep"
+      }
+    },
+    "dist/src/execution/legacy-session/completion-step.js": {
+      "completeLegacyDriverStep": {
+        "stepId": "step//eve@1.0.0-rc.1//completeLegacyDriverStep"
+      }
+    },
+    "dist/src/execution/legacy-session/interrupt-step.js": {
+      "interruptLegacySessionStep": {
+        "stepId": "step//eve@1.0.0-rc.1//interruptLegacySessionStep"
+      }
+    },
+    "dist/src/execution/legacy-session/prepare-step.js": {
+      "prepareLegacySessionStep": {
+        "stepId": "step//eve@1.0.0-rc.1//prepareLegacySessionStep"
+      }
+    },
+    "dist/src/execution/proxied-deliver-step.js": {
+      "routeProxiedDeliverStep": {
+        "stepId": "step//eve@1.0.0-rc.1//routeProxiedDeliverStep"
+      },
+      "mapHeldAnswersStep": {
+        "stepId": "step//eve@1.0.0-rc.1//mapHeldAnswersStep"
+      }
+    },
+    "dist/src/execution/report-dropped-wire-payload-step.js": {
+      "reportDroppedWirePayloadStep": {
+        "stepId": "step//eve@1.0.0-rc.1//reportDroppedWirePayloadStep"
+      }
+    },
+    "dist/src/execution/session-inbox/release-step.js": {
+      "releaseSessionHooksStep": {
+        "stepId": "step//eve@1.0.0-rc.1//releaseSessionHooksStep"
+      }
+    },
+    "dist/src/execution/session/end-sandbox-step.js": {
+      "reportSessionSandboxCleanupFailureStep": {
+        "stepId": "step//eve@1.0.0-rc.1//reportSessionSandboxCleanupFailureStep"
+      },
+      "endSessionSandboxStep": {
+        "stepId": "step//eve@1.0.0-rc.1//endSessionSandboxStep"
+      }
+    },
+    "dist/src/execution/session/handoff-steps.js": {
+      "startSuccessorStep": {
+        "stepId": "step//eve@1.0.0-rc.1//startSuccessorStep"
+      },
+      "hasRunEndedStep": {
+        "stepId": "step//eve@1.0.0-rc.1//hasRunEndedStep"
+      },
+      "prepareSuccessorStep": {
+        "stepId": "step//eve@1.0.0-rc.1//prepareSuccessorStep"
+      },
+      "reportSessionHandoffRetainedStep": {
+        "stepId": "step//eve@1.0.0-rc.1//reportSessionHandoffRetainedStep"
+      },
+      "recordSessionOwnerStep": {
+        "stepId": "step//eve@1.0.0-rc.1//recordSessionOwnerStep"
+      },
+      "signalSessionOwnerActivationStep": {
+        "stepId": "step//eve@1.0.0-rc.1//signalSessionOwnerActivationStep"
+      },
+      "reportSessionTakenOverOutsideAttemptStep": {
+        "stepId": "step//eve@1.0.0-rc.1//reportSessionTakenOverOutsideAttemptStep"
+      },
+      "reportHandoverPartStuckStep": {
+        "stepId": "step//eve@1.0.0-rc.1//reportHandoverPartStuckStep"
+      },
+      "sendSessionHandoverPartStep": {
+        "stepId": "step//eve@1.0.0-rc.1//sendSessionHandoverPartStep"
+      },
+      "signalSessionAnchorStep": {
+        "stepId": "step//eve@1.0.0-rc.1//signalSessionAnchorStep"
+      },
+      "readSessionStreamTailStep": {
+        "stepId": "step//eve@1.0.0-rc.1//readSessionStreamTailStep"
+      }
+    },
+    "dist/src/execution/session/prewarm-step.js": {
+      "prewarmSessionStep": {
+        "stepId": "step//eve@1.0.0-rc.1//prewarmSessionStep"
+      }
+    },
+    "dist/src/execution/session/settle-control-delivery-step.js": {
+      "settleControlDeliveryStep": {
+        "stepId": "step//eve@1.0.0-rc.1//settleControlDeliveryStep"
+      }
+    },
+    "dist/src/execution/session/settle-duplicate-delivery-step.js": {
+      "settleDuplicateDeliveryStep": {
+        "stepId": "step//eve@1.0.0-rc.1//settleDuplicateDeliveryStep"
+      }
+    },
+    "dist/src/execution/session/task-tool-tracing-step.js": {
+      "startTaskToolCallsStep": {
+        "stepId": "step//eve@1.0.0-rc.1//startTaskToolCallsStep"
+      }
+    },
+    "dist/src/execution/session/timeout-steps.js": {
+      "startSessionTimeoutStep": {
+        "stepId": "step//eve@1.0.0-rc.1//startSessionTimeoutStep"
+      },
+      "signalSessionTimeoutStep": {
+        "stepId": "step//eve@1.0.0-rc.1//signalSessionTimeoutStep"
+      },
+      "cancelSessionTimeoutStep": {
+        "stepId": "step//eve@1.0.0-rc.1//cancelSessionTimeoutStep"
+      }
+    },
+    "dist/src/execution/session/turn-step.js": {
+      "turnStep": {
+        "stepId": "step//eve@1.0.0-rc.1//turnStep"
+      }
+    },
+    "dist/src/execution/settle-cancelled-turn-step.js": {
+      "settleCancelledTurnStep": {
+        "stepId": "step//eve@1.0.0-rc.1//settleCancelledTurnStep"
+      }
+    },
+    "dist/src/execution/tasks/steps.js": {
+      "cancelTasksStep": {
+        "stepId": "step//eve@1.0.0-rc.1//cancelTasksStep"
+      }
+    },
+    "dist/src/execution/terminal-session-completion-step.js": {
+      "emitTerminalSessionCompletionStep": {
+        "stepId": "step//eve@1.0.0-rc.1//emitTerminalSessionCompletionStep"
+      }
+    },
+    "dist/src/execution/terminal-session-failure-step.js": {
+      "emitTerminalSessionFailureStep": {
+        "stepId": "step//eve@1.0.0-rc.1//emitTerminalSessionFailureStep"
+      }
+    },
+    "dist/src/execution/terminate-child-sessions-step.js": {
+      "terminateChildSessionsStep": {
+        "stepId": "step//eve@1.0.0-rc.1//terminateChildSessionsStep"
+      },
+      "reportChildSessionTeardownFailureStep": {
+        "stepId": "step//eve@1.0.0-rc.1//reportChildSessionTeardownFailureStep"
+      }
+    },
+    "dist/src/execution/tool-stubs/steps.js": {
+      "publishStubResultStep": {
+        "stepId": "step//eve@1.0.0-rc.1//publishStubResultStep"
+      },
+      "publishStubFailureStep": {
+        "stepId": "step//eve@1.0.0-rc.1//publishStubFailureStep"
+      },
+      "callToolStubStep": {
+        "stepId": "step//eve@1.0.0-rc.1//callToolStubStep"
+      },
+      "reportStubFailureStep": {
+        "stepId": "step//eve@1.0.0-rc.1//reportStubFailureStep"
+      },
+      "failStubSessionStep": {
+        "stepId": "step//eve@1.0.0-rc.1//failStubSessionStep"
+      }
+    },
+    "dist/src/execution/tools/agent-router-workflow.js": {
+      "chooseTarget": {
+        "stepId": "step//eve@1.0.0-rc.1//chooseTarget"
+      }
+    },
+    "dist/src/execution/tools/workflow/apply-run-messages-step.js": {
+      "applyRunMessagesStep": {
+        "stepId": "step//eve@1.0.0-rc.1//applyRunMessagesStep"
+      }
+    },
+    "dist/src/execution/tools/workflow/interrupt.js": {
+      "interruptWorkflowToolRun": {
+        "stepId": "step//eve@1.0.0-rc.1//interruptWorkflowToolRun"
+      }
+    },
+    "dist/src/execution/tools/workflow/resume-hook-step.js": {
+      "resumeHookStep": {
+        "stepId": "step//eve@1.0.0-rc.1//resumeHookStep"
+      }
+    },
+    "dist/src/execution/tools/workflow/withdraw-step.js": {
+      "withdrawWorkflowToolRunQuestionStep": {
+        "stepId": "step//eve@1.0.0-rc.1//withdrawWorkflowToolRunQuestionStep"
+      },
+      "withdrawFinishedRunQuestionsStep": {
+        "stepId": "step//eve@1.0.0-rc.1//withdrawFinishedRunQuestionsStep"
+      }
+    },
+    "dist/src/runtime/connections/events/dispatch-step.js": {
+      "dispatchConnectionEventStep": {
+        "stepId": "step//eve@1.0.0-rc.1//dispatchConnectionEventStep"
+      }
+    },
+    "dist/src/runtime/connections/events/lifecycle-step.js": {
+      "openConnectionEventStep": {
+        "stepId": "step//eve@1.0.0-rc.1//openConnectionEventStep"
+      },
+      "unsubscribeConnectionEventStep": {
+        "stepId": "step//eve@1.0.0-rc.1//unsubscribeConnectionEventStep"
+      },
+      "startConnectionEventDeliveryStep": {
+        "stepId": "step//eve@1.0.0-rc.1//startConnectionEventDeliveryStep"
+      },
+      "publishConnectionEventOutcomeStep": {
+        "stepId": "step//eve@1.0.0-rc.1//publishConnectionEventOutcomeStep"
+      }
+    },
+    "dist/src/subagents/adapter.js": {
+      "forwardToParentStep": {
+        "stepId": "step//eve@1.0.0-rc.1//forwardToParentStep"
+      }
+    },
+    "dist/src/subagents/event-proxy-step.js": {
+      "runProxySubagentEventStep": {
+        "stepId": "step//eve@1.0.0-rc.1//runProxySubagentEventStep"
+      }
+    },
+    "dist/src/subagents/parent-notification.js": {
+      "notifyTurnCallerStep": {
+        "stepId": "step//eve@1.0.0-rc.1//notifyTurnCallerStep"
+      },
+      "notifyCancelledTaskCallerStep": {
+        "stepId": "step//eve@1.0.0-rc.1//notifyCancelledTaskCallerStep"
+      },
+      "resolveInitialTurnCallerStep": {
+        "stepId": "step//eve@1.0.0-rc.1//resolveInitialTurnCallerStep"
+      }
+    }
+  },
+  "workflows": {
+    "dist/src/execution/tools/agent-router-workflow.js": {
+      "runAgentRouterTask": {
+        "graph": {
+          "edges": [],
+          "nodes": []
+        },
+        "workflowId": "workflow//eve@1.0.0-rc.1//runAgentRouterTask"
+      }
+    },
+    "dist/src/execution/legacy-session/turn-workflow.js": {
+      "turnWorkflow": {
+        "graph": {
+          "edges": [],
+          "nodes": []
+        },
+        "workflowId": "workflow//eve//turnWorkflow"
+      }
+    },
+    "dist/src/execution/session/entry.js": {
+      "workflowEntry": {
+        "graph": {
+          "edges": [],
+          "nodes": []
+        },
+        "workflowId": "workflow//eve//workflowEntry"
+      }
+    },
+    "dist/src/execution/dynamic-workflow/tool.js": {
+      "runWorkflowProgramTask": {
+        "graph": {
+          "edges": [],
+          "nodes": []
+        },
+        "workflowId": "workflow//eve@1.0.0-rc.1//runWorkflowProgramTask"
+      }
+    },
+    "dist/src/execution/session/timeout-workflow.js": {
+      "sessionTimeoutWorkflow": {
+        "graph": {
+          "edges": [],
+          "nodes": []
+        },
+        "workflowId": "workflow//eve//sessionTimeoutWorkflow"
+      }
+    },
+    "dist/src/runtime/subagents/workflow.js": {
+      "agentToolServeWorkflow": {
+        "graph": {
+          "edges": [],
+          "nodes": []
+        },
+        "workflowId": "workflow//eve//agentToolServeWorkflow"
+      },
+      "agentWithModelServeWorkflow": {
+        "graph": {
+          "edges": [],
+          "nodes": []
+        },
+        "workflowId": "workflow//eve@1.0.0-rc.1//agentWithModelServeWorkflow"
+      }
+    },
+    "dist/src/runtime/connections/events/workflow.js": {
+      "connectionEventWorkflow": {
+        "graph": {
+          "edges": [],
+          "nodes": []
+        },
+        "workflowId": "workflow//eve//connectionEventWorkflow"
+      },
+      "connectionEventDeliveryWorkflow": {
+        "graph": {
+          "edges": [],
+          "nodes": []
+        },
+        "workflowId": "workflow//eve//connectionEventDeliveryWorkflow"
+      }
+    },
+    "dist/src/execution/tools/workflow/workflow.js": {
+      "workflowToolRunWorkflow": {
+        "graph": {
+          "edges": [],
+          "nodes": []
+        },
+        "workflowId": "workflow//eve//workflowToolRunWorkflow"
+      }
+    },
+    "dist/src/tools/provided/ask-question-workflow.js": {
+      "executeAskQuestionTool": {
+        "graph": {
+          "edges": [],
+          "nodes": []
+        },
+        "workflowId": "workflow//eve@1.0.0-rc.1//executeAskQuestionTool"
+      }
+    },
+    "dist/src/tools/provided/sleep-workflow.js": {
+      "executeSleepTool": {
+        "graph": {
+          "edges": [],
+          "nodes": []
+        },
+        "workflowId": "workflow//eve@1.0.0-rc.1//executeSleepTool"
+      }
+    }
+  },
+  "classes": {}
+}
