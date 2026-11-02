@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { Aleo, Geist } from "next/font/google";
+import { CartProvider } from "@/components/cart/cart";
 import { Footer } from "@/components/layout/root/footer";
 import { Header } from "@/components/layout/root/header";
 import "./globals.css";
@@ -28,13 +30,16 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image" },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children, cart }: LayoutProps<"/"> & { cart?: ReactNode }) {
   return (
     <html lang="en" className={`${geistSans.variable} ${aleo.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">
-        <Header />
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 font-serif">{children}</main>
-        <Footer />
+        <CartProvider>
+          <Header />
+          <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 font-serif">{children}</main>
+          <Footer />
+          {cart}
+        </CartProvider>
       </body>
     </html>
   );

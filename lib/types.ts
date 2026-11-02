@@ -37,3 +37,28 @@ export type Pagination = {
 export type ApiResponse<T> =
   | { success: true; data: T; meta?: { pagination: Pagination } } // meta: list endpoints only
   | { success: false; error: { code?: string; message: string } }
+
+export enum CartField {
+  ProductId = 'productId',
+  Quantity = 'quantity',
+}
+
+export type CartItem = {
+  productId: string
+  quantity: number
+  addedAt: string
+  product: Product
+  lineTotal: number
+}
+
+// Token stays on the server. The UI only sees lines and totals.
+export type Cart = {
+  items: CartItem[]
+  totalItems: number
+  subtotal: number
+  currency: string
+  createdAt: string
+  updatedAt: string
+}
+
+export type CartResult = { cart: Cart } | { error: string }

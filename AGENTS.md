@@ -1,3 +1,6 @@
+# Operating rules
+1. if you find yourself going in a loop churning and overthinking, STOP and ask for direction.
+2. Don't automatically run client-side tests unless I tell you. You can ask the user if they want you to run them.
 <!-- BEGIN:nextjs-agent-rules -->
 
 ## This is NOT the Next.js you know
@@ -9,7 +12,6 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 <!-- END:nextjs-agent-rules -->
 
 ## Next.js conventions
-
 Follow these when changing this app.
 
 ### General Decisions

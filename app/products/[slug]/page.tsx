@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { AddToCartForm } from "@/components/cart/cart";
 import { Category, getProduct, getProductsByCategory } from "@/lib/api";
 import { formatPrice } from "@/lib/format";
 
@@ -54,6 +55,7 @@ async function ProductDetails({ params }: Pick<PageProps<"/products/[slug]">, "p
         <h1 className="text-4xl md:text-5xl">{name}</h1>
         <p className="mt-4 font-sans text-2xl font-bold tracking-tighter md:text-3xl">{formatPrice(price)}</p>
         <p className="mt-6 text-lg text-foreground/70">{description}</p>
+        <AddToCartForm product={product} />
       </div>
     </article>
   );
@@ -67,6 +69,10 @@ function ProductSkeleton() {
         <div className="h-12 w-3/4 animate-pulse rounded-lg bg-foreground/5" />
         <div className="mt-4 h-8 w-24 animate-pulse rounded-lg bg-foreground/5" />
         <div className="mt-6 h-28 animate-pulse rounded-lg bg-foreground/5" />
+        <div className="mt-8 flex gap-3">
+          <div className="h-12 w-24 animate-pulse rounded-full bg-foreground/5" />
+          <div className="h-12 w-40 animate-pulse rounded-full bg-foreground/5" />
+        </div>
       </div>
     </div>
   );
