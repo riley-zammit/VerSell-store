@@ -39,7 +39,7 @@ export default function ChatPage() {
               <p className="mb-2 font-sans text-xs font-bold uppercase tracking-wide opacity-60">
                 {message.role === "user" ? "You" : "Eve"}
               </p>
-              <div className="space-y-3 break-words whitespace-pre-wrap">
+              <div className="space-y-3 wrap-break-word whitespace-pre-wrap">
                 {message.parts.map((part, index) => {
                   if (part.type === "text") return <p key={part.id ?? index}>{part.text}</p>;
                   if (part.type === "file") {

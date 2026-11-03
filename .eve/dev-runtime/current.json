@@ -1,7 +1,7 @@
 {
   "appRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store",
   "kind": "eve-dev-runtime-artifacts-pointer",
-  "runtimeAppRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mw0mv7wj-49fd77ad-79bd-4b1c-bdf1-e69623ef59c3/source",
-  "snapshotRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mw0mv7wj-49fd77ad-79bd-4b1c-bdf1-e69623ef59c3",
+  "runtimeAppRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mw0nl2ph-88ab2cc4-6248-4fec-aa9f-d75c1847e946/source",
+  "snapshotRoot": "/Users/rileyzammit/Documents/storefronts/VerSell-store/.eve/dev-runtime/snapshots/mw0nl2ph-88ab2cc4-6248-4fec-aa9f-d75c1847e946",
   "version": 2
 }
