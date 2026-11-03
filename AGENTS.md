@@ -1,6 +1,7 @@
 # Operating rules
 1. if you find yourself going in a loop churning and overthinking, STOP and ask for direction.
 2. Don't automatically run client-side tests unless I tell you. You can ask the user if they want you to run them.
+3. Ensure all code is simple and human-readable. Don't over-abstract; humans need to be able to follow along.
 
 # Skills
 If you're the Pi coding agent, look inside ./cursor for skills and subagents. In there, the skills format and folder structure is standard.
@@ -19,7 +20,6 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 Follow these when changing this app.
 
 ### General Decisions
-- Leverage Progressive enhancement: All major site functionality needs to work without JS. Forms work without JS: native GET `action`. `preventDefault` runs only when JS handles the submit.
 - Leverage optimistic UI where it makes sense for UX.
 - Links go through `NavLink` (`Link` plus a delayed `useLinkStatus` overlay, `absolute` so it does not shift). Primary destinations set `prefetch`.
 

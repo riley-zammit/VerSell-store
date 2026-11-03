@@ -1,26 +1,28 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useOptimistic, useState, useTransition } from 'react'
+import { use, useEffect, useOptimistic, useState, useTransition } from 'react'
 
 import { CartSkeleton, EmptyCart } from '@/components/cart/cart-parts'
 import { useCart } from '@/components/cart/cart-provider'
-import { applyQuantity, preferCart } from '@/components/cart/optimistic-cart'
+import { applyQuantity, preferCart } from '@/components/cart/state-helpers'
 import { NavLink } from '@/components/nav-link'
 import { removeCartItem, updateCartItem } from '@/lib/cart-actions'
 import { formatPrice } from '@/lib/format'
-import type { Cart, CartItem, CartResult } from '@/lib/types'
+import type { Cart, CartItem } from '@/lib/types'
 
 type Variant = 'page' | 'drawer'
 
-export function CartResolver({ cart, variant }: { cart: Cart | null; variant: Variant }) {
-    const { remember, pending, cart: liveCart, partial, error } = useCart()
+// Takes the unawaited getCart() promise so the cookie read resolves inside the caller's Suspense and the shell still prerenders.
+export function CartResolver({ cartPromise, variant }: { cartPromise: Promise<Cart | null>; variant: Variant }) {
+    const cart = use(cartPromise)
+    const { rememberCart, pending, cart: providerCart, partial, error } = useCart()
 
     useEffect(() => {
-        if (cart) remember(cart)
-    }, [cart, remember])
+        if (cart) rememberCart(cart)
+    }, [cart, rememberCart])
 
-    const shown = pending ? liveCart : preferCart(liveCart, cart)
+    const shown = pending ? providerCart : preferCart(providerCart, cart)
 
     return (
         <CartContent
@@ -35,14 +37,14 @@ export function CartResolver({ cart, variant }: { cart: Cart | null; variant: Va
 
 // Render Skeleton or optimistic cart
 export function CartFallback({ variant }: { variant: Variant }) {
-    const live = useCart()
-    if (!live.cart) return <CartSkeleton />
+    const cartState = useCart()
+    if (!cartState.cart) return <CartSkeleton />
     return (
         <CartContent
-            cart={live.cart}
-            confirmed={!live.pending}
-            partial={live.pending && live.partial}
-            addError={live.error}
+            cart={cartState.cart}
+            confirmed={!cartState.pending}
+            partial={cartState.pending && cartState.partial}
+            addError={cartState.error}
             variant={variant}
         />
     )
@@ -80,15 +82,16 @@ function CartContent({
         )
     }
 
-    const change = (item: CartItem, quantity: number, save: () => Promise<CartResult>) => {
+    const setQuantity = (item: CartItem, quantity: number) => {
         setLineError(null)
         startTransition(async () => {
             applyOptimistic({ productId: item.productId, quantity })
-            const result = await save()
+            const result = quantity === 0
+                ? await removeCartItem(item.productId)
+                : await updateCartItem(item.productId, quantity)
             if ('error' in result) setLineError(result.error)
         })
     }
-    const update = (item: CartItem, quantity: number) => change(item, quantity, () => updateCartItem(item.productId, quantity))
 
     return (
         <div className={`${pad} flex min-h-0 flex-1 flex-col`} aria-busy={waiting}>
@@ -110,7 +113,7 @@ function CartContent({
                                 <div className="inline-flex h-10 items-center rounded-full bg-background px-1">
                                     <button
                                         type="button"
-                                        onClick={() => update(item, Math.max(0, item.quantity - 1))}
+                                        onClick={() => setQuantity(item, Math.max(0, item.quantity - 1))}
                                         disabled={waiting}
                                         aria-label={`Decrease quantity of ${item.product.name}`}
                                         className="grid size-8 place-items-center rounded-full font-sans disabled:opacity-40"
@@ -120,7 +123,7 @@ function CartContent({
                                     <span className="min-w-6 text-center font-sans text-sm tabular-nums">{item.quantity}</span>
                                     <button
                                         type="button"
-                                        onClick={() => update(item, item.quantity + 1)}
+                                        onClick={() => setQuantity(item, item.quantity + 1)}
                                         disabled={waiting}
                                         aria-label={`Increase quantity of ${item.product.name}`}
                                         className="grid size-8 place-items-center rounded-full font-sans disabled:opacity-40"
@@ -130,7 +133,7 @@ function CartContent({
                                 </div>
                                 <button
                                     type="button"
-                                    onClick={() => change(item, 0, () => removeCartItem(item.productId))}
+                                    onClick={() => setQuantity(item, 0)}
                                     disabled={waiting}
                                     className="px-2 font-sans text-sm text-foreground/60 underline-offset-2 hover:underline disabled:opacity-40"
                                 >

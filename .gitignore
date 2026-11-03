@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+/.eve/*
 
 # next.js
 /.next/

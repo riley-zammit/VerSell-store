@@ -1,9 +1,11 @@
 import type { Cart, CartItem, Product } from '@/lib/types'
 
+// Creates the blank base used when adding before the real cart has loaded.
 export function emptyCart(currency: string): Cart {
     return { items: [], totalItems: 0, subtotal: 0, currency, createdAt: '', updatedAt: '' }
 }
 
+// Returns a cart preview with the product added or its existing quantity increased.
 export function applyAdd(cart: Cart, product: Product, quantity: number): Cart {
     const items = cart.items.some((item) => item.productId === product.id)
         ? cart.items.map((item) =>
@@ -15,6 +17,7 @@ export function applyAdd(cart: Cart, product: Product, quantity: number): Cart {
     return summarize(items, cart.currency || product.currency, cart)
 }
 
+// Returns a cart preview with one quantity changed, removing the item at zero.
 export function applyQuantity(cart: Cart, productId: string, quantity: number): Cart | null {
     if (!Number.isInteger(quantity) || quantity < 0) return null
     if (!cart.items.some((item) => item.productId === productId)) return null
@@ -26,6 +29,7 @@ export function applyQuantity(cart: Cart, productId: string, quantity: number): 
     return summarize(items, cart.currency, cart)
 }
 
+// Chooses the newest cart when local action state and streamed server state overlap.
 export function preferCart(settled: Cart | null, server: Cart | null) {
     if (!settled) return server
     if (!server) return settled
@@ -33,6 +37,7 @@ export function preferCart(settled: Cart | null, server: Cart | null) {
     return settled
 }
 
+// Recalculates cart totals while preserving its server timestamps.
 function summarize(items: CartItem[], currency: string, stamp: Cart): Cart {
     return {
         items,

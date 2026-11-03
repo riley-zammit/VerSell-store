@@ -26,7 +26,9 @@ const cookieOptions = {
     maxAge: 60 * 60 * 24 * 30,
 }
 
-async function writeCartCookie(token: string) {
+// Setting a cookie in a Server Action wipes the client's whole prefetch cache, so skip unchanged tokens.
+async function writeCartCookie(token: string, current?: string) {
+    if (token === current) return
     const jar = await cookies()
     jar.set(cartCookie, token, cookieOptions)
 }
@@ -80,7 +82,7 @@ async function postItem(token: string, productId: string, quantity: number) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ productId, quantity }),
     }))
-    await writeCartCookie(data.token)
+    await writeCartCookie(data.token, token)
     return withoutToken(data)
 }
 
@@ -124,7 +126,7 @@ async function sendItem(method: 'PATCH' | 'DELETE', productId: string, quantity?
             headers: quantity === undefined ? undefined : { 'Content-Type': 'application/json' },
             body: quantity === undefined ? undefined : JSON.stringify({ quantity }),
         }))
-        await writeCartCookie(data.token)
+        await writeCartCookie(data.token, token)
         return { cart: withoutToken(data) }
     } catch (error) {
         if (definitive(error)) return { error: error.message }

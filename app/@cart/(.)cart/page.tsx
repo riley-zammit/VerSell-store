@@ -1,20 +1,13 @@
 import { Suspense } from 'react'
 
 import { CartFallback, CartResolver } from '@/components/cart/cart'
-import { CartDrawer } from '@/components/cart/cart-drawer'
 import { getCart } from '@/lib/cart'
 
+// The sheet itself is CartDrawer in the root layout; this slot only fills it.
 export default function Page() {
     return (
-        <CartDrawer>
-            {/* Cookie read and GET /cart stay inside the drawer so the page underneath still prerenders. */}
-            <Suspense fallback={<CartFallback variant="drawer" />}>
-                <LoadCart />
-            </Suspense>
-        </CartDrawer>
+        <Suspense fallback={<CartFallback variant="drawer" />}>
+            <CartResolver cartPromise={getCart()} variant="drawer" />
+        </Suspense>
     )
-}
-
-async function LoadCart() {
-    return <CartResolver cart={await getCart()} variant="drawer" />
 }

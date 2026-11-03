@@ -12,13 +12,9 @@ export default function Page() {
             <h1 className="text-4xl md:text-5xl">Your cart</h1>
             <div className="mt-8">
                 <Suspense fallback={<CartFallback variant="page" />}>
-                    <LoadCart />
+                    <CartResolver cartPromise={getCart()} variant="page" />
                 </Suspense>
             </div>
         </>
     )
-}
-
-async function LoadCart() {
-    return <CartResolver cart={await getCart()} variant="page" />
 }

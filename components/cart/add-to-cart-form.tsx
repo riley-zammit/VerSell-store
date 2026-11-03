@@ -1,43 +1,23 @@
 'use client'
 
-import { flushSync } from 'react-dom'
-import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 
 import { useCart } from '@/components/cart/cart-provider'
 import type { Product } from '@/lib/types'
 
 export function AddToCartForm({ product }: { product: Product }) {
     const router = useRouter()
-    const pathname = usePathname()
-    const { startAdd, armAdd, releaseAdd, cancelArmedAdd, pending, error } = useCart()
-    const from = useRef<string | null>(null)
-
-    useEffect(() => {
-        if (from.current == null) return
-        if (pathname === '/cart' || pathname === from.current) return
-        from.current = null
-        cancelArmedAdd()
-    }, [pathname, cancelArmedAdd])
+    const { add, pending, error } = useCart()
 
     return (
         <form
             className="mt-8 flex flex-wrap items-center gap-3"
-            onSubmit={(event) => {
-                event.preventDefault()
-                const quantity = wholeNumber(new FormData(event.currentTarget).get('quantity'))
+            action={async (formData) => {
+                const quantity = wholeNumber(formData.get('quantity'))
                 if (quantity == null || quantity < 1) return
-                if (!armAdd(product.id, quantity)) {
-                    if (window.location.pathname !== '/cart') router.push('/cart')
-                    return
-                }
-                flushSync(() => startAdd(product, quantity))
-                if (window.location.pathname === '/cart') {
-                    releaseAdd()
-                    return
-                }
-                from.current = window.location.pathname
-                router.push('/cart')
+                // Push first so the router queues the add behind it and the add's refresh renders /cart, not the page being left.
+                if (window.location.pathname !== '/cart') router.push('/cart')
+                await add(product, quantity)
             }}
         >
             <input
