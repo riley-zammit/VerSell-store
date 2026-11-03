@@ -1,5 +1,4 @@
 import 'server-only'
-import { cache } from 'react'
 import { cookies } from 'next/headers'
 
 import { ApiError, apiFetch } from './api'
@@ -58,7 +57,8 @@ function definitive(error: unknown): error is ApiError {
     return error instanceof ApiError && (error.status === 400 || error.status === 404 || error.status === 422)
 }
 
-export const getCart = cache(async (): Promise<Cart | null> => {
+// Called once per request, by the root layout. Every cart view reads that one promise.
+export async function getCart(): Promise<Cart | null> {
     const token = (await cookies()).get(cartCookie)?.value
     if (!token) return null
     try {
@@ -68,7 +68,7 @@ export const getCart = cache(async (): Promise<Cart | null> => {
         if (error instanceof ApiError && error.status === 404) return null
         throw error
     }
-})
+}
 
 async function createCart() {
     const { data } = await apiFetch<ApiCart>(CartPath.Create, { method: 'POST', cache: 'no-store' })

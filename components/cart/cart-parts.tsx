@@ -1,12 +1,27 @@
 'use client'
 
+import { catchError } from 'next/error'
+
+import { useCart, useCartView } from '@/components/cart/cart-provider'
 import { NavLink } from '@/components/nav-link'
 
+// Suspends until the server cart loads. The header renders it inside Suspense with a plain CartBadge fallback.
+export function CartCount() {
+    return <CartBadge count={useCartView()?.totalItems} />
+}
+
 export function CartBadge({ count }: { count?: number }) {
+    const { openDrawer } = useCart()
     return (
+        // A real link, so modified clicks and no-JS still reach the /cart page. Plain clicks open the sheet instead.
         <NavLink
             href="/cart"
-            prefetch
+            prefetch={false}
+            onClick={(event) => {
+                if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+                event.preventDefault()
+                openDrawer()
+            }}
             aria-label={count ? `Cart, ${count} ${count === 1 ? 'item' : 'items'}` : 'Cart'}
             className="relative inline-flex items-center gap-1.5 rounded px-2 py-1 text-sm hover:bg-foreground/5"
         >
@@ -53,7 +68,9 @@ export function EmptyCart({ error, showContinueShopping }: { error: string | nul
     )
 }
 
-export function CartError({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
+export const CartBoundary = catchError((_: object, { retry }) => <CartError reset={retry} />)
+
+export function CartError({ reset }: { reset: () => void }) {
     return (
         <div className="px-5 py-16 text-center">
             <p className="text-lg">The cart didn&apos;t load.</p>

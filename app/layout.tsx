@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Suspense, type ReactNode } from "react";
 import { Aleo, Geist } from "next/font/google";
 import { CartDrawer } from "@/components/cart/cart-drawer";
 import { CartProvider } from "@/components/cart/cart-provider";
 import { Footer } from "@/components/layout/root/footer";
 import { Header } from "@/components/layout/root/header";
+import { getCart } from "@/lib/cart";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -31,18 +31,16 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image" },
 };
 
-export default function RootLayout({ children, cart }: LayoutProps<"/"> & { cart?: ReactNode }) {
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${geistSans.variable} ${aleo.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">
-        <CartProvider>
+        {/* Not awaited: the cookie read resolves inside each cart view's Suspense, so the shell still prerenders. */}
+        <CartProvider cart={getCart()}>
           <Header />
           <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 font-serif">{children}</main>
           <Footer />
-          {/* usePathname suspends while prerendering routes with unknown params. The sheet starts closed, so null keeps the shell static. */}
-          <Suspense fallback={null}>
-            <CartDrawer>{cart}</CartDrawer>
-          </Suspense>
+          <CartDrawer />
         </CartProvider>
       </body>
     </html>

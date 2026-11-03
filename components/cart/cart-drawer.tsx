@@ -1,50 +1,24 @@
 'use client'
 
-import { usePathname, useRouter, useSelectedLayoutSegment } from 'next/navigation'
-import { useEffect, useRef, type ReactNode } from 'react'
+import { Suspense } from 'react'
 
-import { CartFallback } from '@/components/cart/cart'
+import { CartLines } from '@/components/cart/cart'
+import { CartBoundary, CartSkeleton } from '@/components/cart/cart-parts'
 import { useCart } from '@/components/cart/cart-provider'
 
-// Lives in the root layout, not the @cart slot, so an add can open it before the /cart route commits.
-export function CartDrawer({ children }: { children: ReactNode }) {
-    const pathname = usePathname()
-    const page = useSelectedLayoutSegment()
-    const router = useRouter()
-    const { pending } = useCart()
-    const ref = useRef<HTMLDialogElement>(null)
-    // Intercepted /cart keeps the previous page underneath. A hard load of /cart is the full page, so no sheet.
-    const routed = pathname === '/cart' && page !== 'cart'
-    // React holds the add's push to /cart until the add settles. The optimistic pending flag opens the sheet now.
-    const open = routed || pending
-
-    useEffect(() => {
-        const dialog = ref.current
-        if (!open || !dialog) return
-        if (!dialog.open) dialog.showModal()
-        return () => {
-            if (dialog.open) dialog.close()
-        }
-    }, [open])
-
-    if (!open) return null
-
-    // Before the push commits there is no /cart history entry to go back from.
-    const close = () => {
-        if (routed) router.back()
-    }
+// Always mounted and closed until openDrawer(). Opening is a DOM call, so it never waits on a route or a transition.
+export function CartDrawer() {
+    const { drawer } = useCart()
+    const close = () => drawer.current?.close()
 
     return (
         <dialog
-            ref={ref}
+            ref={drawer}
             className="cart-drawer"
             aria-labelledby="cart-title"
-            onCancel={(event) => {
-                event.preventDefault()
-                close()
-            }}
             onClick={(event) => {
-                if (event.target === event.currentTarget) close()
+                // Backdrop clicks land on the dialog itself. Links navigate away, so the sheet goes with them.
+                if (event.target === event.currentTarget || (event.target as Element).closest('a')) close()
             }}
             // :modal beats a class selector, so the sheet's box lives here.
             style={{
@@ -75,7 +49,12 @@ export function CartDrawer({ children }: { children: ReactNode }) {
                         <CloseIcon />
                     </button>
                 </div>
-                {routed ? children : <CartFallback variant="drawer" />}
+                {/* The sheet sits in the root layout, above every error.tsx, so it brings its own boundary. */}
+                <CartBoundary>
+                    <Suspense fallback={<CartSkeleton />}>
+                        <CartLines variant="drawer" />
+                    </Suspense>
+                </CartBoundary>
             </div>
         </dialog>
     )

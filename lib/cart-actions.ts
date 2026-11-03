@@ -36,8 +36,8 @@ export async function removeCartItem(productId: string): Promise<CartResult> {
     return refreshed(await removeItem(parsed.data))
 }
 
-// Writes usually skip the cookie now, so re-render the header count and cart explicitly.
-// Unlike a cookie write, refresh() leaves the client prefetch cache alone.
+// refresh() re-renders the root layout, which hands CartProvider a fresh getCart(). Writes usually skip the
+// cookie, and unlike a cookie write, refresh() leaves the client prefetch cache alone.
 function refreshed(result: CartResult) {
     if ('cart' in result) refresh()
     return result

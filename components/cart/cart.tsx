@@ -1,80 +1,25 @@
 'use client'
 
 import Image from 'next/image'
-import { use, useEffect, useOptimistic, useState, useTransition } from 'react'
+import { useTransition } from 'react'
 
-import { CartSkeleton, EmptyCart } from '@/components/cart/cart-parts'
-import { useCart } from '@/components/cart/cart-provider'
-import { applyQuantity, preferCart } from '@/components/cart/state-helpers'
+import { EmptyCart } from '@/components/cart/cart-parts'
+import { useCart, useCartView } from '@/components/cart/cart-provider'
 import { NavLink } from '@/components/nav-link'
-import { removeCartItem, updateCartItem } from '@/lib/cart-actions'
 import { formatPrice } from '@/lib/format'
-import type { Cart, CartItem } from '@/lib/types'
 
 type Variant = 'page' | 'drawer'
 
-// Takes the unawaited getCart() promise so the cookie read resolves inside the caller's Suspense and the shell still prerenders.
-export function CartResolver({ cartPromise, variant }: { cartPromise: Promise<Cart | null>; variant: Variant }) {
-    const cart = use(cartPromise)
-    const { rememberCart, pending, cart: providerCart, partial, error } = useCart()
-
-    useEffect(() => {
-        if (cart) rememberCart(cart)
-    }, [cart, rememberCart])
-
-    const shown = pending ? providerCart : preferCart(providerCart, cart)
-
-    return (
-        <CartContent
-            cart={shown}
-            confirmed={!pending}
-            partial={pending && partial}
-            addError={error}
-            variant={variant}
-        />
-    )
-}
-
-// Render Skeleton or optimistic cart
-export function CartFallback({ variant }: { variant: Variant }) {
-    const cartState = useCart()
-    if (!cartState.cart) return <CartSkeleton />
-    return (
-        <CartContent
-            cart={cartState.cart}
-            confirmed={!cartState.pending}
-            partial={cartState.pending && cartState.partial}
-            addError={cartState.error}
-            variant={variant}
-        />
-    )
-}
-
-function CartContent({
-    cart,
-    confirmed,
-    partial,
-    addError,
-    variant,
-}: {
-    cart: Cart | null
-    confirmed: boolean
-    partial: boolean
-    addError: string | null
-    variant: Variant
-}) {
-    const [lineError, setLineError] = useState<string | null>(null)
-    const [isPending, startTransition] = useTransition()
-    const [shown, applyOptimistic] = useOptimistic(
-        cart,
-        (current, { productId, quantity }: Pick<CartItem, 'productId' | 'quantity'>) =>
-            current ? applyQuantity(current, productId, quantity) ?? current : current,
-    )
+// Suspends until the server cart loads, so render it inside Suspense.
+export function CartLines({ variant }: { variant: Variant }) {
+    const cart = useCartView()
+    const { changes, error, setQuantity } = useCart()
+    // useTransition rather than the bare startTransition, so a thrown write reaches this view's error boundary.
+    const [, startTransition] = useTransition()
     const pad = variant === 'drawer' ? 'px-5' : ''
-    const error = lineError ?? addError
-    const waiting = !confirmed || isPending
+    const pending = changes.length > 0
 
-    if (!shown || shown.items.length === 0) {
+    if (!cart || cart.items.length === 0) {
         return (
             <div className={pad}>
                 <EmptyCart error={error} showContinueShopping={variant === 'page'} />
@@ -82,22 +27,14 @@ function CartContent({
         )
     }
 
-    const setQuantity = (item: CartItem, quantity: number) => {
-        setLineError(null)
-        startTransition(async () => {
-            applyOptimistic({ productId: item.productId, quantity })
-            const result = quantity === 0
-                ? await removeCartItem(item.productId)
-                : await updateCartItem(item.productId, quantity)
-            if ('error' in result) setLineError(result.error)
-        })
-    }
+    // Quantities are absolute and Next runs Server Actions one at a time, so rapid clicks stack safely.
+    const set = (productId: string, quantity: number) => startTransition(() => setQuantity(productId, quantity))
 
     return (
-        <div className={`${pad} flex min-h-0 flex-1 flex-col`} aria-busy={waiting}>
+        <div className={`${pad} flex min-h-0 flex-1 flex-col`} aria-busy={pending}>
             {error ? <p role="alert" className="mb-4 text-sm text-foreground/70">{error}</p> : null}
             <ul className="min-h-0 flex-1 space-y-5 overflow-y-auto py-2">
-                {shown.items.map((item) => (
+                {cart.items.map((item) => (
                     <li key={item.productId} className="flex gap-3">
                         <div className="relative size-20 shrink-0 overflow-hidden rounded-[17px] bg-background">
                             <Image src={item.product.images[0]} alt="" fill sizes="80px" className="object-cover mix-blend-multiply" />
@@ -113,29 +50,26 @@ function CartContent({
                                 <div className="inline-flex h-10 items-center rounded-full bg-background px-1">
                                     <button
                                         type="button"
-                                        onClick={() => setQuantity(item, Math.max(0, item.quantity - 1))}
-                                        disabled={waiting}
+                                        onClick={() => set(item.productId, Math.max(0, item.quantity - 1))}
                                         aria-label={`Decrease quantity of ${item.product.name}`}
-                                        className="grid size-8 place-items-center rounded-full font-sans disabled:opacity-40"
+                                        className="grid size-8 place-items-center rounded-full font-sans"
                                     >
                                         −
                                     </button>
                                     <span className="min-w-6 text-center font-sans text-sm tabular-nums">{item.quantity}</span>
                                     <button
                                         type="button"
-                                        onClick={() => setQuantity(item, item.quantity + 1)}
-                                        disabled={waiting}
+                                        onClick={() => set(item.productId, item.quantity + 1)}
                                         aria-label={`Increase quantity of ${item.product.name}`}
-                                        className="grid size-8 place-items-center rounded-full font-sans disabled:opacity-40"
+                                        className="grid size-8 place-items-center rounded-full font-sans"
                                     >
                                         +
                                     </button>
                                 </div>
                                 <button
                                     type="button"
-                                    onClick={() => setQuantity(item, 0)}
-                                    disabled={waiting}
-                                    className="px-2 font-sans text-sm text-foreground/60 underline-offset-2 hover:underline disabled:opacity-40"
+                                    onClick={() => set(item.productId, 0)}
+                                    className="px-2 font-sans text-sm text-foreground/60 underline-offset-2 hover:underline"
                                 >
                                     Remove
                                 </button>
@@ -147,15 +81,11 @@ function CartContent({
             <div className="shrink-0 border-t border-foreground/10 py-5">
                 <div className="flex items-baseline justify-between font-sans">
                     <span>Subtotal</span>
-                    {partial ? (
-                        <span className="text-sm text-foreground/60">Updating…</span>
-                    ) : (
-                        <span className="text-lg font-bold tracking-tight">{formatPrice(shown.subtotal)}</span>
-                    )}
+                    <span className="text-lg font-bold tracking-tight">{formatPrice(cart.subtotal)}</span>
                 </div>
-                {!partial && waiting ? <p className="mt-1 text-sm text-foreground/60">Updating…</p> : null}
+                {pending ? <p className="mt-1 text-sm text-foreground/60">Updating…</p> : null}
                 {/* Inert until checkout exists. Disabled while the lines on screen are not the API cart. */}
-                <button type="button" className="button-dark mt-4 w-full" disabled={waiting}>
+                <button type="button" className="button-dark mt-4 w-full" disabled={pending}>
                     Checkout
                 </button>
             </div>

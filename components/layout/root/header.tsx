@@ -1,10 +1,9 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
-import { CartBadge } from '@/components/cart/cart-parts'
+import { CartBadge, CartCount } from '@/components/cart/cart-parts'
 import { NavLink } from '@/components/nav-link'
 import { PromoBanner } from '@/components/promo-banner'
 import { ScrollHeader } from '@/components/layout/root/scroll-header'
-import { getCart } from '@/lib/cart'
 
 const linkClass = 'relative rounded px-2 py-1 text-sm hover:bg-foreground/5'
 
@@ -36,8 +35,4 @@ export function Header() {
             </div>
         </ScrollHeader>
     )
-}
-
-async function CartCount() {
-    return <CartBadge count={(await getCart())?.totalItems} />
 }
