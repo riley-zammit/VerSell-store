@@ -3,22 +3,28 @@ import { GRID_LIMIT, getCollection } from '@/lib/api'
 import { ProductCard, ProductCardSkeleton } from './product-card'
 import { NavLink } from '../nav-link'
 import type { Pagination as PaginationMeta } from '@/lib/types'
+import { cacheLife } from 'next/cache'
 
 // Shared with search's own <ul> so every grid has the same footprint.
 export const gridClassName = 'grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3'
 
 export const pageSchema = z.coerce.number().int().min(1).catch(1)
 
-/** Products for ?category= / ?featured= (all products when neither), paged via ?page=N. Reads the URL, so it needs a boundary whose fallback includes <GridSkeleton /> (e.g. loading.tsx). */
-export async function ProductGrid({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
-    const sp = await searchParams
-    const page = pageSchema.parse(sp.page)
-    const query = new URLSearchParams()
-    
-    for (const key of ['category', 'featured']) if (typeof sp[key] === 'string') query.set(key, sp[key])
-    const pageHref = (n: number) => `?${new URLSearchParams([...query, ['page', String(n)]])}`
+function constructCollectionQuery(category?: string) {
+    if (!category) return ''
+    if (category === 'featured') return 'featured=true' // not an API category; the API filters it separately
+    return `category=${category}`
+}
 
-    const result = await getCollection(String(query), GRID_LIMIT, page)
+/** Products in `category` (all products when omitted; 'featured' for featured products), paged via ?page=N. Reads the URL, so render inside <Suspense fallback={<GridSkeleton />}>. */
+export async function ProductGrid({ category, searchParams }: { category?: string; searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+    "use cache"
+    cacheLife("catalog");
+    
+    const page = pageSchema.parse((await searchParams).page)
+    const pageHref = (n: number) => `?page=${n}`
+
+    const result = await getCollection(constructCollectionQuery(category), GRID_LIMIT, page)
     if ('error' in result) return <p className="text-foreground/60">{result.error}</p>
     const { products, pagination } = result
     return (

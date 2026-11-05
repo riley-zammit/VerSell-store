@@ -12,9 +12,11 @@
 - Add collection pages to handle large product collections and pagination more gracefully. use query params so its easier to leverage partial prerendering
 - Minimize page-level suspense boundaries. Even just a page-level title with an immediate suspense child is better UX
 - Keep productRow as generic instead of wrapping it in CategoryRow or FeaturedRow.
+- Cache at the function level to let us create multiple product layouts
 
 ## Collection
-- Keep collection pages dynamic to account for future different possible filters. e.g. featured=true, category=x
+- Rendering strategy: Static params with an api-mapping layer 
+- Whole set should really be static
 
 ## Cart
 - Cart drawer as an intercepted route was extremely complex due to optimistic UI; remove that in favor of a client component but keep progressive enhancement

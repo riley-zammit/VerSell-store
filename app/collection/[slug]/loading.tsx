@@ -1,5 +1,6 @@
 import { GridSkeleton } from "@/components/product/product-grid";
 
+// The page awaits params before its own Suspense, so slugs outside generateStaticParams have no shell without this.
 export default function Loading() {
     return (
         <section>

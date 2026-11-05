@@ -1,11 +1,17 @@
 import 'server-only'
 import { cacheLife } from 'next/cache'
 
-import type { ApiResponse, Product, Promotion } from './types'
+import type { ApiResponse, CategoryInfo, Health, Product, Promotion, Stock, StoreConfig } from './types'
 
 export enum ApiHeader { Bypass = 'x-vercel-protection-bypass' }
 export enum Category { Bottles = 'bottles', Cups = 'cups', Mugs = 'mugs' } 
-enum ApiPath { Products = '/products', Promotions = '/promotions' }
+enum ApiPath {
+    Products = '/products',
+    Categories = '/categories',
+    Promotions = '/promotions',
+    StoreConfig = '/store/config',
+    Health = '/health',
+}
 export const SEARCH_LIMIT = 9
 export const GRID_LIMIT = 9
 
@@ -31,8 +37,6 @@ export async function apiFetch<T>(path: string, init?: RequestInit) {
 
 /** `query` is a /products query string, e.g. 'category=mugs' or 'featured=true'; '' is all products. */
 export async function getCollection(query: string, limit: number, page = 1) {
-    'use cache'
-    cacheLife('catalog')
     const params = new URLSearchParams(query)
     params.set('limit', String(limit))
     params.set('page', String(page))
@@ -54,6 +58,12 @@ export async function getProductsByCategory(category: Category) {
     return (await apiFetch<Product[]>(`${ApiPath.Products}?category=${category}&limit=6`)).data
 }
 
+export async function getCategories() {
+    'use cache'
+    cacheLife('catalog')
+    return (await apiFetch<CategoryInfo[]>(ApiPath.Categories)).data
+}
+
 export async function getProduct(slug: string) {
     'use cache'
     cacheLife('catalog')
@@ -63,6 +73,10 @@ export async function getProduct(slug: string) {
     })
 }
 
+// Not cached: stock changes on every request, so callers render it inside Suspense as a dynamic hole.
+export async function getProductStock(id: string) {
+    return (await apiFetch<Stock>(`${ApiPath.Products}/${encodeURIComponent(id)}/stock`)).data
+}
 
 // Searches all products; '' returns everything.
 export async function searchProducts(query: string, page = 1) {
@@ -78,4 +92,17 @@ export async function getPromotion() {
     'use cache'
     cacheLife('hours') // longer than 'catalog', so it doesn't shorten any route's lifetime
     return (await apiFetch<Promotion>(ApiPath.Promotions)).data
+}
+
+// TODO: not wired in yet. Intended for store name, SEO defaults, social links, and feature flags.
+// Store-wide and rarely changes; 'hours' (like promotions) so it doesn't shorten any route's lifetime.
+export async function getStoreConfig() {
+    'use cache'
+    cacheLife('hours')
+    return (await apiFetch<StoreConfig>(ApiPath.StoreConfig)).data
+}
+
+// Used by the hourly cron at app/api/health. Not cached: a stale health status is meaningless.
+export async function getHealth() {
+    return (await apiFetch<Health>(ApiPath.Health)).data
 }

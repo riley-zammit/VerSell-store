@@ -1,3 +1,4 @@
+import { cacheLife } from 'next/cache'
 import { getCollection } from '@/lib/api'
 import { NavLink } from '../nav-link'
 import { ProductCard, ProductCardSkeleton } from './product-card'
@@ -9,8 +10,12 @@ const rowProps = (slots: number) => ({
     style: { '--slots': slots } as CSSProperties,
 })
 
-/** First `slots` products for a /products query string (e.g. 'category=mugs'), plus "See all" when there are more. Render inside <Suspense fallback={<RowSkeleton slots={n} />}>. */
-export async function ProductRow({ query, slots }: { query: string; slots: number }) {
+/** First `slots` products for a /products query string (e.g. 'category=mugs'), plus "See all" (to `href`) when there are more. */
+export async function ProductRow({ query, href, slots }: { query: string; href: string; slots: number }) {
+    // Cached here rather than in getCollection: rows prerender into the static shell (no Suspense needed),
+    // while the paginated collection grid still fetches fresh on every request.
+    'use cache'
+    cacheLife('catalog')
     const result = await getCollection(query, slots)
     if ('error' in result) return <p className="text-foreground/60">{result.error}</p>
     const { products, pagination } = result
@@ -23,7 +28,7 @@ export async function ProductRow({ query, slots }: { query: string; slots: numbe
             </ul>
             {pagination.total > slots && (
                 <div className="mt-8 flex justify-center">
-                    <NavLink href={`/collection?${query}`} className="button-dark relative">
+                    <NavLink href={href} className="button-dark relative">
                         See all
                     </NavLink>
                 </div>

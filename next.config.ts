@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
     // 3 minutes is considered a 'good' browsing session in ecomm; average is 2.5 mins. 
     // set stale to 5 mins to ensure catalog performance and stability for most single sessions as those 2 minutes cost us nothing
     // Revalidate at 10 to ensure fresh catalog
-    catalog: { stale: 300, revalidate: 600 },
+    catalog: { stale: 300, revalidate: 600 }
   },
   images: {
     remotePatterns: [new URL("https://i8qy5y6gxkdgdcv9.public.blob.vercel-storage.com/storefront/**")],

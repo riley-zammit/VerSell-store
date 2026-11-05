@@ -6,7 +6,7 @@ import { useCart } from '@/components/cart/cart-provider'
 import { addToCart } from '@/lib/cart-actions'
 import { CartField, type Product } from '@/lib/types'
 
-export function AddToCartForm({ product }: { product: Product }) {
+export function AddToCartForm({ product, disabled = false }: { product: Product; disabled?: boolean }) {
     const { showAdd, openDrawer } = useCart()
     // Before hydration the form posts back to this page, which re-renders with the new cart count (or the error).
     // No permalink to /cart: Next only resolves an action on pages that render it, so /cart would 409.
@@ -31,11 +31,12 @@ export function AddToCartForm({ product }: { product: Product }) {
                 min={1}
                 defaultValue={1}
                 required
+                disabled={disabled}
                 aria-label="Quantity"
                 className="h-12 w-24 rounded-full bg-white px-4 text-center font-sans shadow-card outline-none focus-visible:ring-2 focus-visible:ring-foreground"
             />
-            <button type="submit" className="button-dark">
-                Add to cart
+            <button type="submit" className="button-dark" disabled={disabled}>
+                {disabled ? 'Out of stock' : 'Add to cart'}
             </button>
             {error ? (
                 <p role="alert" className="basis-full text-sm text-foreground/70">

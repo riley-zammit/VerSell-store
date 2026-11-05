@@ -12,6 +12,39 @@ export type Product = {
   createdAt: string
 }
 
+export type Stock = {
+  productId: string
+  stock: number
+  inStock: boolean
+  lowStock: boolean // stock between 1 and 5
+}
+
+export type StoreConfig = {
+  storeName: string
+  currency: string
+  features: {
+    wishlist: boolean
+    productComparison: boolean
+    reviews: boolean
+    liveChat: boolean
+    recentlyViewed: boolean
+  }
+  socialLinks: { twitter: string; github: string; discord: string }
+  seo: { defaultTitle: string; titleTemplate: string; defaultDescription: string }
+}
+
+export enum RedisStatus {
+  Connected = 'connected',
+  Error = 'error',
+}
+
+export type Health = {
+  status: string
+  timestamp: string
+  services: { redis: RedisStatus }
+}
+
+export type CategoryInfo = { slug: string; name: string; productCount: number }
 
 export type Promotion = {
   id: string

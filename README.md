@@ -2,7 +2,17 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+> [!IMPORTANT]
+> Create `.env.local` before running anything (or `vercel env pull` if the project is linked). `next build` calls the storefront API from `generateStaticParams`, so it fails without these.
+
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `SWAG_API_URL` | Yes | Base URL of the storefront API (`/products`, `/categories`, `/promotions`, cart). |
+| `SWAG_API_BYPASS_TOKEN` | Yes | Sent as `x-vercel-protection-bypass` on every API request. |
+| `OPENAI_API_KEY` | For the Eve agent | Read implicitly by `@ai-sdk/openai` in `agent/agent.ts`. |
+| `VERCEL_PROJECT_PRODUCTION_URL` | No | Set by Vercel; used for `metadataBase`. Falls back to `http://localhost:3000`. |
+
+Then run the development server:
 
 ```bash
 npm run dev

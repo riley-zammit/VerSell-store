@@ -24,7 +24,7 @@ export function Hero() {
             <p className="mt-4 max-w-md text-lg text-white/85">
               Official Vercel swag for people who deploy on Fridays. Minimal design, built to last.
             </p>
-            <NavLink href="/collection" prefetch className="button-light relative mt-6">
+            <NavLink href="/collection/all" prefetch className="button-light relative mt-6">
               Shop all products
             </NavLink>
           </div>
