@@ -1,115 +1,47 @@
 'use client'
 
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useRef, useState, useTransition } from 'react'
-import type { CategoryInfo } from '@/lib/types'
+import { useEffect, useRef, useTransition } from 'react'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 
-const toUrl = (q: string, category: string) => {
-  const params = new URLSearchParams()
-  if (q.trim()) params.set('q', q.trim())
-  if (category) params.set('category', category)
-  const qs = params.toString()
-  return qs ? `/search?${qs}` : '/search'
-}
+// The URL is the only source of truth.
+export function SearchForm() {
+    const { replace } = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams()
+    const [isPending, startTransition] = useTransition()
+    // Debounced so each keystroke doesn't trigger a server render + uncached API call.
+    const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
+    useEffect(() => () => clearTimeout(timer.current), []) // don't navigate back to /search after leaving
 
-// The URL is the only source of truth; every trigger funnels through navigate().
-export function SearchForm({ categories }: { categories: CategoryInfo[] }) {
-  const router = useRouter()
-  const params = useSearchParams()
-  const [q, setQ] = useState(params.get('q') ?? '')
-  const [category, setCategory] = useState(params.get('category') ?? '')
-  const [isPending, startTransition] = useTransition()
-  const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
+    function handleSearch(term: string) {
+        const params = new URLSearchParams(searchParams);
+        params.delete('page'); // a new query starts back at page 1
+        if (term) {
+            params.set('query', term);
+        } else {
+            //remove the parameter if there's no query
+            params.delete('query');
+        }
+        startTransition(() => replace(`${pathname}?${params.toString()}`));
+    }
 
-  const navigate = (q: string, category: string) => {
-    clearTimeout(timer.current)
-    startTransition(() => router.replace(toUrl(q, category), { scroll: false }))
-  }
-
-  return (
-    <SearchFields
-      categories={categories}
-      q={q}
-      category={category}
-      pending={isPending}
-      onSubmit={(e) => {
-        e.preventDefault() // without JS this is a native GET to the same URL
-        navigate(q, category)
-      }}
-      onQueryChange={(value) => {
-        setQ(value)
-        clearTimeout(timer.current)
-        if (value.trim().length >= 3 || !value.trim())
-          timer.current = setTimeout(() => navigate(value, category), 300)
-      }}
-      onCategoryChange={(value) => {
-        setCategory(value)
-        navigate(q, value)
-      }}
-    />
-  )
-}
-
-const Spinner = () => (
-  <span aria-hidden className="block size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-)
-
-type FieldsProps = {
-  categories: CategoryInfo[]
-  q?: string
-  category?: string
-  pending?: boolean
-  disabled?: boolean
-  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void
-  onQueryChange?: (value: string) => void
-  onCategoryChange?: (value: string) => void
-}
-
-/** Shared markup: SearchForm renders it live; the Suspense fallback renders it disabled (same footprint). */
-export function SearchFields({ categories, q, category, pending, disabled, onSubmit, onQueryChange, onCategoryChange }: FieldsProps) {
-  return (
-    <form
-      action="/search"
-      role="search"
-      onSubmit={onSubmit}
-      data-pending={pending || undefined}
-      aria-busy={pending}
-      className="flex flex-col gap-2 sm:flex-row"
-    >
-      <input
-        type="search"
-        name="q"
-        value={q}
-        onChange={onQueryChange && ((e) => onQueryChange(e.target.value))}
-        disabled={disabled}
-        placeholder="Search products…"
-        aria-label="Search products"
-        className="h-12 min-w-0 rounded-full bg-white px-5 shadow-card outline-none focus-visible:ring-2 focus-visible:ring-foreground disabled:opacity-60 flex-1"
-      />
-      <div className="flex gap-2">
-        <select
-          name="category"
-          value={category}
-          onChange={onCategoryChange && ((e) => onCategoryChange(e.target.value))}
-          disabled={disabled}
-          aria-label="Category"
-          className="h-12 min-w-0 rounded-full bg-white px-5 shadow-card outline-none focus-visible:ring-2 focus-visible:ring-foreground disabled:opacity-60 flex-1 sm:w-48"
-        >
-          <option value="">All categories</option>
-          {categories.map((c) => (
-            <option key={c.slug} value={c.slug}>
-              {c.name}
-            </option>
-          ))}
-        </select>
-        <button
-          disabled={disabled}
-          className="button-dark gap-2"
-        >
-          <span className="w-4">{pending && <Spinner />}</span>
-          Search
-        </button>
-      </div>
-    </form>
-  )
+    return (
+        <div className="relative flex flex-1 shrink-0">
+            <label htmlFor="search" className="sr-only">
+                Search
+            </label>
+            <input
+                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                placeholder="Search for products"
+                onChange={(e) => {
+                    const term = e.target.value
+                    clearTimeout(timer.current)
+                    timer.current = setTimeout(() => handleSearch(term), 300)
+                }}
+                defaultValue={searchParams.get('query')?.toString()}
+            />
+            {/* Overlays the outline, so it never shifts layout or blocks typing. */}
+            {isPending && <span role="status" aria-label="Loading results" className="search-shimmer" />}
+        </div>
+    )
 }

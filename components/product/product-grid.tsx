@@ -2,13 +2,14 @@ import { z } from 'zod'
 import { GRID_LIMIT, getCollection } from '@/lib/api'
 import { ProductCard, ProductCardSkeleton } from './product-card'
 import { NavLink } from '../nav-link'
+import type { Pagination as PaginationMeta } from '@/lib/types'
 
 // Shared with search's own <ul> so every grid has the same footprint.
 export const gridClassName = 'grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3'
 
-const pageSchema = z.coerce.number().int().min(1).catch(1)
+export const pageSchema = z.coerce.number().int().min(1).catch(1)
 
-/** Products for ?category= / ?featured= (all products when neither), paged via ?page=N. Reads the URL, so render it inside <Suspense fallback={<GridSkeleton />}>. */
+/** Products for ?category= / ?featured= (all products when neither), paged via ?page=N. Reads the URL, so it needs a boundary whose fallback includes <GridSkeleton /> (e.g. loading.tsx). */
 export async function ProductGrid({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
     const sp = await searchParams
     const page = pageSchema.parse(sp.page)
@@ -27,24 +28,29 @@ export async function ProductGrid({ searchParams }: { searchParams: Promise<Reco
                     <ProductCard key={p.id} product={p} />
                 ))}
             </ul>
-            {pagination.totalPages > 1 && (
-                <nav aria-label="Pagination" className="mt-8 flex items-center justify-center gap-6 text-sm">
-                    {pagination.hasPreviousPage && (
-                        <NavLink href={pageHref(Math.min(page - 1, pagination.totalPages))} className="relative hover:underline">
-                            Previous
-                        </NavLink>
-                    )}
-                    <span className="text-foreground/60">
-                        Page {page} of {pagination.totalPages}
-                    </span>
-                    {pagination.hasNextPage && (
-                        <NavLink href={pageHref(page + 1)} className="relative hover:underline">
-                            Next
-                        </NavLink>
-                    )}
-                </nav>
-            )}
+            <Pagination page={page} pagination={pagination} pageHref={pageHref} />
         </>
+    )
+}
+
+export function Pagination({ page, pagination, pageHref }: { page: number; pagination: PaginationMeta; pageHref: (n: number) => string }) {
+    if (pagination.totalPages <= 1) return null
+    return (
+        <nav aria-label="Pagination" className="mt-8 flex items-center justify-center gap-6 text-sm">
+            {pagination.hasPreviousPage && (
+                <NavLink href={pageHref(Math.min(page - 1, pagination.totalPages))} className="relative hover:underline">
+                    Previous
+                </NavLink>
+            )}
+            <span className="text-foreground/60">
+                Page {page} of {pagination.totalPages}
+            </span>
+            {pagination.hasNextPage && (
+                <NavLink href={pageHref(page + 1)} className="relative hover:underline">
+                    Next
+                </NavLink>
+            )}
+        </nav>
     )
 }
 

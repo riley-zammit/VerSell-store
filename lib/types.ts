@@ -12,7 +12,6 @@ export type Product = {
   createdAt: string
 }
 
-export type CategoryInfo = { slug: string; name: string; productCount: number }
 
 export type Promotion = {
   id: string
@@ -57,3 +56,9 @@ export type Cart = {
 }
 
 export type CartResult = { cart: Cart } | { error: string }
+
+// Form field names shared by the add-to-cart form and its Server Action.
+export enum CartField {
+  ProductId = 'productId',
+  Quantity = 'quantity',
+}

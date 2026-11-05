@@ -3,7 +3,7 @@
 import { createContext, startTransition, use, useContext, useOptimistic, useRef, useState, type ReactNode, type RefObject } from 'react'
 
 import { applyChanges, CartChangeType, type CartChange } from '@/components/cart/state-helpers'
-import { addToCart, removeCartItem, updateCartItem } from '@/lib/cart-actions'
+import { removeCartItem, updateCartItem } from '@/lib/cart-actions'
 import type { Cart, CartResult, Product } from '@/lib/types'
 
 type CartContextValue = {
@@ -12,7 +12,7 @@ type CartContextValue = {
     error: string | null
     drawer: RefObject<HTMLDialogElement | null>
     openDrawer: () => void
-    add: (product: Product, quantity: number) => Promise<void>
+    showAdd: (product: Product, quantity: number) => void
     setQuantity: (productId: string, quantity: number) => Promise<void>
 }
 
@@ -55,8 +55,10 @@ export function CartProvider({ cart, children }: { cart: Promise<Cart | null>; c
         openDrawer: () => {
             if (!drawer.current?.open) drawer.current?.showModal()
         },
-        add: (product, quantity) =>
-            write({ type: CartChangeType.Add, product, quantity }, addToCart(product.id, quantity)),
+        // Call from the add form's onSubmit. It shares that event's transition lane with the form's action,
+        // so the line shows until the action (and its refresh) lands.
+        showAdd: (product, quantity) =>
+            startTransition(() => addChange({ type: CartChangeType.Add, product, quantity })),
         setQuantity: (productId, quantity) =>
             write(
                 { type: CartChangeType.Set, productId, quantity },

@@ -13,12 +13,15 @@
 - Minimize page-level suspense boundaries. Even just a page-level title with an immediate suspense child is better UX
 - Keep productRow as generic instead of wrapping it in CategoryRow or FeaturedRow.
 
+## Collection
+- Keep collection pages dynamic to account for future different possible filters. e.g. featured=true, category=x
+
 ## Cart
-- Soft navigation to `/cart` is intercepted into a drawer. A hard load renders the full page, with the cart streamed behind a focused Suspense fallback.
+- Cart drawer as an intercepted route was extremely complex due to optimistic UI; remove that in favor of a client component but keep progressive enhancement
 - Keep only the API cart token in an httpOnly cookie. The header streams the numeric badge from `GET /cart` and shows the plain cart icon while it resolves.
 - Cart mutations are client-handled controls that call validated Server Actions. Checkout is an inert button, disabled until the cart on screen is the API response.
 - The add POST waits until the drawer is open. The navigation and the action share one router queue, so sending the POST in the click holds the drawer until the response. 
-- The cart requires JavaScript. Products come from an API and use Suspense, so optimize the flow for the vast majority of users with JavaScript rather than keep a parallel no-JS path.
+- Add to cart is progressively enhanced: one `useActionState` Server Action. No-JS posts back to the product page (no redirect; a `/cart` permalink 409s because Next only resolves actions on pages that render them). With JS, `onSubmit` opens the drawer and adds the optimistic line. Quantity controls still require JavaScript.
 
 ## Agent
 ### Ideas

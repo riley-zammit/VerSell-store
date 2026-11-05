@@ -4,7 +4,7 @@ import { refresh } from 'next/cache'
 import { z } from 'zod'
 
 import { addItem, removeItem, updateItem } from './cart'
-import type { CartResult } from './types'
+import { CartField, type CartResult } from './types'
 
 const addSchema = z.object({
     productId: z.string().trim().min(1),
@@ -18,10 +18,15 @@ const updateSchema = z.object({
 
 const idSchema = z.string().trim().min(1)
 
-export async function addToCart(productId: string, quantity: number): Promise<CartResult> {
-    const parsed = addSchema.safeParse({ productId, quantity })
-    if (!parsed.success) return { error: 'Enter a quantity of at least 1.' }
-    return refreshed(await addItem(parsed.data.productId, parsed.data.quantity))
+// The add form's useActionState action, so it also works before hydration. Returns the error to show, or null.
+export async function addToCart(_prev: string | null, formData: FormData): Promise<string | null> {
+    const parsed = addSchema.safeParse({
+        productId: formData.get(CartField.ProductId),
+        quantity: formData.get(CartField.Quantity),
+    })
+    if (!parsed.success) return 'Enter a quantity of at least 1 or a valid productId.'
+    const result = refreshed(await addItem(parsed.data.productId, parsed.data.quantity))
+    return 'error' in result ? result.error : null
 }
 
 export async function updateCartItem(productId: string, quantity: number): Promise<CartResult> {

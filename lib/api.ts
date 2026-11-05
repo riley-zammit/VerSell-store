@@ -1,13 +1,13 @@
 import 'server-only'
 import { cacheLife } from 'next/cache'
 
-import type { ApiResponse, CategoryInfo, Product, Promotion } from './types'
+import type { ApiResponse, Product, Promotion } from './types'
 
 export enum ApiHeader { Bypass = 'x-vercel-protection-bypass' }
 export enum Category { Bottles = 'bottles', Cups = 'cups', Mugs = 'mugs' } 
-enum ApiPath { Products = '/products', Categories = '/categories', Promotions = '/promotions' }
-export const SEARCH_LIMIT = 5
-export const GRID_LIMIT = 6
+enum ApiPath { Products = '/products', Promotions = '/promotions' }
+export const SEARCH_LIMIT = 9
+export const GRID_LIMIT = 9
 
 export class ApiError extends Error {
     constructor(public status: number, message: string) {
@@ -63,24 +63,19 @@ export async function getProduct(slug: string) {
     })
 }
 
-export async function searchProducts(q = '', category = '') {
-    'use cache'
-    cacheLife('catalog')
-    const params = new URLSearchParams({ limit: String(SEARCH_LIMIT) })
-    if (q) params.set('search', q)
-    if (category) params.set('category', category)
-    return (await apiFetch<Product[]>(`${ApiPath.Products}?${params}`)).data
+
+// Searches all products; '' returns everything.
+export async function searchProducts(query: string, page = 1) {
+    const params = new URLSearchParams({ limit: String(SEARCH_LIMIT), page: String(page) })
+    if (query) params.set('search', query)
+    const { data, meta } = await apiFetch<Product[]>(`${ApiPath.Products}?${params}`)
+    return { products: data, pagination: meta!.pagination } // list endpoints always send meta
 }
 
-export async function getCategories() {
-    'use cache'
-    cacheLife('catalog')
-    return (await apiFetch<CategoryInfo[]>(ApiPath.Categories)).data
-}
-
-// API returns a random promo per call; caching pins one for everyone, rotating hourly.
+// API returns a random promo per call; caching here pins one for every caller on the page, rotating hourly.
+// Cache must be here and not the component, so if promotions are rendered anywhere else in the site, they stay stable
 export async function getPromotion() {
     'use cache'
-    cacheLife('catalog') // same profile as the rest of the layout, so it doesn't shorten every route's lifetime
+    cacheLife('hours') // longer than 'catalog', so it doesn't shorten any route's lifetime
     return (await apiFetch<Promotion>(ApiPath.Promotions)).data
 }
