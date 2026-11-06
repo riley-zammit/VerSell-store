@@ -94,8 +94,7 @@ export default defineMcpClientConnection({
 });
 ```
 
-- Blocked tools are never listed to the model, so it can't call them at all. Hooks run *after* events are recorded and
-  can't veto a call; the closest a hook gets is cancelling the whole turn.
+- Blocked tools are never listed to the model, so it can't call them at all. 
 - Belt and braces, if wanted: add an `approval` policy that returns `"denied"` for any name containing `cart`,
   `checkout`, `spend_request`, or `order`.
 - Sign-in prompts from the child show up in the root session, which is the documented subagent behaviour. Search
