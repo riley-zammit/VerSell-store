@@ -1,0 +1,67 @@
+{
+  "generator": {
+    "name": "eve",
+    "version": "1.0.0-rc.1"
+  },
+  "kind": "vercel-connect-manifest",
+  "requirements": [
+    {
+      "connect": {
+        "manifest": {
+          "$type": "https://docs.slack.dev/reference/app-manifest/",
+          "display_information": {
+            "name": "slack"
+          },
+          "features": {
+            "app_home": {
+              "home_tab_enabled": false,
+              "messages_tab_enabled": true,
+              "messages_tab_read_only_enabled": false
+            },
+            "bot_user": {
+              "display_name": "slack"
+            }
+          },
+          "oauth_config": {
+            "scopes": {
+              "bot": [
+                "app_mentions:read",
+                "chat:write"
+              ]
+            }
+          },
+          "settings": {
+            "event_subscriptions": {
+              "bot_events": [
+                "app_mention"
+              ]
+            },
+            "org_deploy_enabled": false,
+            "socket_mode_enabled": false,
+            "token_rotation_enabled": false
+          }
+        },
+        "service": "slack",
+        "subjectTypes": [
+          "app"
+        ],
+        "type": "slack"
+      },
+      "interfaces": [],
+      "target": "connector:slack/riley-s-vercel",
+      "triggers": [
+        {
+          "path": "/eve/v1/slack"
+        }
+      ],
+      "uses": [
+        {
+          "kind": "channel",
+          "logicalPath": "channels/slack.ts",
+          "name": "slack"
+        }
+      ]
+    }
+  ],
+  "schemaVersion": 1
+}

@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-11-02T19:39:52.082Z",
+  "fetchedAt": "2026-11-06T22:01:58.839Z",
   "kind": "eve-model-metadata",
   "models": [
     {
@@ -15,11 +15,6 @@
     {
       "slug": "alibaba/qwen-3-235b",
       "providers": [
-        {
-          "contextWindowTokens": 40960,
-          "provider": "deepinfra",
-          "providerModelId": "Qwen/Qwen3-235B-A22B-Instruct-2507"
-        },
         {
           "contextWindowTokens": 262144,
           "provider": "vertex",
@@ -979,11 +974,6 @@
           "contextWindowTokens": 128000,
           "provider": "bedrock",
           "providerModelId": "us.deepseek.r1-v1:0"
-        },
-        {
-          "contextWindowTokens": 160000,
-          "provider": "deepinfra",
-          "providerModelId": "deepseek-ai/DeepSeek-R1-0528"
         }
       ]
     },
@@ -994,11 +984,6 @@
           "contextWindowTokens": 163840,
           "provider": "deepinfra",
           "providerModelId": "deepseek-ai/DeepSeek-V3.1"
-        },
-        {
-          "contextWindowTokens": 128000,
-          "provider": "sambanova",
-          "providerModelId": "DeepSeek-V3.1"
         }
       ]
     },
@@ -1427,6 +1412,11 @@
         },
         {
           "contextWindowTokens": 1048576,
+          "provider": "nebius",
+          "providerModelId": "deepseek-ai/DeepSeek-V4.1-Flash-1017"
+        },
+        {
+          "contextWindowTokens": 1048576,
           "provider": "novita",
           "providerModelId": "deepseek/deepseek-v4.1-flash-1017"
         },
@@ -1477,6 +1467,11 @@
         },
         {
           "contextWindowTokens": 1048576,
+          "provider": "telnyx",
+          "providerModelId": "deepseek-ai/DeepSeek-V4.1-Flash-1017"
+        },
+        {
+          "contextWindowTokens": 1048576,
           "provider": "togetherai",
           "providerModelId": "deepseek-ai/DeepSeek-V4.1-Flash-1017"
         },
@@ -1494,6 +1489,16 @@
           "contextWindowTokens": 1048576,
           "provider": "baseten",
           "providerModelId": "deepseek-ai/DeepSeek-V4.1-Flash-1017-Fast"
+        }
+      ]
+    },
+    {
+      "slug": "deepseek/deepseek-v4.1-flash-1017-ultrafast",
+      "providers": [
+        {
+          "contextWindowTokens": 1048576,
+          "provider": "fireworks",
+          "providerModelId": "accounts/fireworks/routers/deepseek-v4p1-flash-1017-ultrafast"
         }
       ]
     },
@@ -1633,16 +1638,6 @@
       ]
     },
     {
-      "slug": "google/gemini-3.1-flash-image-preview",
-      "providers": [
-        {
-          "contextWindowTokens": 131072,
-          "provider": "google",
-          "providerModelId": "gemini-3.1-flash-image-preview"
-        }
-      ]
-    },
-    {
       "slug": "google/gemini-3.1-flash-lite",
       "providers": [
         {
@@ -1692,11 +1687,6 @@
       "providers": [
         {
           "contextWindowTokens": 1000000,
-          "provider": "google",
-          "providerModelId": "gemini-3.5-flash"
-        },
-        {
-          "contextWindowTokens": 1000000,
           "provider": "vertex",
           "providerModelId": "gemini-3.5-flash"
         }
@@ -1735,11 +1725,6 @@
     {
       "slug": "google/gemini-3.7-flash",
       "providers": [
-        {
-          "contextWindowTokens": 1000000,
-          "provider": "google",
-          "providerModelId": "gemini-3.7-flash"
-        },
         {
           "contextWindowTokens": 1000000,
           "provider": "vertex",
@@ -1813,13 +1798,23 @@
       ]
     },
     {
-      "slug": "google/gemini-omni-flash-preview",
+      "slug": "google/gemini-omni-1.2-flash",
       "providers": [
         {
-          "contextWindowTokens": 1000000,
+          "contextWindowTokens": 1048576,
           "provider": "google",
-          "providerModelId": "gemini-omni-flash-preview"
+          "providerModelId": "gemini-omni-1.2-flash"
         },
+        {
+          "contextWindowTokens": 131072,
+          "provider": "vertex",
+          "providerModelId": "gemini-omni-1.2-flash"
+        }
+      ]
+    },
+    {
+      "slug": "google/gemini-omni-flash-preview",
+      "providers": [
         {
           "contextWindowTokens": 1000000,
           "provider": "vertex",
@@ -1874,6 +1869,16 @@
           "contextWindowTokens": 262144,
           "provider": "parasail",
           "providerModelId": "google/gemma-4-31B-it"
+        }
+      ]
+    },
+    {
+      "slug": "humansand/ampersand-v0.1",
+      "providers": [
+        {
+          "contextWindowTokens": 1000000,
+          "provider": "humansand",
+          "providerModelId": "ampersand-v0.1"
         }
       ]
     },
@@ -2342,6 +2347,11 @@
       "providers": [
         {
           "contextWindowTokens": 1048576,
+          "provider": "digitalocean",
+          "providerModelId": "minimax-m3.1-flash"
+        },
+        {
+          "contextWindowTokens": 1048576,
           "provider": "fireworks",
           "providerModelId": "accounts/fireworks/models/minimax-m3p1-flash"
         },
@@ -2687,8 +2697,78 @@
       "providers": [
         {
           "contextWindowTokens": 1048576,
+          "provider": "alibaba",
+          "providerModelId": "kimi-k3.1-pro"
+        },
+        {
+          "contextWindowTokens": 1000000,
+          "provider": "baseten",
+          "providerModelId": "moonshotai/Kimi-K3.1-Pro"
+        },
+        {
+          "contextWindowTokens": 1048576,
+          "provider": "boundless",
+          "providerModelId": "moonshotai/kimi-k3.1-pro"
+        },
+        {
+          "contextWindowTokens": 1048576,
+          "provider": "deepinfra",
+          "providerModelId": "moonshotai/Kimi-K3.1-Pro"
+        },
+        {
+          "contextWindowTokens": 1048576,
+          "provider": "fireworks",
+          "providerModelId": "accounts/fireworks/models/kimi-k3p1-pro"
+        },
+        {
+          "contextWindowTokens": 1048576,
+          "provider": "inference-net",
+          "providerModelId": "moonshotai/kimi-k3.1-pro"
+        },
+        {
+          "contextWindowTokens": 1048576,
+          "provider": "modal",
+          "providerModelId": "vercelaigateway--ep-kimi-k3-1-pro-server.us-west.modal.direct"
+        },
+        {
+          "contextWindowTokens": 1048576,
           "provider": "moonshotai",
           "providerModelId": "kimi-k3.1-pro"
+        },
+        {
+          "contextWindowTokens": 1048576,
+          "provider": "morph",
+          "providerModelId": "morph-kimik31"
+        },
+        {
+          "contextWindowTokens": 1048576,
+          "provider": "nebius",
+          "providerModelId": "moonshotai/Kimi-K3.1-Pro"
+        },
+        {
+          "contextWindowTokens": 1048576,
+          "provider": "parasail",
+          "providerModelId": "moonshotai/Kimi-K3.1-Pro"
+        },
+        {
+          "contextWindowTokens": 1048576,
+          "provider": "relace",
+          "providerModelId": "moonshotai/kimi-k3.1-pro"
+        },
+        {
+          "contextWindowTokens": 1048576,
+          "provider": "runware",
+          "providerModelId": "moonshotai:kimi@k3.1-pro"
+        },
+        {
+          "contextWindowTokens": 1048576,
+          "provider": "togetherai",
+          "providerModelId": "moonshotai/Kimi-K3.1-Pro"
+        },
+        {
+          "contextWindowTokens": 1048576,
+          "provider": "wafer",
+          "providerModelId": "Kimi-K3.1-Pro"
         }
       ]
     },
@@ -3502,6 +3582,11 @@
         },
         {
           "contextWindowTokens": 1050000,
+          "provider": "bedrock",
+          "providerModelId": "global.openai.gpt-6.1-terra"
+        },
+        {
+          "contextWindowTokens": 1050000,
           "provider": "openai",
           "providerModelId": "gpt-6.1-terra"
         }
@@ -3679,6 +3764,16 @@
           "contextWindowTokens": 200000,
           "provider": "azure",
           "providerModelId": "o4-mini"
+        }
+      ]
+    },
+    {
+      "slug": "parallel/parallel-decisions-fast",
+      "providers": [
+        {
+          "contextWindowTokens": 32000,
+          "provider": "parallel",
+          "providerModelId": "fast"
         }
       ]
     },
@@ -3952,11 +4047,6 @@
       "providers": [
         {
           "contextWindowTokens": 262144,
-          "provider": "deepinfra",
-          "providerModelId": "tencent/Hy3"
-        },
-        {
-          "contextWindowTokens": 262144,
           "provider": "gmicloud",
           "providerModelId": "tencent/Hy3"
         },
@@ -3973,6 +4063,16 @@
       ]
     },
     {
+      "slug": "tencent/hy4",
+      "providers": [
+        {
+          "contextWindowTokens": 1024000,
+          "provider": "tencent",
+          "providerModelId": "hy4"
+        }
+      ]
+    },
+    {
       "slug": "tencent/hy4-preview",
       "providers": [
         {
@@ -3985,11 +4085,6 @@
     {
       "slug": "thinkingmachines/inkling",
       "providers": [
-        {
-          "contextWindowTokens": 524288,
-          "provider": "deepinfra",
-          "providerModelId": "thinkingmachines/Inkling"
-        },
         {
           "contextWindowTokens": 262144,
           "provider": "modal",

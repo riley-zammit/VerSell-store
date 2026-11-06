@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^4.0.106",
+    "@upstash/redis": "^1.41.0",
+    "@vercel/blob": "^2.8.2",
     "@vercel/connect": "^2.8.0",
     "ai": "^7.0.137",
     "eve": "^1.0.0-rc.1",

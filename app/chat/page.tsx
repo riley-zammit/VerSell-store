@@ -173,7 +173,7 @@ function InteractionPrompt({
   if (locked) {
     const selected = options.find(({ id }) => id === interaction.answer?.optionId)?.label;
     return (
-      <p className="rounded-xl border border-black/10 bg-white p-3 text-black">
+      <p className="whitespace-pre-line rounded-xl border border-black/10 bg-white p-3 text-black">
         {interaction.request.prompt}
         {interaction.answer ? ` — ${selected ?? interaction.answer.text ?? "answered"}` : ""}
       </p>
@@ -182,7 +182,7 @@ function InteractionPrompt({
 
   return (
     <div className="rounded-xl border border-black/10 bg-white p-3 text-black">
-      <p>{interaction.request.prompt}</p>
+      <p className="whitespace-pre-line">{interaction.request.prompt}</p>
       {options.length > 0 ? (
         <div className="mt-3 flex flex-wrap gap-2">
           {options.map((option) => (

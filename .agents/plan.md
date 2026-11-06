@@ -17,8 +17,8 @@ Status: draft v2 for review. Nothing below is built yet.
 6. The customer picks which products get the creative. The concierge calls the **product-customizer** once per product,
    and the calls run in parallel. Each one makes a mockup with `google/gemini-3.1-flash-image`.
 7. The customer gives feedback on a mockup ("crop it tighter", "logo on the other side"). The concierge passes the
-   feedback to that item's customizer task. The customizer **edits with ImageMagick if it can**, and only regenerates
-   with Gemini if ImageMagick can't make the change.
+   feedback to that item's customizer task. The customizer **edits the mockup if it can** (ImageMagick or its own
+   Python/Node scripts), and only regenerates with Gemini if editing can't make the change.
 8. The customer **confirms** the bundle, and it's saved. Unconfirmed drafts expire on their own. There's no purchase.
    Mockups are illustrations only; another merchant would do the printing.
 
@@ -47,10 +47,9 @@ agent/                                   ROOT: concierge
 
   subagents/product-customizer/
     agent.ts                             description + model (needs vision to check its output)
-    instructions.md                      generate; on feedback, ImageMagick first, regenerate only if needed
-    sandbox.ts                           its own Vercel Sandbox, ImageMagick installed in prepare (§6)
-    skills/image-editing/SKILL.md        what versell-img can and can't do, and the edit loop
-    skills/image-editing/scripts/versell-img   ImageMagick wrapper CLI (bash)
+    instructions.md                      generate; on feedback, edit first, regenerate only if needed
+    sandbox.ts                           its own Vercel Sandbox: ImageMagick, Pillow/NumPy, sharp (§6)
+    skills/image-editing/SKILL.md        edit-or-regenerate rule, the edit loop, what's installed, examples
     tools/generate_mockup.ts             Gemini (product image + creative [+ feedback]) → Blob → Redis (§5)
     tools/load_image.ts                  image URL → file in the sandbox
     tools/publish_mockup.ts              sandbox file → Blob → Redis, returns the image so the model can check it
@@ -90,12 +89,12 @@ lib/
 - First call: one item (`itemKey`, product title, product image URL, creative URL, placement notes) →
   `generate_mockup`. It checks the returned image (logo readable, product unchanged) and retries at most twice.
 - **Feedback** (same task, continued by the root): edit first, regenerate last.
-  1. Read the `image-editing` skill and decide whether a `versell-img` command covers the request. Examples:
-     - ImageMagick can: crop, resize, rotate, brightness/contrast/saturation, remove a flat background, pad, sharpen,
-       or convert format.
-     - ImageMagick can't: move the logo to another part of the product, change the angle, change the print style
+  1. Read the `image-editing` skill and decide whether editing (ImageMagick or a script) can make the change. Examples:
+     - Editing can: crop, resize, rotate, colour and tone, remove a flat background, masks and compositing, clean-up,
+       or anything else that works on the existing pixels.
+     - Editing can't: move the logo to another part of the product, change the angle, change the print style
        (embroidery, engraving), or change the product's colour realistically.
-  2. If it's covered: `load_image` (latest mockup) → `bash versell-img …` → `publish_mockup`, then check the returned
+  2. If it can: `load_image` (latest mockup) → commands or scripts through `bash` → `publish_mockup`, then check the returned
      image.
   3. If it isn't: `generate_mockup` again with the feedback added to the prompt.
   4. Its reply says which path it took ("edited" or "regenerated") and why.
@@ -154,45 +153,33 @@ export default defineMcpClientConnection({
 - Output goes to Blob at `bundles/<id>/mockups/<itemKey>/<random>.png`. The tool then sets the latest mockup for that
   item in Redis (§7).
 - Gemini is used **only** to create a mockup from the customer's creative, including regenerating with feedback.
-  Everything ImageMagick can do goes through ImageMagick (§6).
+  Everything that can be done by editing the existing mockup is edited instead (§6).
 
-## 6. Image editing: the customizer's own sandbox with ImageMagick
+## 6. Image editing: the customizer's own sandbox
 
 - **Yes, a subagent can have its own sandbox.**
   - A declared subagent's folder can hold its own `sandbox/`. Without one it gets eve's default, not the root's.
   - Only a subagent using `defineParentSandbox()` shares the root's. That's also the case that can't declare its own
     skill files, so ours can.
-  - So `agent/subagents/product-customizer/sandbox.ts`:
-    ```ts
-    export default defineSandbox({
-      environment: VercelSandbox.environment({
-        prepare: async (sandbox) => {
-          await sandbox.run({ command: "sudo apt-get update && sudo apt-get install -y imagemagick" });
-        },
-      }),
-    });
-    ```
-  - `prepare` runs at build time into a snapshot. Sessions start with ImageMagick already installed.
+  - So `agent/subagents/product-customizer/sandbox.ts` has a `prepare` step that installs the editing toolbox.
+  - `prepare` runs at build time into a snapshot. Sessions start with everything already installed.
   - The root's sandbox stays as it is.
 - **One sandbox per customizer task.**
   - Parallel customizers don't share files.
   - A sandbox is only opened on first use, so a mockup that never gets an edit never starts one.
   - Every edit starts with `load_image` from the latest Blob URL, so nothing depends on files surviving in the sandbox.
-- **CLI:** `skills/image-editing/scripts/versell-img`, a small bash script with one subcommand per operation. It calls `magick`
-  when present and falls back to `convert` (Ubuntu ships ImageMagick 6).
-  - `info <in>`: size, format, has-alpha
-  - `resize <in> <out> --width N | --height N | --fit WxH`
-  - `crop <in> <out> --box WxH+X+Y` and `trim <in> <out>`
-  - `rotate <in> <out> --degrees N`
-  - `adjust <in> <out> [--brightness N] [--contrast N] [--saturation N]`
-  - `remove-bg <in> <out> [--fuzz 10%]`: make a near-uniform background transparent
-  - `pad <in> <out> --to WxH [--color #fff]`
-  - `sharpen <in> <out>`, `convert <in> <out.png|jpg>`
-- **Skill:** `SKILL.md` has two parts: the can/can't list from §2, which is the decision rule, and the loop:
-  `load_image` → `bash $HOME/.agents/skills/image-editing/scripts/versell-img …` → `publish_mockup`.
+- **Code execution, not a wrapper CLI.** Edits are personal and open-ended, so the customizer gets maximum
+  flexibility through eve's built-in `bash` tool:
+  - ImageMagick 6 on the shell (`convert`, `identify`, `mogrify`, `composite`)
+  - Python 3 scripts with Pillow and NumPy (masks, compositing). No OpenCV: it's heavy and we're not doing hard CV.
+  - Node 24 scripts with `sharp`, in `~/image-tools`
+  - Python 3 and Node 24 come with eve's base image; `prepare` adds the libraries
+- **Network:** only the npm and PyPI registries, so it can add a library it needs mid-task.
+- **Skill:** `SKILL.md` has the edit-or-regenerate rule, the loop
+  (`load_image` → commands or scripts in `bash` → `read_file` to check → `publish_mockup`), what's installed, and
+  example commands.
 - **Moving files:**
-  - `load_image` and `publish_mockup` run in the app runtime, so the Blob and Redis tokens never enter the sandbox and
-    the sandbox needs no network.
+  - `load_image` and `publish_mockup` run in the app runtime, so the Blob and Redis tokens never enter the sandbox.
   - `publish_mockup` returns the image (`toolOutputPart.fileUrl`) so the model sees the result.
 
 ## 7. Storage
@@ -264,7 +251,9 @@ Product   { title, priceCents, currency, imageUrl, productUrl, seller?, productI
   - the composer gets a PNG/JPG picker that uploads to Blob from the browser (`@vercel/blob/client` `upload()`), then sends
     `[{ type: "text" }, { type: "file", data: blobUrl, mediaType }]`
   - eve fetches the public URL, so the model sees the creative and has its URL for the customizer
-- `app/api/creative-upload/route.ts`: the `handleUpload` token route
+- `app/api/creative-upload/route.ts`: the upload route
+  - the Blob store is OIDC-backed (no read-write token), so this uses `handleUploadPresigned` on the server and
+    `uploadPresigned` in the browser, not `handleUpload` / `upload`, which need a read-write token
   - allows only `image/png` and `image/jpeg`, with a size cap (e.g. 10 MB)
   - the pathname must start with `bundles/<sessionId>/creative/`
 - **Auto-expand:** when a `product-set-selector` tool part appears and we're not on `/bundle`, the provider calls
@@ -293,9 +282,9 @@ Product   { title, priceCents, currency, imageUrl, productUrl, seller?, productI
 ## 9. Config and env
 
 - `npm i @vercel/blob @upstash/redis`. `@vercel/blob` is only there indirectly today.
-- Blob store on the Vercel project → `BLOB_READ_WRITE_TOKEN`.
-- Upstash Redis from the Vercel Marketplace, connected to the project. The integration injects the REST URL and token;
-  `vercel env pull` brings them down locally.
+- Blob store (public, OIDC-backed) → `PUBLIC_BLOB_STORE_ID`, used with `VERCEL_OIDC_TOKEN`.
+- Upstash Redis (Marketplace) → `REDIS_STORAGE_KV_REST_API_URL` and `REDIS_STORAGE_KV_REST_API_TOKEN`.
+- Both connections must include the Development environment, or `vercel env pull` won't bring them down.
 - Already present: AI Gateway auth (covers Sonnet, Jev, Gemini), `SWAG_API_URL`, `SWAG_API_BYPASS_TOKEN`.
 - No secrets in either sandbox.
 
@@ -306,7 +295,7 @@ Product   { title, priceCents, currency, imageUrl, productUrl, seller?, productI
 2. **Jev scores:** that `decide()` accepts runtime-built criteria keys (`c1…cN`) and that Jev fills in `probabilities`
    for a choice answer.
 3. **Customizer sandbox:**
-   - that a subagent's own `sandbox.ts` gets its own build snapshot with ImageMagick
+   - that a subagent's own `sandbox.ts` gets its own build snapshot with the editing toolbox
    - whether a continued task (same `taskId`) keeps the same sandbox; we don't rely on it either way
 4. **Sandbox file transfer:** that the `ctx.getSandbox()` handle can write and read binary files for `load_image` /
    `publish_mockup`.
@@ -327,8 +316,9 @@ Product   { title, priceCents, currency, imageUrl, productUrl, seller?, productI
    `save_bundle`, instructions. Check: a brief in the TUI produces a valid draft in Redis, with alternates.
 3. **Customizer, generate:** `generate_mockup` + instructions. Check: one store product + a sample logo URL → a mockup
    in Blob, pointer in Redis.
-4. **Customizer, edit:** its `sandbox.ts`, `versell-img`, skill, `load_image` / `publish_mockup`. Check:
+4. **Customizer, edit:** its `sandbox.ts`, skill, `load_image` / `publish_mockup`. Check:
    - "crop and brighten it" → edited with ImageMagick
+   - "make only the background warmer" → edited with a script
    - "put the logo on the other side" → regenerated
 5. **Root:** instructions rewrite (flow + feedback routing), `get_bundle`, `confirm_bundle`.
 6. **Frontend:**
