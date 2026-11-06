@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^4.0.106",
-    "@vercel/connect": "2.7.0",
+    "@vercel/connect": "^2.8.0",
     "ai": "^7.0.137",
     "eve": "^1.0.0-rc.1",
     "next": "16.4.3",

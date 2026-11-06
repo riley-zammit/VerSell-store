@@ -1,7 +1,8 @@
-import { openai } from "@ai-sdk/openai";
 import { defineAgent } from "eve";
 
+// A plain "provider/model" string routes through the Vercel AI Gateway.
+// Auth comes from AI_GATEWAY_API_KEY or VERCEL_OIDC_TOKEN (.env.local).
 export default defineAgent({
-  model: openai("gpt-6.1-terra"),
+  model: "anthropic/claude-sonnet-5.5",
   reasoning: "high",
 });
