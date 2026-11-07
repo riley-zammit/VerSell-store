@@ -16,4 +16,7 @@ const localShopper: AuthFn<Request> = async (request) =>
 export default eveChannel({
   // localDev() stays listed so eve still treats this as a local-dev channel (e.g. /eve/v1/info).
   auth: [vercelOidc(), localShopper, localDev(), none()],
+  // The only upload is the customer's creative. Files are sent inline, so Vercel's 4.5 MB body
+  // limit allows about 3.3 MB, and the model only sees images up to 3 MiB anyway.
+  uploadPolicy: { maxBytes: 3 * 1024 * 1024, allowedMediaTypes: ["image/png", "image/jpeg"] },
 });

@@ -34,6 +34,7 @@ agent/                                   ROOT: concierge
   tools/escalate.ts                      existing
   tools/get_bundle.ts                    read this session's bundle + latest mockups (Redis)
   tools/confirm_bundle.ts                mark the bundle confirmed so it stops expiring (Redis)
+  tools/save_creative.ts                 attached creative in the sandbox → Blob, returns the creative URL
   lib/shop-auth.ts                       shared Shop device-flow auth + token store (moved out of shop-mcp.ts)
 
   subagents/product-set-selector/
@@ -248,14 +249,10 @@ Product   { title, priceCents, currency, imageUrl, productUrl, seller?, productI
   - because it never remounts, scroll position and composer text survive the transition
 - `components/eve/chat-messages.tsx` and `chat-composer.tsx`:
   - extracted from `app/chat/page.tsx`
-  - the composer gets a PNG/JPG picker that uploads to Blob from the browser (`@vercel/blob/client` `upload()`), then sends
-    `[{ type: "text" }, { type: "file", data: blobUrl, mediaType }]`
-  - eve fetches the public URL, so the model sees the creative and has its URL for the customizer
-- `app/api/creative-upload/route.ts`: the upload route
-  - the Blob store is OIDC-backed (no read-write token), so this uses `handleUploadPresigned` on the server and
-    `uploadPresigned` in the browser, not `handleUpload` / `upload`, which need a read-write token
-  - allows only `image/png` and `image/jpeg`, with a size cap (e.g. 10 MB)
-  - the pathname must start with `bundles/<sessionId>/creative/`
+  - the composer has a PNG/JPG picker (already built in `app/chat/page.tsx`). It sends the file inline as a `data:` URL
+    with the message. eve stages it in the root sandbox, and the root's `save_creative` tool copies it to Blob.
+  - no upload route: the file goes through the eve channel's auth, and its `uploadPolicy` allows only PNG/JPEG up to
+    3 MB (Vercel's 4.5 MB body limit after base64)
 - **Auto-expand:** when a `product-set-selector` tool part appears and we're not on `/bundle`, the provider calls
   `router.push(\`/bundle/${sessionId}\`, { transitionTypes: ["bundle-open"] })`.
 - **`app/bundle/[id]/page.tsx`:**
@@ -300,13 +297,13 @@ Product   { title, priceCents, currency, imageUrl, productUrl, seller?, productI
 4. **Sandbox file transfer:** that the `ctx.getSandbox()` handle can write and read binary files for `load_image` /
    `publish_mockup`.
 5. **Parent session ID:** that `ctx.session.parent.rootSessionId` is present in subagent tool contexts.
-6. **File messages:** that `useEveAgent().send()` accepts a URL file part from the composer.
+6. **File messages:** that an inline creative reaches the root sandbox and `save_creative` can read it.
 7. **Upstash env names:** confirm which variable names the integration injects, and use `Redis.fromEnv()` or pass them
    explicitly.
 8. **Skill filename:** `agent/skills/shop/skill.md` is lowercase. Packaged skills require `SKILL.md`; it works on macOS
    (case-insensitive) but may break on Linux builds. Rename it.
-9. **Upload route auth:** there's no auth (any caller can write to any session's prefix). Acceptable for the prototype;
-   mark `TODO(prod)` like the existing Shop token store.
+9. **Upload size:** creatives are capped at 3 MB because they're sent inline. If that's too small, switch to a browser
+   upload to Blob plus the channel's `fetchFile`.
 
 ## 11. Build order (each phase testable on its own with `eve dev`)
 
@@ -322,7 +319,7 @@ Product   { title, priceCents, currency, imageUrl, productUrl, seller?, productI
    - "put the logo on the other side" → regenerated
 5. **Root:** instructions rewrite (flow + feedback routing), `get_bundle`, `confirm_bundle`.
 6. **Frontend:**
-   - chat provider/surface/composer + upload route
+   - chat provider/surface/composer (carry over the creative picker)
    - `(store)` route group
    - bundle page
    - auto-expand + view transitions

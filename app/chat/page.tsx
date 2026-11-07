@@ -2,12 +2,38 @@
 
 import { activeTurn } from "eve/events";
 import { useEveAgent, type Interaction, type UseEveAgentReturn } from "eve/react";
+import { useState } from "react";
+
+// Same limits as the eve channel's uploadPolicy (agent/channels/eve.ts), checked here first
+// so the customer gets a clear message instead of a rejected request.
+const CREATIVE_TYPES = ["image/png", "image/jpeg"];
+const MAX_CREATIVE_BYTES = 3 * 1024 * 1024;
 
 export default function ChatPage() {
   const agent = useEveAgent();
   const isBusy = agent.status === "busy";
   const isResuming = agent.status === "resuming";
   const turn = activeTurn(agent.view);
+  const [creative, setCreative] = useState<File | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
+
+  function pickCreative(file: File | undefined) {
+    setCreative(null);
+    setFileError(null);
+    if (!file) return;
+    if (!CREATIVE_TYPES.includes(file.type)) return setFileError("Attach a PNG or JPG.");
+    if (file.size > MAX_CREATIVE_BYTES) return setFileError("That image is over 3 MB. Try a smaller export.");
+    setCreative(file);
+  }
+
+  // eve stages the attachment in the agent's sandbox; the agent's save_creative tool moves it to Blob.
+  async function sendMessage(message: string, file: File | null) {
+    if (!file) return agent.send(message);
+    return agent.send([
+      { type: "text", text: message || "Here's my artwork." },
+      { type: "file", data: await readAsDataUrl(file), mediaType: file.type, filename: file.name },
+    ]);
+  }
 
   return (
     <section className="surface-card mx-auto flex min-h-[70vh] max-w-3xl flex-col p-5 md:p-8">
@@ -100,42 +126,83 @@ export default function ChatPage() {
 
       <form
         action="/chat"
-        className="sticky bottom-4 mt-auto flex gap-2 rounded-2xl border border-black/10 bg-white p-2 shadow-card"
+        className="sticky bottom-4 mt-auto rounded-2xl border border-black/10 bg-white p-2 shadow-card"
         method="get"
         onSubmit={(event) => {
           const message = String(new FormData(event.currentTarget).get("message") ?? "").trim();
-          if (!message || isResuming) return;
+          if ((!message && !creative) || isResuming) return;
           event.preventDefault();
           event.currentTarget.reset();
-          void agent.send(message);
+          setCreative(null);
+          void sendMessage(message, creative);
         }}
       >
-        <label className="sr-only" htmlFor="message">
-          Message Eve
-        </label>
-        <textarea
-          className="min-h-12 flex-1 resize-none rounded-xl bg-transparent px-3 py-3 outline-none"
-          disabled={isResuming}
-          id="message"
-          name="message"
-          placeholder={isResuming ? "Reconnecting…" : "Message Eve"}
-          required
-          rows={1}
-        />
-        {turn ? (
-          <button className="button-light" onClick={() => void agent.cancel()} type="button">
-            Stop
-          </button>
+        {creative || fileError ? (
+          <p className={`px-3 pb-2 text-sm ${fileError ? "text-red-700" : "text-black/60"}`} role={fileError ? "alert" : undefined}>
+            {fileError ?? (
+              <>
+                Attached: {creative?.name}{" "}
+                <button className="font-sans font-semibold underline" onClick={() => setCreative(null)} type="button">
+                  Remove
+                </button>
+              </>
+            )}
+          </p>
         ) : null}
-        <button className="button-dark" disabled={isResuming} type="submit">
-          Send
-        </button>
+        <div className="flex gap-2">
+          <label className="button-light flex cursor-pointer items-center" title="Attach your logo or artwork">
+            <span className="sr-only">Attach your logo or artwork (PNG or JPG)</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.75">
+              <path d="m21 11-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.6-8.6a3.7 3.7 0 0 1 5.2 5.2l-8.6 8.6a1.8 1.8 0 0 1-2.6-2.6L15 6.6" />
+            </svg>
+            <input
+              accept={CREATIVE_TYPES.join(",")}
+              className="sr-only"
+              disabled={isResuming}
+              onChange={(event) => {
+                pickCreative(event.currentTarget.files?.[0]);
+                // State holds the file, so clear the input; picking the same file again still fires onChange.
+                event.currentTarget.value = "";
+              }}
+              type="file"
+            />
+          </label>
+          <label className="sr-only" htmlFor="message">
+            Message Eve
+          </label>
+          <textarea
+            className="min-h-12 flex-1 resize-none rounded-xl bg-transparent px-3 py-3 outline-none"
+            disabled={isResuming}
+            id="message"
+            name="message"
+            placeholder={isResuming ? "Reconnecting…" : "Message Eve"}
+            required={!creative}
+            rows={1}
+          />
+          {turn ? (
+            <button className="button-light" onClick={() => void agent.cancel()} type="button">
+              Stop
+            </button>
+          ) : null}
+          <button className="button-dark" disabled={isResuming} type="submit">
+            Send
+          </button>
+        </div>
       </form>
       <noscript>
         <p className="mt-3 text-sm text-red-700">This chat requires JavaScript.</p>
       </noscript>
     </section>
   );
+}
+
+function readAsDataUrl(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
 }
 
 function InteractionPrompt({

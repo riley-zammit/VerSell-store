@@ -121,14 +121,22 @@ export async function setMockup(id: string, itemKey: string, mockup: Omit<Mockup
 
 const extensions: Record<string, string> = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' }
 
+/** Stores a mockup image (generated or edited). Returns its public URL. */
+export const putMockupImage = (id: string, itemKey: string, bytes: Uint8Array, mediaType: string) =>
+    putImage(`bundles/${id}/mockups/${itemKey}/mockup`, bytes, mediaType)
+
+/** Stores the customer's uploaded logo or artwork. Returns its public URL. */
+export const putCreativeImage = (id: string, bytes: Uint8Array, mediaType: string) =>
+    putImage(`bundles/${id}/creative/creative`, bytes, mediaType)
+
 /**
- * Stores a mockup image. Every version gets a new path (random suffix): overwriting a public
- * blob can serve a stale copy from the CDN, and parallel customizers never touch the same file.
+ * Every version gets a new path (random suffix): overwriting a public blob can serve a stale
+ * copy from the CDN, and parallel customizers never touch the same file.
  */
-export async function putMockupImage(id: string, itemKey: string, bytes: Uint8Array, mediaType: string) {
+async function putImage(pathWithoutExtension: string, bytes: Uint8Array, mediaType: string) {
     const extension = extensions[mediaType]
     if (!extension) throw new Error(`Unsupported image type ${mediaType}. Use PNG, JPEG, or WebP.`)
-    const blob = await put(`bundles/${id}/mockups/${itemKey}/mockup.${extension}`, Buffer.from(bytes), {
+    const blob = await put(`${pathWithoutExtension}.${extension}`, Buffer.from(bytes), {
         // OIDC-backed store: the SDK pairs this id with the Vercel OIDC token, so there's no
         // read-write token. The connection uses the PUBLIC_ prefix, so pass the id explicitly.
         storeId: process.env.PUBLIC_BLOB_STORE_ID,
