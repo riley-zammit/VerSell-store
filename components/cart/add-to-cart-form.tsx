@@ -8,6 +8,7 @@ import { CartField, type Product } from '@/lib/types'
 
 export function AddToCartForm({ product, disabled = false }: { product: Product; disabled?: boolean }) {
     const { showAdd, openDrawer } = useCart()
+    
     // Before hydration the form posts back to this page, which re-renders with the new cart count (or the error).
     // No permalink to /cart: Next only resolves an action on pages that render it, so /cart would 409.
     // With JS there's no navigation; onSubmit opens the drawer instead.
@@ -19,7 +20,8 @@ export function AddToCartForm({ product, disabled = false }: { product: Product;
             action={formAction}
             onSubmit={(event) => {
                 // Native validation (required, min, integer step) already passed, or submit wouldn't fire.
-                const quantity = Number(new FormData(event.currentTarget).get(CartField.Quantity))
+                const formData = new FormData(event.currentTarget)
+                const quantity = Number(formData.get(CartField.Quantity))
                 openDrawer()
                 showAdd(product, quantity)
             }}

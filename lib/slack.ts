@@ -10,11 +10,19 @@ export async function postSlackMessage(channel: string, text: string) {
     const token = await getToken(SLACK_CONNECTOR, { subject: { type: 'app' } })
     const res = await fetch('https://slack.com/api/chat.postMessage', {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json; charset=utf-8' },
-        body: JSON.stringify({ channel, text }),
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json; charset=utf-8',
+        },
+        body: JSON.stringify({
+            channel,
+            text,
+        }),
         signal: AbortSignal.timeout(5000), // a hung Slack call shouldn't hold the cron open
     })
     // Slack returns 200 even for failures; the real result is in `ok`.
     const body: { ok: boolean; error?: string } = await res.json()
-    if (!body.ok) throw new Error(`Slack rejected the message: ${body.error}`)
+    if (!body.ok) {
+        throw new Error(`Slack rejected the message: ${body.error}`)
+    }
 }

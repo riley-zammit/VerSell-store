@@ -16,16 +16,12 @@ export async function generateStaticParams() {
     return lists.flat().map(({ slug }) => ({ slug }));
 }
 
-export default function Page({ params }: PageProps<"/products/[slug]">) {
-    // params is awaited inside Suspense so unknown slugs still get the generic App Shell.
-    return (
-        <Suspense fallback={<ProductSkeleton />}>
-            <ProductDetails params={params} />
-        </Suspense>
-    );
-}
+//default loading so we can resolve the params at top-level 
+export default async function Page({ params }: PageProps<"/products/[slug]">) {
+    // params is awaited inside Suspense so unknown slugs still get the generic App Shell. Cache is for the unknown slugs
+    "use cache: remote"
+    cacheLife('catalog');
 
-async function ProductDetails({ params }: Pick<PageProps<"/products/[slug]">, "params">) {
     const { slug } = await params;
     const product = await getProduct(slug);
     if (!product) notFound();
@@ -42,9 +38,8 @@ async function ProductDetails({ params }: Pick<PageProps<"/products/[slug]">, "p
                 <h1 className="text-4xl md:text-5xl">{name}</h1>
                 <p className="mt-4 font-sans text-2xl font-bold tracking-tighter md:text-3xl">{formatPrice(price)}</p>
                 <p className="mt-6 text-lg text-foreground/70">{description}</p>
-                {/* Optimistically render the ATC form regardless to enable progressive ehnancement; In the edge case
-                    where there's no inventory, rely on the final checkout negotiation to block the purchase.
-                */}
+
+                {/* Optimistically render the ATC form every time to enable progressive ehnancement; If no inventory + no JS, rely on the final checkout negotiation to block the purchase. */}
                 <Suspense fallback={<AddToCartForm product={product}/>}>
                     <ProductCardAndInventory product={product} />
                 </Suspense>
@@ -57,24 +52,8 @@ async function ProductCardAndInventory({ product }: { product: Product }) {
     const STOP_SELLING_AT_INVENTORY_LEVEL = 0
     // A failed stock check shouldn't take down the page; keep the optimistic form and let checkout decide.
     const inventory = await getProductStock(product.id).catch(() => null)
+    
+    //Don't expose inventory count
     const soldOut = inventory !== null && inventory.stock <= STOP_SELLING_AT_INVENTORY_LEVEL
     return <AddToCartForm product={product} disabled={soldOut} />
-}
-
-
-function ProductSkeleton() {
-    return (
-        <div className="grid gap-8 md:grid-cols-2 md:gap-12" aria-busy>
-            <div className="surface-card aspect-square animate-pulse" />
-            <div className="md:pt-6">
-                <div className="h-12 w-3/4 animate-pulse rounded-lg bg-foreground/5" />
-                <div className="mt-4 h-8 w-24 animate-pulse rounded-lg bg-foreground/5" />
-                <div className="mt-6 h-28 animate-pulse rounded-lg bg-foreground/5" />
-                <div className="mt-8 flex gap-3">
-                    <div className="h-12 w-24 animate-pulse rounded-full bg-foreground/5" />
-                    <div className="h-12 w-40 animate-pulse rounded-full bg-foreground/5" />
-                </div>
-            </div>
-        </div>
-    );
 }

@@ -2,12 +2,16 @@ import Image from 'next/image'
 import { NavLink } from '@/components/nav-link'
 import { getProduct } from '@/lib/api'
 import { formatPrice } from '@/lib/format'
+import { cacheLife } from 'next/cache'
 
 // Half of the max-w-6xl column from md up; keep in sync if the layout changes.
 const sizes = '(min-width: 1152px) 560px, (min-width: 768px) 50vw, 100vw'
 
-/** PDP-style spotlight for one product. getProduct is cached and nothing here reads the request, so it renders into the static shell. */
+
 export async function FeaturedProduct({ slug }: { slug: string }) {
+    "use cache: remote"
+    cacheLife('catalog');
+
     const product = await getProduct(slug)
     if (!product) return null
     const { name, price, images, description } = product

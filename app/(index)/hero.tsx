@@ -16,7 +16,7 @@ export function Hero() {
             alt="Friends in black hoodies hanging out with a laptop in a sunny office"
             fill
             preload
-            // sizes="(min-width: 768px) 50vw, 100vw"
+            sizes="(min-width: 768px) 50vw, 100vw"
             className="object-cover"
           />
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pt-28 pr-6 pb-8 pl-[max(1rem,calc((100vw-72rem)/2+1rem))] sm:pr-10 sm:pb-10">
@@ -36,7 +36,7 @@ export function Hero() {
             alt="Friends on a picnic blanket in a Toronto park, skyline behind them"
             fill
             loading="eager"
-            // sizes="(min-width: 768px) 50vw, 100vw"
+            sizes="(min-width: 768px) 50vw, 100vw"
             className="object-cover"
           />
         </div>

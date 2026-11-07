@@ -25,9 +25,16 @@ const cookieOptions = {
     maxAge: 60 * 60 * 24 * 30,
 }
 
+async function readCartToken() {
+    const jar = await cookies()
+    return jar.get(cartCookie)?.value
+}
+
 // Setting a cookie in a Server Action wipes the client's whole prefetch cache, so skip unchanged tokens.
 async function writeCartCookie(token: string, current?: string) {
-    if (token === current) return
+    if (token === current) {
+        return
+    }
     const jar = await cookies()
     jar.set(cartCookie, token, cookieOptions)
 }
@@ -49,7 +56,10 @@ function cartInit(token: string, init?: RequestInit): RequestInit {
     return {
         ...init,
         cache: 'no-store',
-        headers: { [CartHeader.Token]: token, ...init?.headers },
+        headers: {
+            [CartHeader.Token]: token,
+            ...init?.headers,
+        },
     }
 }
 
@@ -59,29 +69,40 @@ function definitive(error: unknown): error is ApiError {
 
 // Called once per request, by the root layout. Every cart view reads that one promise.
 export async function getCart(): Promise<Cart | null> {
-    const token = (await cookies()).get(cartCookie)?.value
-    if (!token) return null
+    const token = await readCartToken()
+    if (!token) {
+        return null
+    }
     try {
         const { data } = await apiFetch<ApiCart>(CartPath.Root, cartInit(token))
         return withoutToken(data)
     } catch (error) {
-        if (error instanceof ApiError && error.status === 404) return null
+        if (error instanceof ApiError && error.status === 404) {
+            return null
+        }
         throw error
     }
 }
 
 async function createCart() {
-    const { data } = await apiFetch<ApiCart>(CartPath.Create, { method: 'POST', cache: 'no-store' })
+    const { data } = await apiFetch<ApiCart>(CartPath.Create, {
+        method: 'POST',
+        cache: 'no-store',
+    })
     await writeCartCookie(data.token)
     return data.token
 }
 
 async function postItem(token: string, productId: string, quantity: number) {
-    const { data } = await apiFetch<ApiCart>(CartPath.Root, cartInit(token, {
+    const init = cartInit(token, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId, quantity }),
-    }))
+        body: JSON.stringify({
+            productId,
+            quantity,
+        }),
+    })
+    const { data } = await apiFetch<ApiCart>(CartPath.Root, init)
     await writeCartCookie(data.token, token)
     return withoutToken(data)
 }
@@ -91,53 +112,70 @@ async function cartExists(token: string) {
         await apiFetch<ApiCart>(CartPath.Root, cartInit(token))
         return true
     } catch (error) {
-        if (error instanceof ApiError && error.status === 404) return false
+        if (error instanceof ApiError && error.status === 404) {
+            return false
+        }
         throw error
     }
 }
 
 export async function addItem(productId: string, quantity: number): Promise<CartResult> {
-    let token = (await cookies()).get(cartCookie)?.value
-    if (!token) token = await createCart()
+    let token = await readCartToken()
+    if (!token) {
+        token = await createCart()
+    }
 
     try {
-        return { cart: await postItem(token, productId, quantity) }
+        const cart = await postItem(token, productId, quantity)
+        return { cart }
     } catch (error) {
         // 404 is either an expired cart or a missing product. Only replace the cart when GET agrees it's gone.
-        if (error instanceof ApiError && error.status === 404 && !(await cartExists(token))) {
+        const cartExpired = error instanceof ApiError && error.status === 404 && !(await cartExists(token))
+        if (cartExpired) {
             try {
-                return { cart: await postItem(await createCart(), productId, quantity) }
+                const newToken = await createCart()
+                const cart = await postItem(newToken, productId, quantity)
+                return { cart }
             } catch (retry) {
-                if (definitive(retry)) return { error: retry.message }
+                if (definitive(retry)) {
+                    return { error: retry.message }
+                }
                 throw retry
             }
         }
-        if (definitive(error)) return { error: error.message }
+        if (definitive(error)) {
+            return { error: error.message }
+        }
         throw error
     }
 }
 
-async function sendItem(method: 'PATCH' | 'DELETE', productId: string, quantity?: number): Promise<CartResult> {
-    const token = (await cookies()).get(cartCookie)?.value
-    if (!token) return { error: 'Your cart expired. Add the item again.' }
+async function sendItem(productId: string, init: RequestInit): Promise<CartResult> {
+    const token = await readCartToken()
+    if (!token) {
+        return { error: 'Your cart expired. Add the item again.' }
+    }
     try {
-        const { data } = await apiFetch<ApiCart>(`${CartPath.Root}/${encodeURIComponent(productId)}`, cartInit(token, {
-            method,
-            headers: quantity === undefined ? undefined : { 'Content-Type': 'application/json' },
-            body: quantity === undefined ? undefined : JSON.stringify({ quantity }),
-        }))
+        const path = `${CartPath.Root}/${encodeURIComponent(productId)}`
+        const { data } = await apiFetch<ApiCart>(path, cartInit(token, init))
         await writeCartCookie(data.token, token)
         return { cart: withoutToken(data) }
     } catch (error) {
-        if (definitive(error)) return { error: error.message }
+        if (definitive(error)) {
+            return { error: error.message }
+        }
         throw error
     }
 }
 
 export function updateItem(productId: string, quantity: number) {
-    return sendItem('PATCH', productId, quantity)
+    return sendItem(productId, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ quantity }),
+    })
 }
 
 export function removeItem(productId: string) {
-    return sendItem('DELETE', productId)
+    return sendItem(productId, { method: 'DELETE' })
 }

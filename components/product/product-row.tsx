@@ -10,12 +10,15 @@ const rowProps = (slots: number) => ({
     style: { '--slots': slots } as CSSProperties,
 })
 
+// Mirrors rowProps inside the max-w-6xl column (1120px of content); keep in sync if the layout changes.
+const rowSizes = (slots: number) => `(min-width: 1152px) ${Math.round(1120 / slots)}px, (min-width: 640px) ${Math.round(100 / slots)}vw, 100vw`
+
 /** First `slots` products for a /products query string (e.g. 'category=mugs'), plus "See all" (to `href`) when there are more. */
 export async function ProductRow({ query, href, slots }: { query: string; href: string; slots: number }) {
-    // Cached here rather than in getCollection: rows prerender into the static shell (no Suspense needed),
-    // while the paginated collection grid still fetches fresh on every request.
-    'use cache'
+    // Cache: Reusable component. 
+    'use cache: remote'
     cacheLife('catalog')
+    
     const result = await getCollection(query, slots)
     if ('error' in result) return <p className="text-foreground/60">{result.error}</p>
     const { products, pagination } = result
@@ -23,7 +26,7 @@ export async function ProductRow({ query, href, slots }: { query: string; href: 
         <>
             <ul {...rowProps(slots)}>
                 {products.map((p) => (
-                    <ProductCard key={p.id} product={p} />
+                    <ProductCard key={p.id} product={p} sizes={rowSizes(slots)} />
                 ))}
             </ul>
             {pagination.total > slots && (

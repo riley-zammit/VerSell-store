@@ -28,6 +28,9 @@ export function Header() {
                     <NavLink href="/chat" prefetch className={linkClass}>
                         Chat
                     </NavLink>
+                    <NavLink href="/about" prefetch className={linkClass}>
+                        About
+                    </NavLink>
                     <Suspense fallback={<CartBadge />}>
                         <CartCount />
                     </Suspense>

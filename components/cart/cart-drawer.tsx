@@ -18,7 +18,11 @@ export function CartDrawer() {
             aria-labelledby="cart-title"
             onClick={(event) => {
                 // Backdrop clicks land on the dialog itself. Links navigate away, so the sheet goes with them.
-                if (event.target === event.currentTarget || (event.target as Element).closest('a')) close()
+                const clickedBackdrop = event.target === event.currentTarget
+                const clickedLink = (event.target as Element).closest('a')
+                if (clickedBackdrop || clickedLink) {
+                    close()
+                }
             }}
             // :modal beats a class selector, so the sheet's box lives here.
             style={{

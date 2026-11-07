@@ -8,10 +8,7 @@ import { useCart, useCartView } from '@/components/cart/cart-provider'
 import { NavLink } from '@/components/nav-link'
 import { formatPrice } from '@/lib/format'
 
-type Variant = 'page' | 'drawer'
-
-// Suspends until the server cart loads, so render it inside Suspense.
-export function CartLines({ variant }: { variant: Variant }) {
+export function CartLines({ variant }: { variant: 'page' | 'drawer' }) {
     const cart = useCartView()
     const { changes, error, setQuantity } = useCart()
     // useTransition rather than the bare startTransition, so a thrown write reaches this view's error boundary.

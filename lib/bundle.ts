@@ -5,8 +5,15 @@ import { z } from 'zod'
 // Bundles: the record lives in Redis, images live in Blob.
 // Shared by the eve agent's tools and the /bundle page, so no `server-only` or Next imports.
 
-export enum ItemSource { Store = 'store', Shop = 'shop' }
-export enum BundleStatus { Draft = 'draft', Confirmed = 'confirmed' }
+export enum ItemSource {
+    Store = 'store',
+    Shop = 'shop',
+}
+
+export enum BundleStatus {
+    Draft = 'draft',
+    Confirmed = 'confirmed',
+}
 
 export const BundleProduct = z.object({
     title: z.string().min(1),
@@ -57,11 +64,15 @@ const mockupsKey = (id: string) => `bundle:${id}:mockups`
 // Created on first use so importing this file never needs the Redis env vars.
 // The Upstash connection uses the REDIS_STORAGE_ prefix, so Redis.fromEnv() wouldn't find it.
 let client: Redis | undefined
-const redis = () =>
-    (client ??= new Redis({
-        url: process.env.REDIS_STORAGE_KV_REST_API_URL!,
-        token: process.env.REDIS_STORAGE_KV_REST_API_TOKEN!,
-    }))
+function redis() {
+    if (!client) {
+        client = new Redis({
+            url: process.env.REDIS_STORAGE_KV_REST_API_URL!,
+            token: process.env.REDIS_STORAGE_KV_REST_API_TOKEN!,
+        })
+    }
+    return client
+}
 
 export async function getBundle(id: string) {
     const value = await redis().get(bundleKey(id))
@@ -70,8 +81,12 @@ export async function getBundle(id: string) {
 
 /** Latest mockup per item key. */
 export async function getMockups(id: string) {
-    const values = (await redis().hgetall<Record<string, unknown>>(mockupsKey(id))) ?? {}
-    return Object.fromEntries(Object.entries(values).map(([key, value]) => [key, Mockup.parse(value)]))
+    const stored = await redis().hgetall<Record<string, unknown>>(mockupsKey(id))
+    const mockups: Record<string, Mockup> = {}
+    for (const [itemKey, value] of Object.entries(stored ?? {})) {
+        mockups[itemKey] = Mockup.parse(value)
+    }
+    return mockups
 }
 
 /** Saves the whole bundle as a draft. Any change after confirming needs a new confirmation. */
@@ -95,8 +110,14 @@ export async function saveDraft(id: string, input: Pick<Bundle, 'concept' | 'bri
 
 export async function confirmBundle(id: string) {
     const bundle = await getBundle(id)
-    if (!bundle) return null
-    const confirmed: Bundle = { ...bundle, status: BundleStatus.Confirmed, confirmedAt: new Date().toISOString() }
+    if (!bundle) {
+        return null
+    }
+    const confirmed: Bundle = {
+        ...bundle,
+        status: BundleStatus.Confirmed,
+        confirmedAt: new Date().toISOString(),
+    }
     await redis()
         .multi()
         .set(bundleKey(id), confirmed) // no `ex`: confirmed bundles don't expire
@@ -110,16 +131,26 @@ export async function confirmBundle(id: string) {
  * never overwrite each other. The hash expires with the bundle (or not, once confirmed).
  */
 export async function setMockup(id: string, itemKey: string, mockup: Omit<Mockup, 'updatedAt'>) {
-    const value: Mockup = { ...mockup, updatedAt: new Date().toISOString() }
+    const value: Mockup = {
+        ...mockup,
+        updatedAt: new Date().toISOString(),
+    }
     const ttl = await redis().ttl(bundleKey(id)) // -1: confirmed (no expiry), -2: no bundle yet
     const tx = redis().multi().hset(mockupsKey(id), { [itemKey]: value })
-    if (ttl > 0) tx.expire(mockupsKey(id), ttl)
-    else if (ttl === -2) tx.expire(mockupsKey(id), DRAFT_TTL_SECONDS)
+    if (ttl > 0) {
+        tx.expire(mockupsKey(id), ttl)
+    } else if (ttl === -2) {
+        tx.expire(mockupsKey(id), DRAFT_TTL_SECONDS)
+    }
     await tx.exec()
     return value
 }
 
-const extensions: Record<string, string> = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' }
+const extensions: Record<string, string> = {
+    'image/png': 'png',
+    'image/jpeg': 'jpg',
+    'image/webp': 'webp',
+}
 
 /** Stores a mockup image (generated or edited). Returns its public URL. */
 export const putMockupImage = (id: string, itemKey: string, bytes: Uint8Array, mediaType: string) =>
@@ -135,7 +166,9 @@ export const putCreativeImage = (id: string, bytes: Uint8Array, mediaType: strin
  */
 async function putImage(pathWithoutExtension: string, bytes: Uint8Array, mediaType: string) {
     const extension = extensions[mediaType]
-    if (!extension) throw new Error(`Unsupported image type ${mediaType}. Use PNG, JPEG, or WebP.`)
+    if (!extension) {
+        throw new Error(`Unsupported image type ${mediaType}. Use PNG, JPEG, or WebP.`)
+    }
     const blob = await put(`${pathWithoutExtension}.${extension}`, Buffer.from(bytes), {
         // OIDC-backed store: the SDK pairs this id with the Vercel OIDC token, so there's no
         // read-write token. The connection uses the PUBLIC_ prefix, so pass the id explicitly.

@@ -4,8 +4,9 @@ import { createContext, startTransition, use, useContext, useOptimistic, useRef,
 
 import { applyChanges, CartChangeType, type CartChange } from '@/components/cart/state-helpers'
 import { removeCartItem, updateCartItem } from '@/lib/cart-actions'
-import type { Cart, CartResult, Product } from '@/lib/types'
+import type { Cart, Product } from '@/lib/types'
 
+//Include state and mutation methods here so we can call them from anywhere
 type CartContextValue = {
     cart: Promise<Cart | null>
     changes: CartChange[]
@@ -20,7 +21,9 @@ const CartContext = createContext<CartContextValue | null>(null)
 
 export function useCart() {
     const value = useContext(CartContext)
-    if (!value) throw new Error('Cart controls must render inside CartProvider')
+    if (!value) {
+        throw new Error('Cart controls must render inside CartProvider')
+    }
     return value
 }
 
@@ -37,15 +40,6 @@ export function CartProvider({ cart, children }: { cart: Promise<Cart | null>; c
     const [error, setError] = useState<string | null>(null)
     const drawer = useRef<HTMLDialogElement>(null)
 
-    // Callers run this inside a transition (form action or useTransition): the change shows until it ends,
-    // and a thrown request reaches the caller's error boundary.
-    async function write(change: CartChange, request: Promise<CartResult>) {
-        addChange(change)
-        const result = await request
-        // State set after an await leaves the transition. Wrapping it lands the error with the refreshed cart.
-        startTransition(() => setError('error' in result ? result.error : null))
-    }
-
     const value: CartContextValue = {
         cart,
         changes,
@@ -53,17 +47,32 @@ export function CartProvider({ cart, children }: { cart: Promise<Cart | null>; c
         drawer,
         // showModal is a DOM call, so the sheet opens on this frame even inside a transition.
         openDrawer: () => {
-            if (!drawer.current?.open) drawer.current?.showModal()
+            if (!drawer.current?.open) {
+                drawer.current?.showModal()
+            }
         },
         // Call from the add form's onSubmit. It shares that event's transition lane with the form's action,
         // so the line shows until the action (and its refresh) lands.
         showAdd: (product, quantity) =>
-            startTransition(() => addChange({ type: CartChangeType.Add, product, quantity })),
-        setQuantity: (productId, quantity) =>
-            write(
-                { type: CartChangeType.Set, productId, quantity },
-                quantity === 0 ? removeCartItem(productId) : updateCartItem(productId, quantity),
+            startTransition(() =>
+                addChange({
+                    type: CartChangeType.Add,
+                    product,
+                    quantity,
+                }),
             ),
+        // Callers run this inside useTransition: the change shows until it ends,
+        // and a thrown request reaches the caller's error boundary.
+        setQuantity: async (productId, quantity) => {
+            addChange({
+                type: CartChangeType.Set,
+                productId,
+                quantity,
+            })
+            const result = quantity === 0 ? await removeCartItem(productId) : await updateCartItem(productId, quantity)
+            // State set after an await leaves the transition. Wrapping it lands the error with the refreshed cart.
+            startTransition(() => setError('error' in result ? result.error : null))
+        },
     }
 
     return <CartContext.Provider value={value}>{children}</CartContext.Provider>

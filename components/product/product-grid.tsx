@@ -16,12 +16,11 @@ function constructCollectionQuery(category?: string) {
     return `category=${category}`
 }
 
-/** Products in `category` (all products when omitted; 'featured' for featured products), paged via ?page=N. Reads the URL, so render inside <Suspense fallback={<GridSkeleton />}>. */
-export async function ProductGrid({ category, searchParams }: { category?: string; searchParams: Promise<Record<string, string | string[] | undefined>> }) {
-    "use cache"
+/** Page `page` of products in `category` (all products when omitted; 'featured' for featured products). */
+export async function ProductGrid({ category, page }: { category?: string; page: number }) {
+    "use cache: remote"
     cacheLife("catalog");
-    
-    const page = pageSchema.parse((await searchParams).page)
+
     const pageHref = (n: number) => `?page=${n}`
 
     const result = await getCollection(constructCollectionQuery(category), GRID_LIMIT, page)

@@ -12,17 +12,23 @@ export function CartCount() {
 
 export function CartBadge({ count }: { count?: number }) {
     const { openDrawer } = useCart()
+    const itemWord = count === 1 ? 'item' : 'items'
+    const label = count ? `Cart, ${count} ${itemWord}` : 'Cart'
+
     return (
         // A real link, so modified clicks and no-JS still reach the /cart page. Plain clicks open the sheet instead.
         <NavLink
             href="/cart"
             prefetch={false}
             onClick={(event) => {
-                if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+                const isModifiedClick = event.metaKey || event.ctrlKey || event.shiftKey || event.altKey
+                if (isModifiedClick) {
+                    return
+                }
                 event.preventDefault()
                 openDrawer()
             }}
-            aria-label={count ? `Cart, ${count} ${count === 1 ? 'item' : 'items'}` : 'Cart'}
+            aria-label={label}
             className="relative inline-flex items-center gap-1.5 rounded px-2 py-1 text-sm hover:bg-foreground/5"
         >
             <BagIcon />
@@ -73,7 +79,7 @@ export const CartBoundary = catchError((_: object, { retry }) => <CartError rese
 export function CartError({ reset }: { reset: () => void }) {
     return (
         <div className="px-5 py-16 text-center">
-            <p className="text-lg">The cart didn&apos;t load.</p>
+            <p className="text-lg">The cart didn't load.</p>
             <button type="button" onClick={reset} className="button-dark mt-6">
                 Try again
             </button>

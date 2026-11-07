@@ -1,12 +1,15 @@
 import { getPromotion } from '@/lib/api'
+import { cacheLife } from 'next/cache'
 
 // Fixed single-line height on every breakpoint → zero CLS.
 const barClass = 'flex h-10 items-center justify-center gap-x-3 overflow-hidden whitespace-nowrap bg-foreground px-4 text-sm text-background'
 
 // getPromotion is cached, so this renders into the static shell: no Suspense or skeleton needed.
 export async function PromoBanner() {
-    // The shared header must not block Eve's chat when the storefront API is unconfigured.
-    if (!process.env.SWAG_API_URL) return null
+    //local cache so discounts are distributed a bit
+    "use cache"
+    cacheLife("hours");
+
     const promo = await getPromotion()
     return (
         <aside className={barClass}>

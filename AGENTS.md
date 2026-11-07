@@ -3,6 +3,9 @@
 2. Don't automatically run client-side tests unless I tell you. You can ask the user if they want you to run them.
 3. Ensure all code is simple and human-readable. Don't over-abstract; humans need to be able to follow along.
 
+# Progressive Enhancement
+- Rule: We're building for slow networks, not devices with JS disabled. Therefore assume slow hydration but still leverage suspense boundaries.
+
 # Skills
 If you're the Pi coding agent, look inside ./cursor for skills and subagents. In there, the skills format and folder structure is standard.
 

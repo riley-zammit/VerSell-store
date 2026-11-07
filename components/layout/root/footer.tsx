@@ -1,4 +1,5 @@
 import { cacheLife } from 'next/cache'
+import { NavLink } from '@/components/nav-link'
 
 // Hard-coded rather than read from getStoreConfig so the footer never depends on the API at build time.
 const socialLinks = [
@@ -15,6 +16,11 @@ export function Footer() {
           © <Year /> Versell. All rights reserved.
         </p>
         <ul className="flex gap-6">
+          <li>
+            <NavLink href="/about" className="relative hover:text-foreground hover:underline">
+              About
+            </NavLink>
+          </li>
           {socialLinks.map(({ label, href }) => (
             <li key={href}>
               <a href={href} target="_blank" rel="noopener noreferrer" className="hover:text-foreground hover:underline">
