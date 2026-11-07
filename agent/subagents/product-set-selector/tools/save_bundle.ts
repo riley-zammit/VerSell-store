@@ -14,7 +14,10 @@ export default defineTool({
             .array(BundleItem)
             .min(2)
             .max(8)
-            .refine((items) => new Set(items.map((item) => item.key)).size === items.length, "Item keys must be unique.")
+            .refine((items) => {
+                const keys = items.map((item) => item.key);
+                return new Set(keys).size === keys.length;
+            }, "Item keys must be unique.")
             .refine((items) => {
                 const fromStore = items.filter((item) => item.source === ItemSource.Store).length;
                 return fromStore >= 1 && fromStore <= 2;
@@ -23,6 +26,10 @@ export default defineTool({
     label: { start: () => "Saving the bundle" },
     async execute(input, ctx) {
         const bundle = await saveDraft(bundleIdFor(ctx), input);
-        return { saved: true, itemKeys: bundle.items.map((item) => item.key) };
+        const itemKeys = bundle.items.map((item) => item.key);
+        return {
+            saved: true,
+            itemKeys,
+        };
     },
 });

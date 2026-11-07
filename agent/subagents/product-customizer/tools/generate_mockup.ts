@@ -44,9 +44,20 @@ export default defineTool({
                 {
                     role: "user",
                     content: [
-                        { type: "text", text: prompt },
-                        { type: "file", data: product.bytes, mediaType: product.mediaType },
-                        { type: "file", data: creative.bytes, mediaType: creative.mediaType },
+                        {
+                            type: "text",
+                            text: prompt,
+                        },
+                        {
+                            type: "file",
+                            data: product.bytes,
+                            mediaType: product.mediaType,
+                        },
+                        {
+                            type: "file",
+                            data: creative.bytes,
+                            mediaType: creative.mediaType,
+                        },
                     ],
                 },
             ],
@@ -54,12 +65,21 @@ export default defineTool({
         });
 
         const image = result.files.find((file) => file.mediaType.startsWith("image/"));
-        if (!image) throw new Error(`The image model returned no image. Its reply: ${result.text || "(empty)"}`);
+        if (!image) {
+            throw new Error(`The image model returned no image. Its reply: ${result.text || "(empty)"}`);
+        }
 
         const bundleId = bundleIdFor(ctx);
         const mockupUrl = await putMockupImage(bundleId, itemKey, image.uint8Array, image.mediaType);
-        await setMockup(bundleId, itemKey, { mockupUrl, creativeUrl });
-        return { itemKey, mockupUrl, mediaType: image.mediaType };
+        await setMockup(bundleId, itemKey, {
+            mockupUrl,
+            creativeUrl,
+        });
+        return {
+            itemKey,
+            mockupUrl,
+            mediaType: image.mediaType,
+        };
     },
     // The URL stays readable for the whole session (public Blob), so the model can keep seeing it.
     toModelOutput: ({ itemKey, mockupUrl, mediaType }) =>

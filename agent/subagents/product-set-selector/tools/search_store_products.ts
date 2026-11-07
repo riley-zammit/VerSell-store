@@ -16,8 +16,12 @@ export default defineTool({
     label: { start: ({ query, category }) => `Searching the store for ${query ?? category ?? "products"}` },
     async execute({ query, category, limit }) {
         const params = new URLSearchParams({ limit: String(limit) });
-        if (query) params.set("search", query);
-        if (category) params.set("category", category);
+        if (query) {
+            params.set("search", query);
+        }
+        if (category) {
+            params.set("category", category);
+        }
         const { data } = await apiFetch<Product[]>(`/products?${params}`);
         return data.map((product) => ({
             title: product.name,
