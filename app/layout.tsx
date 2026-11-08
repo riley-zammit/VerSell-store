@@ -4,7 +4,7 @@ import { CartDrawer } from "@/components/cart/cart-drawer";
 import { CartProvider } from "@/components/cart/cart-provider";
 import { Footer } from "@/components/layout/root/footer";
 import { Header } from "@/components/layout/root/header";
-import { getCart } from "@/lib/cart";
+import { getCartView } from "@/lib/cart";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -32,11 +32,13 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+    // Not awaited: the shell prerenders, and only the cart's readers (badge, drawer, /cart) wait, inside Suspense.
+    const cartView = getCartView();
+
     return (
         <html lang="en" className={`${geistSans.variable} ${aleo.variable} h-full antialiased`}>
             <body className="flex min-h-full flex-col font-sans">
-                {/* Not awaited: the cookie read resolves inside each cart view's Suspense, so the shell still prerenders. */}
-                <CartProvider cart={getCart()}>
+                <CartProvider cartView={cartView}>
                     <Header />
                     <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 font-serif">{children}</main>
                     <Footer />

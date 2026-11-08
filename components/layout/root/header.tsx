@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
-import { CartBadge, CartCount } from '@/components/cart/cart-parts'
+import { CartBadge, CartCount } from '@/components/cart/cart'
 import { NavLink } from '@/components/nav-link'
 import { PromoBanner } from '@/components/promo-banner'
 import { ScrollHeader } from '@/components/layout/root/scroll-header'

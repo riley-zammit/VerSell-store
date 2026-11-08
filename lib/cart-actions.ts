@@ -1,10 +1,11 @@
 'use server'
 
-import { refresh } from 'next/cache'
+import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
-import { addItem, removeItem, updateItem } from './cart'
-import { CartField, type CartResult } from './types'
+import { getProductStock, STOP_SELLING_AT_INVENTORY_LEVEL } from './api'
+import { addItem, removeItem, toCartView, updateItem } from './cart'
+import { AddError, CartField, type CartView } from './types'
 
 //Some basic validation on a public endpoint
 const addSchema = z.object({
@@ -12,55 +13,73 @@ const addSchema = z.object({
     quantity: z.coerce.number().int().min(1),
 })
 
-const updateSchema = z.object({
+// 0 removes the line.
+const quantitySchema = z.object({
     productId: z.string().trim().min(1),
     quantity: z.coerce.number().int().min(0),
 })
 
-const idSchema = z.string().trim().min(1)
+// The cart lives on the client, so actions return the next cart instead of re-rendering the server tree.
 
-// The add form's useActionState action, so it also works before hydration. Returns the error to show, or null.
-export async function addToCart(_prev: string | null, formData: FormData): Promise<string | null> {
+// JS path: CartProvider sends this once the drawer is open.
+export async function addToCart(formData: FormData): Promise<{ cart: CartView } | { error: AddError }> {
     const parsed = addSchema.safeParse({
         productId: formData.get(CartField.ProductId),
         quantity: formData.get(CartField.Quantity),
     })
     if (!parsed.success) {
-        return 'Enter a quantity of at least 1 or a valid productId.'
+        return { error: AddError.InvalidQuantity }
     }
     const { productId, quantity } = parsed.data
+    // Like the product page, a failed stock check doesn't block the add: checkout makes the final call.
+    const inventory = await getProductStock(productId).catch(() => null)
+    if (inventory && inventory.stock <= STOP_SELLING_AT_INVENTORY_LEVEL) {
+        return { error: AddError.OutOfStock }
+    }
     const result = await addItem(productId, quantity)
-    refreshOnSuccess(result)
-    return 'error' in result ? result.error : null
+    if ('error' in result) {
+        return result
+    }
+    const cart = await toCartView(result.cart)
+    return { cart }
 }
 
-export async function updateCartItem(productId: string, quantity: number): Promise<CartResult> {
-    const parsed = updateSchema.safeParse({
-        productId,
-        quantity,
+// No-JS path: the add form's action before hydration. A plain post always lands on the cart page.
+export async function addToCartAndRedirect(formData: FormData) {
+    let error: AddError | null
+    try {
+        const result = await addToCart(formData)
+        error = 'error' in result ? result.error : null
+    } catch {
+        // Timeouts and 5xx. Without JS there's no client to catch them, so they become a code too.
+        error = AddError.Failed
+    }
+    // A code rather than the API's text, so a crafted link can't put arbitrary words on the cart page.
+    redirect(error ? `/cart?error=${error}` : '/cart')
+}
+
+// JS path: each cart line calls this through CartProvider and shows the error under the line.
+export async function setCartQuantity(formData: FormData): Promise<{ cart: CartView } | { error: string }> {
+    const parsed = quantitySchema.safeParse({
+        productId: formData.get(CartField.ProductId),
+        quantity: formData.get(CartField.Quantity),
     })
     if (!parsed.success) {
         return { error: 'Enter a whole number for the quantity.' }
     }
-    const result = await updateItem(parsed.data.productId, parsed.data.quantity)
-    refreshOnSuccess(result)
-    return result
+    const { productId, quantity } = parsed.data
+    // Applied even past stock. The returned cart's stock messages explain the limit and disable checkout.
+    const result = quantity === 0 ? await removeItem(productId) : await updateItem(productId, quantity)
+    if ('error' in result) {
+        return result
+    }
+    const cart = await toCartView(result.cart)
+    return { cart }
 }
 
-export async function removeCartItem(productId: string): Promise<CartResult> {
-    const parsed = idSchema.safeParse(productId)
-    if (!parsed.success) {
-        return { error: 'That item is no longer in the cart.' }
-    }
-    const result = await removeItem(parsed.data)
-    refreshOnSuccess(result)
-    return result
-}
-
-// refresh() re-renders the root layout, which hands CartProvider a fresh getCart(). Writes usually skip the
-// cookie, and unlike a cookie write, refresh() leaves the client prefetch cache alone.
-function refreshOnSuccess(result: CartResult) {
-    if ('cart' in result) {
-        refresh()
-    }
+// No-JS path: the line form's action before hydration, which only happens on the /cart page.
+// Like no-JS quantity errors before, a failure just shows the unchanged cart.
+export async function setCartQuantityAndRedirect(formData: FormData) {
+    await setCartQuantity(formData)
+    redirect('/cart')
 }

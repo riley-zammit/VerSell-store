@@ -90,8 +90,42 @@ export type Cart = {
 
 export type CartResult = { cart: Cart } | { error: string }
 
-// Form field names shared by the add-to-cart form and its Server Action.
+// What the client cart list needs from a server line. Slim, so whole products don't cross into the client.
+export type CartLine = {
+    productId: string
+    name: string
+    slug: string
+    image: string
+    quantity: number
+    lineTotal: number | null // cents; null on an optimistic line the server hasn't priced yet
+    stockMessage: string | null
+}
+
+// The cart as the client holds it. The layout streams the first one; each cart action returns the next.
+export type CartView = {
+    lines: CartLine[]
+    totalItems: number
+    subtotal: number // cents
+}
+
+// Form field names shared by the cart forms and their Server Actions.
 export enum CartField {
     ProductId = 'productId',
     Quantity = 'quantity',
+}
+
+// Why an add failed. The no-JS add carries it in the /cart URL, so it's a closed set rather than the API's text.
+export enum AddError {
+    InvalidQuantity = 'invalid-quantity',
+    ProductUnavailable = 'product-unavailable',
+    OutOfStock = 'out-of-stock',
+    Failed = 'add-failed',
+}
+
+// Shared by the drawer (client) and the /cart page (server), so it lives outside both.
+export const addErrorMessages: Record<AddError, string> = {
+    [AddError.InvalidQuantity]: 'Enter a whole number of at least 1.',
+    [AddError.ProductUnavailable]: 'That product is no longer available.',
+    [AddError.OutOfStock]: 'That product is out of stock.',
+    [AddError.Failed]: 'We couldn’t add that item. Try again.',
 }

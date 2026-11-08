@@ -1,20 +1,31 @@
 'use client'
 
-import { createContext, startTransition, use, useContext, useOptimistic, useRef, useState, type ReactNode, type RefObject } from 'react'
+import { createContext, startTransition, use, useContext, useOptimistic, useState, type ReactNode } from 'react'
 
-import { applyChanges, CartChangeType, type CartChange } from '@/components/cart/state-helpers'
-import { removeCartItem, updateCartItem } from '@/lib/cart-actions'
-import type { Cart, Product } from '@/lib/types'
+import { addToCart, setCartQuantity } from '@/lib/cart-actions'
+import { AddError, CartField, type CartView, type Product } from '@/lib/types'
 
-//Include state and mutation methods here so we can call them from anywhere
+enum CartChangeType {
+    Add = 'add',
+    SetQuantity = 'set-quantity',
+}
+
+// A cart action in flight. Absolute quantities like the forms, so 0 removes the line.
+type CartChange =
+    | { type: CartChangeType.Add; product: Product; quantity: number }
+    | { type: CartChangeType.SetQuantity; productId: string; quantity: number }
+
 type CartContextValue = {
-    cart: Promise<Cart | null>
-    changes: CartChange[]
-    error: string | null
-    drawer: RefObject<HTMLDialogElement | null>
-    openDrawer: () => void
-    showAdd: (product: Product, quantity: number) => void
-    setQuantity: (productId: string, quantity: number) => Promise<void>
+    cartView: Promise<CartView>
+    latestCart: CartView | null
+    pendingChanges: CartChange[]
+    setQuantity: (productId: string, formData: FormData) => Promise<string | null>
+    adding: Product | null
+    error: AddError | null
+    add: (product: Product, formData: FormData) => void
+    isOpen: boolean
+    openCart: () => void
+    closeCart: () => void
 }
 
 const CartContext = createContext<CartContextValue | null>(null)
@@ -27,52 +38,135 @@ export function useCart() {
     return value
 }
 
-// The server cart with in-flight writes applied. Suspends until the cart loads, so call it inside Suspense.
-export function useCartView() {
-    const { cart, changes } = useCart()
-    return applyChanges(use(cart), changes)
+// The cart to show: the newest server cart with pending changes on top. Suspends until the first load, so render
+// inside Suspense. `pending` means the totals are still the server's old ones.
+export function useShownCart() {
+    const { cartView, latestCart, pendingChanges } = useCart()
+    let cart = latestCart ?? use(cartView)
+    for (const change of pendingChanges) {
+        cart = applyChange(cart, change)
+    }
+    return {
+        cart,
+        pending: pendingChanges.length > 0,
+    }
 }
 
-// `cart` is the root layout's unawaited getCart(). A write's refresh() re-renders the layout with a new one,
-// and React commits it together with dropping that write from `changes`, so there's only ever one cart.
-export function CartProvider({ cart, children }: { cart: Promise<Cart | null>; children: ReactNode }) {
-    const [changes, addChange] = useOptimistic<CartChange[], CartChange>([], (current, change) => [...current, change])
-    const [error, setError] = useState<string | null>(null)
-    const drawer = useRef<HTMLDialogElement>(null)
+// Lines and count only. Totals are never computed here; they come back with the action's cart.
+function applyChange(cart: CartView, change: CartChange) {
+    const lines = cart.lines.map((line) => ({ ...line }))
 
-    const value: CartContextValue = {
-        cart,
-        changes,
-        error,
-        drawer,
-        // showModal is a DOM call, so the sheet opens on this frame even inside a transition.
-        openDrawer: () => {
-            if (!drawer.current?.open) {
-                drawer.current?.showModal()
-            }
-        },
-        // Call from the add form's onSubmit. It shares that event's transition lane with the form's action,
-        // so the line shows until the action (and its refresh) lands.
-        showAdd: (product, quantity) =>
-            startTransition(() =>
-                addChange({
-                    type: CartChangeType.Add,
-                    product,
-                    quantity,
-                }),
-            ),
-        // Callers run this inside useTransition: the change shows until it ends,
-        // and a thrown request reaches the caller's error boundary.
-        setQuantity: async (productId, quantity) => {
-            addChange({
-                type: CartChangeType.Set,
-                productId,
-                quantity,
+    if (change.type === CartChangeType.Add) {
+        const existing = lines.find((line) => line.productId === change.product.id)
+        if (existing) {
+            existing.quantity += change.quantity
+        } else {
+            lines.push({
+                productId: change.product.id,
+                name: change.product.name,
+                slug: change.product.slug,
+                image: change.product.images[0],
+                quantity: change.quantity,
+                lineTotal: null,
+                stockMessage: null,
             })
-            const result = quantity === 0 ? await removeCartItem(productId) : await updateCartItem(productId, quantity)
-            // State set after an await leaves the transition. Wrapping it lands the error with the refreshed cart.
-            startTransition(() => setError('error' in result ? result.error : null))
-        },
+        }
+    } else {
+        const line = lines.find((line) => line.productId === change.productId)
+        if (line) {
+            line.quantity = change.quantity
+        }
+    }
+
+    const shownLines = lines.filter((line) => line.quantity > 0)
+    let totalItems = 0
+    for (const line of shownLines) {
+        totalItems += line.quantity
+    }
+
+    return {
+        ...cart,
+        lines: shownLines,
+        totalItems,
+    }
+}
+
+// The cart lives here, so opening the drawer or the header count never waits on the server.
+// `cartView` is the root layout's unawaited load. Every cart action returns the next cart, which replaces it.
+export function CartProvider({ cartView, children }: { cartView: Promise<CartView>; children: ReactNode }) {
+    const [latestCart, setLatestCart] = useState<CartView | null>(null)
+    // Each change shows while its action's transition runs. React drops it in the same commit as the cart the action
+    // returned, so nothing blinks. Trade-off: React holds every other transition until an action settles, so a
+    // navigation (a link, back) waits for it. Opening and closing the drawer are plain state, so they never wait.
+    const [pendingChanges, addPendingChange] = useOptimistic<CartChange[], CartChange>(
+        [],
+        (changes, change) => [...changes, change],
+    )
+    const [error, setError] = useState<AddError | null>(null)
+    const [isOpen, setIsOpen] = useState(false)
+
+    const pendingAdd = pendingChanges.find((change) => change.type === CartChangeType.Add)
+
+    // Call inside a transition, so the change shows until the action returns. Returns the error to show, or null.
+    const setQuantity = async (productId: string, formData: FormData) => {
+        addPendingChange({
+            type: CartChangeType.SetQuantity,
+            productId,
+            quantity: Number(formData.get(CartField.Quantity)),
+        })
+        // Timeouts, 5xx, or the shopper went offline.
+        const result = await setCartQuantity(formData).catch(() => ({ error: 'We couldn’t update the quantity. Try again.' }))
+        if ('error' in result) {
+            return result.error
+        }
+        // Updates after an await need their own transition to join the action.
+        startTransition(() => {
+            setLatestCart(result.cart)
+        })
+        return null
+    }
+
+    // Opens the drawer and sends the add. Its progress and any error show in the drawer, never under the add form.
+    const add = (product: Product, formData: FormData) => {
+        // Outside the transition, so the drawer opens right away.
+        setError(null)
+        setIsOpen(true)
+        startTransition(async () => {
+            addPendingChange({
+                type: CartChangeType.Add,
+                product,
+                quantity: Number(formData.get(CartField.Quantity)),
+            })
+            // Timeouts, 5xx, or the shopper went offline.
+            const result = await addToCart(formData).catch(() => ({ error: AddError.Failed }))
+            // Updates after an await need their own transition to join the action.
+            startTransition(() => {
+                if ('error' in result) {
+                    setError(result.error)
+                } else {
+                    setLatestCart(result.cart)
+                }
+            })
+        })
+    }
+
+    const closeCart = () => {
+        setIsOpen(false)
+        // An old failure shouldn't greet the next open. One that lands after closing still shows on the next open.
+        setError(null)
+    }
+
+    const value = {
+        cartView,
+        latestCart,
+        pendingChanges,
+        setQuantity,
+        adding: pendingAdd ? pendingAdd.product : null,
+        error,
+        add,
+        isOpen,
+        openCart: () => setIsOpen(true),
+        closeCart,
     }
 
     return <CartContext.Provider value={value}>{children}</CartContext.Provider>

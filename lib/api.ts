@@ -57,6 +57,9 @@ export async function getProduct(slug: string) {
     }
 }
 
+// Stock can't be sold below this. The product page and the add action share it so they agree on "sold out".
+export const STOP_SELLING_AT_INVENTORY_LEVEL = 0
+
 export async function getProductStock(id: string) {
     const { data } = await apiFetch<Stock>(`${ApiPath.Products}/${encodeURIComponent(id)}/stock`)
     return data

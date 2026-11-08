@@ -1,8 +1,8 @@
 import 'server-only'
 import { cookies } from 'next/headers'
 
-import { ApiError, apiFetch } from './api'
-import type { Cart, CartResult } from './types'
+import { ApiError, apiFetch, getProductStock, STOP_SELLING_AT_INVENTORY_LEVEL } from './api'
+import { AddError, type Cart, type CartResult, type CartView, type Stock } from './types'
 
 const cartCookie = 'cart-token'
 
@@ -67,8 +67,7 @@ function definitive(error: unknown): error is ApiError {
     return error instanceof ApiError && (error.status === 400 || error.status === 404 || error.status === 422)
 }
 
-// Called once per request, by the root layout. Every cart view reads that one promise.
-export async function getCart(): Promise<Cart | null> {
+async function getCart(): Promise<Cart | null> {
     const token = await readCartToken()
     if (!token) {
         return null
@@ -82,6 +81,52 @@ export async function getCart(): Promise<Cart | null> {
         }
         throw error
     }
+}
+
+// The root layout streams this to CartProvider without awaiting it, so only the cart's consumers wait.
+export async function getCartView() {
+    const cart = await getCart()
+    return toCartView(cart)
+}
+
+// Slims the API's cart for the client and checks each line's stock. Stock is real-time, so it's checked on every
+// load and after every cart action. Same as the product page, a failed check doesn't block checkout: checkout makes
+// the final call.
+export async function toCartView(cart: Cart | null): Promise<CartView> {
+    const items = cart?.items ?? []
+    const stockChecks = items.map((item) => getProductStock(item.productId).catch(() => null))
+    const inventories = await Promise.all(stockChecks)
+
+    const lines = items.map((item, index) => ({
+        productId: item.productId,
+        name: item.product.name,
+        slug: item.product.slug,
+        image: item.product.images[0],
+        quantity: item.quantity,
+        lineTotal: item.lineTotal,
+        stockMessage: stockMessage(item.quantity, inventories[index]),
+    }))
+
+    return {
+        lines,
+        totalItems: cart?.totalItems ?? 0,
+        subtotal: cart?.subtotal ?? 0,
+    }
+}
+
+// Says how many the shopper can buy, but leaves their quantity alone. Null when the line is fine or stock is unknown.
+function stockMessage(quantity: number, inventory: Stock | null) {
+    if (!inventory) {
+        return null
+    }
+    const available = inventory.stock - STOP_SELLING_AT_INVENTORY_LEVEL
+    if (quantity <= available) {
+        return null
+    }
+    if (available <= 0) {
+        return 'Out of stock. Remove it to check out.'
+    }
+    return `Only ${available} available. Lower the quantity to check out.`
 }
 
 async function createCart() {
@@ -119,7 +164,18 @@ async function cartExists(token: string) {
     }
 }
 
-export async function addItem(productId: string, quantity: number): Promise<CartResult> {
+// What a definitive add failure means for the shopper. The cart's own 404 is retried before this.
+function toAddError(error: ApiError) {
+    if (error.status === 404) {
+        return AddError.ProductUnavailable
+    }
+    if (error.status === 422) {
+        return AddError.InvalidQuantity
+    }
+    return AddError.Failed
+}
+
+export async function addItem(productId: string, quantity: number): Promise<{ cart: Cart } | { error: AddError }> {
     let token = await readCartToken()
     if (!token) {
         token = await createCart()
@@ -138,13 +194,13 @@ export async function addItem(productId: string, quantity: number): Promise<Cart
                 return { cart }
             } catch (retry) {
                 if (definitive(retry)) {
-                    return { error: retry.message }
+                    return { error: toAddError(retry) }
                 }
                 throw retry
             }
         }
         if (definitive(error)) {
-            return { error: error.message }
+            return { error: toAddError(error) }
         }
         throw error
     }

@@ -2,7 +2,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { AddToCartForm } from "@/components/cart/add-to-cart-form";
-import { Category, getProduct, getProductStock, getProductsByCategory } from "@/lib/api";
+import { Category, getProduct, getProductStock, getProductsByCategory, STOP_SELLING_AT_INVENTORY_LEVEL } from "@/lib/api";
 import { formatPrice } from "@/lib/format";
 import type { Product } from "@/lib/types";
 import { cacheLife } from "next/cache";
@@ -49,7 +49,6 @@ export default async function Page({ params }: PageProps<"/products/[slug]">) {
 }
 
 async function ProductCardAndInventory({ product }: { product: Product }) {
-    const STOP_SELLING_AT_INVENTORY_LEVEL = 0
     // A failed stock check shouldn't take down the page; keep the optimistic form and let checkout decide.
     const inventory = await getProductStock(product.id).catch(() => null)
     

@@ -1,27 +1,49 @@
 'use client'
 
-import { Suspense } from 'react'
+import { catchError } from 'next/error'
+import { Suspense, useEffect, useRef } from 'react'
 
-import { CartLines } from '@/components/cart/cart'
-import { CartBoundary, CartSkeleton } from '@/components/cart/cart-parts'
+import { CartLines, CartSkeleton } from '@/components/cart/cart'
+import { CartError } from '@/components/cart/cart-islands'
 import { useCart } from '@/components/cart/cart-provider'
+import { addErrorMessages } from '@/lib/types'
 
-// Always mounted and closed until openDrawer(). Opening is a DOM call, so it never waits on a route or a transition.
+// The drawer sits in the root layout, above every error.tsx, so it brings its own boundary.
+const CartBoundary = catchError((_: object, { retry }) => <CartError reset={retry} />)
+
+// Always mounted, closed until opened. Before hydration, and without JS, the badge and the add form go to the
+// /cart page instead.
 export function CartDrawer() {
-    const { drawer } = useCart()
-    const close = () => drawer.current?.close()
+    const { isOpen, adding, error, closeCart } = useCart()
+    const dialogRef = useRef<HTMLDialogElement>(null)
+
+    // Kept mounted so closing can slide out: globals.css transitions both adding and removing [open]. showModal also
+    // traps focus and makes the page inert.
+    useEffect(() => {
+        const dialog = dialogRef.current
+        if (!dialog) {
+            return
+        }
+        if (isOpen && !dialog.open) {
+            dialog.showModal()
+        }
+        if (!isOpen && dialog.open) {
+            dialog.close()
+        }
+    }, [isOpen])
 
     return (
         <dialog
-            ref={drawer}
+            ref={dialogRef}
             className="cart-drawer"
             aria-labelledby="cart-title"
+            // Esc (and other native closes) shut the dialog first; this keeps the state in step.
+            onClose={closeCart}
             onClick={(event) => {
-                // Backdrop clicks land on the dialog itself. Links navigate away, so the sheet goes with them.
-                const clickedBackdrop = event.target === event.currentTarget
-                const clickedLink = (event.target as Element).closest('a')
-                if (clickedBackdrop || clickedLink) {
-                    close()
+                // Backdrop clicks land on the dialog itself. Links inside navigate away, so they close it too.
+                const target = event.target as Element
+                if (target === event.currentTarget || target.closest('a')) {
+                    closeCart()
                 }
             }}
             // :modal beats a class selector, so the sheet's box lives here.
@@ -46,14 +68,18 @@ export function CartDrawer() {
                     <h2 id="cart-title" className="text-2xl">Your cart</h2>
                     <button
                         type="button"
-                        onClick={close}
+                        onClick={closeCart}
                         aria-label="Close cart"
                         className="grid size-10 place-items-center rounded-full hover:bg-foreground/5 focus-visible:ring-2 focus-visible:ring-foreground"
                     >
                         <CloseIcon />
                     </button>
                 </div>
-                {/* The sheet sits in the root layout, above every error.tsx, so it brings its own boundary. */}
+                {/* The add in flight, or why it failed. A fixed-height row, so a message never moves the lines. */}
+                <div aria-live="polite" className="h-6 shrink-0 px-5 text-sm text-foreground/70">
+                    {adding ? <p className="truncate">Adding {adding.name}…</p> : null}
+                    {error ? <p role="alert" className="truncate">{addErrorMessages[error]}</p> : null}
+                </div>
                 <CartBoundary>
                     <Suspense fallback={<CartSkeleton />}>
                         <CartLines variant="drawer" />
