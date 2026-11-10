@@ -49,13 +49,13 @@ export function ChatWindow({ isDocked = false }: { isDocked?: boolean }) {
                     <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z" />
                     </svg>
-                    <span className="max-sm:sr-only">Chat</span>
+                    <span className="max-sm:sr-only">Build a Bundle</span>
                 </button>
             )}
             {isWindowShown ? (
                 <aside aria-label="Chat with Eve" className={`${bubbleClass} ${isDocked ? dockedClass : ''} ${hiddenBelowLg}`}>
                     <header className="flex items-center justify-between gap-2 border-b border-black/10 px-4 py-3">
-                        <h2 className="text-xl">Eve</h2>
+                        <h2 className="text-xl">Bundle Builder</h2>
                         <div className="flex items-center gap-3">
                             {isHydrated && agent.session ? (
                                 <button className="font-sans text-sm font-semibold underline" onClick={agent.newSession} type="button">

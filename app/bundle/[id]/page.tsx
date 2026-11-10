@@ -32,16 +32,11 @@ export default function BundlePage({ params }: PageProps<'/bundle/[id]'>) {
     return (
         <section className="transition-opacity duration-300 starting:opacity-0 motion-reduce:transition-none">
             <ChatDockSpace />
-            <NavLink href="/" className="relative font-sans text-sm font-semibold hover:underline">
-                ← Back to store
-            </NavLink>
             {/* What isn't production-ready yet. In the shell, so it's prerendered and shifts nothing. */}
             <p className="mt-4 rounded-2xl bg-amber-100 px-4 py-3 text-sm text-amber-950" role="note">
-                <strong className="font-sans">This feature is in beta.</strong> Your bundles are tied to this browser,
-                so clearing your storage removes them from Your bundles. Anyone with the link can see and change this
-                bundle.
+                <strong className="font-sans">This feature is in beta.</strong> Clearning your browser storage removes Your bundles. Anyone with the link can see and change this
+                bundle. Your chats are private.
             </p>
-            <h1 className="mt-4 text-4xl md:text-5xl">Your bundle</h1>
             <BundleActivityLine />
             <Suspense fallback={<BundleSkeleton />}>
                 <BundleDetails params={params} />
