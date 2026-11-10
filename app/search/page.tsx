@@ -4,7 +4,7 @@ import { z } from "zod";
 import { gridClassName, Pagination, pageSchema } from "@/components/product/product-grid";
 import { ProductCard, ProductCardSkeleton } from "@/components/product/product-card";
 import { SearchForm } from "@/components/search-form";
-import { SEARCH_LIMIT, searchProducts } from "@/lib/api";
+import { SEARCH_LIMIT, searchProducts } from "@/lib/swag-api/catalog";
 import { cacheLife } from "next/cache";
 
 

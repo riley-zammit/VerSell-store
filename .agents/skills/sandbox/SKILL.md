@@ -960,7 +960,7 @@ try {
 const controller = new AbortController();
 
 // Cancel after 30 seconds
-setTimeout(() => controller.abort(), 30000);
+setTimeout(() => controller.abort("aborted"), 30000);
 
 const sandbox = await Sandbox.create({
   signal: controller.signal,

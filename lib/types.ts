@@ -79,7 +79,7 @@ export type CartItem = {
 }
 
 // Token stays on the server. The UI only sees lines and totals.
-export type Cart = {
+export type ApiCart = {
     items: CartItem[]
     totalItems: number
     subtotal: number
@@ -87,8 +87,6 @@ export type Cart = {
     createdAt: string
     updatedAt: string
 }
-
-export type CartResult = { cart: Cart } | { error: CartErrorCode }
 
 // What the client cart list needs from a server line. Slim, so whole products don't cross into the client.
 export type CartLine = {
@@ -102,7 +100,7 @@ export type CartLine = {
 }
 
 // The cart as the client holds it. The layout streams the first one; each cart action returns the next.
-export type CartView = {
+export type Cart = {
     lines: CartLine[]
     totalItems: number
     subtotal: number // cents
@@ -131,7 +129,7 @@ export const cartErrorMessages: Record<CartErrorCode, string> = {
     [CartErrorCode.ProductUnavailable]: 'That product is no longer available.',
     [CartErrorCode.ItemMissing]: 'That item isn’t in your cart anymore.',
     [CartErrorCode.OutOfStock]: 'That product is out of stock.',
-    [CartErrorCode.NotEnoughStock]: 'We don’t have that many in stock.',
+    [CartErrorCode.NotEnoughStock]: 'There isn’t enough stock to add more.',
     [CartErrorCode.AddFailed]: 'We couldn’t add that item. Try again.',
     [CartErrorCode.UpdateFailed]: 'We couldn’t update the quantity. Try again.',
 }

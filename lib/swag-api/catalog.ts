@@ -1,9 +1,7 @@
 import 'server-only'
 
-import { apiFetch, ApiError, Category } from './swag-api'
-import type { CategoryInfo, Health, Product, Promotion, Stock, StoreConfig } from './types'
-
-export { apiFetch, ApiError, ApiHeader, Category } from './swag-api'
+import { apiFetch, ApiError, Category } from './client'
+import type { CategoryInfo, Health, Product, Promotion, Stock, StoreConfig } from '../types'
 
 enum ApiPath {
     Products = '/products',
@@ -57,12 +55,13 @@ export async function getProduct(slug: string) {
     }
 }
 
-// Stock can't be sold below this. The product page and the add action share it so they agree on "sold out".
-export const STOP_SELLING_AT_INVENTORY_LEVEL = 0
+// Stock can't be sold below this. Every stock check goes through getAvailableStock, so they all agree on "sold out".
+const STOP_SELLING_AT_INVENTORY_LEVEL = 0
 
-export async function getProductStock(id: string) {
+// How many can still be sold. Zero or less is sold out.
+export async function getAvailableStock(id: string) {
     const { data } = await apiFetch<Stock>(`${ApiPath.Products}/${encodeURIComponent(id)}/stock`)
-    return data
+    return data.stock - STOP_SELLING_AT_INVENTORY_LEVEL
 }
 
 // Searches all products; '' returns everything.

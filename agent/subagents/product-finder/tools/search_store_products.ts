@@ -1,7 +1,7 @@
 import { defineTool } from "eve/tools";
 import { z } from "zod";
 import type { BundleProduct } from "../../../../lib/bundle-schema";
-import { apiFetch, Category } from "../../../../lib/swag-api";
+import { apiFetch, Category } from "../../../../lib/swag-api/client";
 import type { Product } from "../../../../lib/types";
 
 export default defineTool({

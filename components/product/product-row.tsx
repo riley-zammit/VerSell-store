@@ -1,5 +1,5 @@
 import { cacheLife } from 'next/cache'
-import { getCollection } from '@/lib/api'
+import { getCollection } from '@/lib/swag-api/catalog'
 import { NavLink } from '../nav-link'
 import { ProductCard, ProductCardSkeleton } from './product-card'
 import type { CSSProperties } from 'react'

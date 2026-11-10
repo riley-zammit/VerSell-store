@@ -1,4 +1,4 @@
-import { getHealth } from '@/lib/api'
+import { getHealth } from '@/lib/swag-api/catalog'
 import { postSlackMessage } from '@/lib/slack'
 
 // Pinged hourly by Vercel Cron (see vercel.ts). Vercel sends CRON_SECRET as a bearer token,

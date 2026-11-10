@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { GridSkeleton, pageSchema, ProductGrid } from "@/components/product/product-grid";
-import { getCategories } from "@/lib/api";
+import { getCategories } from "@/lib/swag-api/catalog";
 import { cacheLife } from "next/cache";
 
 // "all" and "featured" aren't API categories, so they need their own titles. ProductGrid maps them to their filters.

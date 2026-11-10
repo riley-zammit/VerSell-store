@@ -28,7 +28,8 @@ so changing this here wouldn't affect other layouts. Decision: Let's not do this
 ## Cart
 - Originally used a parallel route for cart so we could server-render but Cart should be client component to feel snappy. The server round-trip to open the drawer felt slow. Once we moved that to the client, the parallel route started getting in the way: Prefetching the route, managing the state across routes - optimistic add was too complex
 - Enforce random stock differences in the cart as a second layer. Typically we'd do this at checkout if we accept the cart add, but bring it up since we're not writing checkout.
-- Keep only the API cart token in an httpOnly cookie. The root layout starts `getCartView()` without awaiting it and passes the promise to the client `CartProvider`; cart readers `use()` it inside Suspense. The header shows the plain cart icon while it resolves.
+- An add or `+` that would take a line past available stock fails rather than clamping, and the optimistic change rolls back. Lowering always applies, since that's how the shopper clears a stock message. A failed stock check doesn't block: checkout makes the final call.
+- Keep only the API cart token in an httpOnly cookie. The root layout starts `getCart()` without awaiting it and passes the promise to the client `CartProvider`; cart readers `use()` it inside Suspense. The header shows the plain cart icon while it resolves.
 - Add with JS: `onSubmit` opens the drawer (plain client state) and sends `addToCart` in a transition with an optimistic line. The drawer shows "Adding…" and any error from the provider. Errors never show under the form.
 - Add without JS: a second action (`addToCartAndRedirect`) redirects to `/cart`, or `/cart?error=<AddError>` on failure
 - Ensure errors show on non-JS cart page via redirect

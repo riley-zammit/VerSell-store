@@ -3,7 +3,8 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { AddToCartForm } from "@/components/cart/add-to-cart-form";
-import { Category, getProduct, getProductStock, getProductsByCategory, STOP_SELLING_AT_INVENTORY_LEVEL } from "@/lib/api";
+import { getAvailableStock, getProduct, getProductsByCategory } from "@/lib/swag-api/catalog";
+import { Category } from "@/lib/swag-api/client";
 import { formatPrice } from "@/lib/format";
 import { siteOpenGraph } from "@/lib/metadata";
 import type { Product } from "@/lib/types";
@@ -71,10 +72,8 @@ export default async function Page({ params }: PageProps<"/products/[slug]">) {
 
 async function ProductCardAndInventory({ product }: { product: Product }) {
     // A failed stock check shouldn't take down the page; keep the optimistic form and let checkout decide.
-    const inventory = await getProductStock(product.id).catch(() => null)
-    
     // What's left to sell, not the raw stock. Null when the check failed.
-    const available = inventory ? inventory.stock - STOP_SELLING_AT_INVENTORY_LEVEL : null
+    const available = await getAvailableStock(product.id).catch(() => null)
     const soldOut = available !== null && available <= 0
     return <AddToCartForm product={product} inventory={available} disabled={soldOut} />
 }

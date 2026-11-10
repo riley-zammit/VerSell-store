@@ -49,65 +49,79 @@ export function ChatMessages() {
                     {isResuming ? 'Loading your conversation…' : 'What’s the bundle for? Like “a welcome kit for new engineers.”'}
                 </p>
             ) : (
-                messages.map((message) => (
-                    <article
-                        className={`max-w-[90%] rounded-2xl p-4 ${message.role === 'user' ? 'ml-auto bg-black text-white' : 'bg-black/5'}`}
-                        key={message.id}
-                    >
-                        <p className="mb-2 font-sans text-xs font-bold tracking-wide uppercase opacity-60">
-                            {message.role === 'user' ? 'You' : 'Eve'}
-                        </p>
-                        <div className="space-y-3 wrap-break-word whitespace-pre-wrap">
-                            {message.parts.map((part, index) => {
-                                if (part.type === 'text') {
-                                    return <TextWithLinks key={part.id ?? index} text={part.text} />
-                                }
-                                if (part.type === 'file') {
-                                    return (
-                                        <p className="text-sm" key={`file-${index}`}>
-                                            Attachment: {part.filename ?? part.mediaType}
-                                        </p>
-                                    )
-                                }
-                                if (part.type === 'interaction') {
-                                    return (
-                                        <InteractionPrompt
-                                            disabled={isResuming}
-                                            interaction={part}
-                                            key={part.interactionId}
-                                            respond={agent.respond}
-                                        />
-                                    )
-                                }
-                                if (part.type === 'tool') {
-                                    const finderStep = finderSteps.find((finder) => finder.callId === part.callId)?.step
-                                    return (
-                                        <div className="space-y-2 text-sm" key={part.callId}>
-                                            <p className="font-sans font-semibold">{part.label}</p>
-                                            {finderStep ? (
-                                                <p className="flex items-center gap-2 font-sans text-black/60">
-                                                    <span
-                                                        aria-hidden
-                                                        className="block size-3 shrink-0 animate-spin rounded-full border-2 border-current border-t-transparent"
+                messages.map((message) => {
+                    // Tool calls are logged to the console (AgentContextProvider), not shown. A call only appears here for a
+                    // finder's progress or a question about it. Reasoning isn't shown either.
+                    const visibleParts = message.parts.filter((part) => {
+                        if (part.type === 'tool') {
+                            const hasFinderStep = finderSteps.some(({ callId }) => callId === part.callId)
+                            return hasFinderStep || part.interaction !== undefined
+                        }
+                        return part.type !== 'reasoning'
+                    })
+                    // A reply that has only made calls so far would be an empty bubble; "Eve is working…" covers it.
+                    if (visibleParts.length === 0) {
+                        return null
+                    }
+                    return (
+                        <article
+                            className={`max-w-[90%] rounded-2xl p-4 ${message.role === 'user' ? 'ml-auto bg-black text-white' : 'bg-black/5'}`}
+                            key={message.id}
+                        >
+                            <p className="mb-2 font-sans text-xs font-bold tracking-wide uppercase opacity-60">
+                                {message.role === 'user' ? 'You' : 'Eve'}
+                            </p>
+                            <div className="space-y-3 wrap-break-word whitespace-pre-wrap">
+                                {visibleParts.map((part, index) => {
+                                    if (part.type === 'text') {
+                                        return <TextWithLinks key={part.id ?? index} text={part.text} />
+                                    }
+                                    if (part.type === 'file') {
+                                        return (
+                                            <p className="text-sm" key={`file-${index}`}>
+                                                Attachment: {part.filename ?? part.mediaType}
+                                            </p>
+                                        )
+                                    }
+                                    if (part.type === 'interaction') {
+                                        return (
+                                            <InteractionPrompt
+                                                disabled={isResuming}
+                                                interaction={part}
+                                                key={part.interactionId}
+                                                respond={agent.respond}
+                                            />
+                                        )
+                                    }
+                                    if (part.type === 'tool') {
+                                        const finderStep = finderSteps.find((finder) => finder.callId === part.callId)?.step
+                                        return (
+                                            <div className="space-y-2 text-sm" key={part.callId}>
+                                                {finderStep ? (
+                                                    <p className="flex items-center gap-2 font-sans text-black/60">
+                                                        <span
+                                                            aria-hidden
+                                                            className="block size-3 shrink-0 animate-spin rounded-full border-2 border-current border-t-transparent"
+                                                        />
+                                                        {finderStep}
+                                                    </p>
+                                                ) : null}
+                                                {part.interaction ? (
+                                                    <InteractionPrompt
+                                                        disabled={isResuming}
+                                                        interaction={part.interaction}
+                                                        respond={agent.respond}
                                                     />
-                                                    {finderStep}
-                                                </p>
-                                            ) : null}
-                                            {part.interaction ? (
-                                                <InteractionPrompt
-                                                    disabled={isResuming}
-                                                    interaction={part.interaction}
-                                                    respond={agent.respond}
-                                                />
-                                            ) : null}
-                                        </div>
-                                    )
-                                }
-                                return null
-                            })}
-                        </div>
-                    </article>
-                ))
+                                                ) : null}
+                                            </div>
+                                        )
+                                    }
+                                    return null
+                                })}
+                            </div>
+                        </article>
+                    )
+                })
             )}
             {isBusy ? (
                 <div className="flex w-fit items-center gap-3 rounded-2xl bg-black/5 p-4 text-black/60" role="status">

@@ -1,4 +1,4 @@
-import { getPromotion } from '@/lib/api'
+import { getPromotion } from '@/lib/swag-api/catalog'
 import { cacheLife } from 'next/cache'
 
 // Wraps on narrow screens. It isn't behind Suspense, so it's in the first HTML and its height can't shift the page.

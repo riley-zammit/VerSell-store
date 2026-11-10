@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers'
 
-import { getProduct } from '@/lib/api'
+import { getProduct } from '@/lib/swag-api/catalog'
 import { getBundle, getItems, rememberBundle } from '@/lib/bundle'
 import { BundleId, ItemSource } from '@/lib/bundle-schema'
 import type { Product } from '@/lib/types'

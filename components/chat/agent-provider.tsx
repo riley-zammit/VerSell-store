@@ -48,6 +48,13 @@ export function AgentContextProvider({ children }: { children: ReactNode }) {
         // refresh the moment a product or mockup is saved, not when the subagent finishes replying. Only those two:
         // eve rereads every followed session every few seconds for as long as the page is open.
         followAgents: ({ name }) => name === FINDER_AGENT || name === CUSTOMIZER_AGENT,
+        // Tool calls stay out of the chat, so they're logged here for debugging. Only Eve's own calls: each subagent's
+        // calls are on its own stream.
+        onEvent: (event) => {
+            if (event.type === 'call.requested' || event.type === 'call.settled') {
+                console.log(`[eve] ${event.type}`, event.data)
+            }
+        },
     })
     useBundleFlow(agent)
 

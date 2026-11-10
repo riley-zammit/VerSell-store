@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { GRID_LIMIT, getCollection } from '@/lib/api'
+import { GRID_LIMIT, getCollection } from '@/lib/swag-api/catalog'
 import { ProductCard, ProductCardSkeleton } from './product-card'
 import { NavLink } from '../nav-link'
 import type { Pagination as PaginationMeta } from '@/lib/types'

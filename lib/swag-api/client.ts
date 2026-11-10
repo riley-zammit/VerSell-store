@@ -1,6 +1,6 @@
-import type { ApiResponse } from './types'
+import type { ApiResponse } from '../types'
 
-// No `server-only` or Next imports here: the eve agent's tools call the store API too.
+// No `server-only` or Next imports here: the eve agent's tools import this file
 
 export enum ApiHeader {
     Bypass = 'x-vercel-protection-bypass',

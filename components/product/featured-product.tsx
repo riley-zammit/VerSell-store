@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { NavLink } from '@/components/nav-link'
-import { getProduct } from '@/lib/api'
+import { getProduct } from '@/lib/swag-api/catalog'
 import { formatPrice } from '@/lib/format'
 import { cacheLife } from 'next/cache'
 

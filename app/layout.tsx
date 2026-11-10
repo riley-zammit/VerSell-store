@@ -8,8 +8,9 @@ import { ChatWindow, ChatWindowWithPathname } from "@/components/chat/chat-windo
 import { ChatWindowContextProvider } from "@/components/chat/chat-window-provider";
 import { Footer } from "@/components/layout/root/footer";
 import { Header } from "@/components/layout/root/header";
-import { getCartView } from "@/lib/cart";
+import { getCart } from "@/lib/cart";
 import { siteOpenGraph } from "@/lib/metadata";
+import type { Cart } from "@/lib/types";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -36,13 +37,13 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
-    // Not awaited: the shell prerenders, and only the cart's readers (cart icon, drawer, /cart) wait, inside Suspense.
-    const cartView = getCartView();
+    // Initial value for cart/loads on hard loads that clear client state
+    const initialCart: Promise<Cart> = getCart();
 
     return (
         <html lang="en" className={`${geistSans.variable} ${aleo.variable} h-full antialiased`}>
             <body className="flex min-h-full flex-col font-sans">
-                <CartProvider cartView={cartView}>
+                <CartProvider initialCart={initialCart}>
                     <AgentContextProvider>
                         <ChatWindowContextProvider>
                             <Header />
