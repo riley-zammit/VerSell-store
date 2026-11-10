@@ -12,7 +12,7 @@ export default function HomePage() {
             <Hero />
             <section className="mt-16">
                 <h2 className="mb-8 text-4xl md:text-5xl">Featured</h2>
-                <ProductRow query="featured=true" href="/collection/featured" slots={3} />
+                <ProductRow eager query="featured=true" href="/collection/featured" slots={3} />
             </section>
             <section className="mt-16">
                 <h2 className="mb-8 text-4xl md:text-5xl">Mugs for the Holidays</h2>

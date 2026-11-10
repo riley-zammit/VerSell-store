@@ -32,7 +32,7 @@ If a request mixes both, regenerate first, then `load_image` the draft URL and e
 
 1. `load_image` with the item's current mockup URL. It returns an absolute path in the sandbox.
 2. Edit with `bash`: ImageMagick commands, or write a script and run it. Save each result to a new file (`…-v2.png`, `…-v3.png`) so you can go back to the last good one.
-3. Open each result with `read_file` and check it. The customer sees nothing until you publish, so keep editing until it looks right.
+3. Open each result with `read_file` and check it, but only after the `bash` call that writes it has returned. Don't call them together: calls in the same batch run at the same time, so `read_file` runs before the file exists. The customer sees nothing until you publish, so keep editing until it looks right.
 4. `publish_mockup` with the item key, the creative URL, and the final `path`. Publish once, with the edit you settled on.
 
 Outputs must be `.png`, `.jpg`, or `.webp`.

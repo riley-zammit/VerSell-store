@@ -9,7 +9,7 @@ import Image from 'next/image'
 // Cards in other layouts (e.g. ProductRow) pass their own.
 const gridSizes = '(min-width: 1152px) 340px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw'
 
-export function ProductCard({ product, sizes = gridSizes, prefetch = null }: { product: Product; sizes?: string; prefetch?: boolean | null}) {
+export function ProductCard({ product, sizes = gridSizes, prefetch = null, eager }: { product: Product; sizes?: string; prefetch?: boolean | null; eager?:boolean}) {
   return (
     <li>
       <NavLink href={`/products/${product.slug}`} prefetch={prefetch} className="surface-card group relative block overflow-hidden p-2.5">
@@ -20,6 +20,7 @@ export function ProductCard({ product, sizes = gridSizes, prefetch = null }: { p
             fill
             sizes={sizes}
             className="object-cover mix-blend-multiply transition-transform duration-500 group-hover:scale-105"
+            loading={eager ? 'eager' : undefined}
           />
         </div>
         <div className="px-2 pt-4 pb-2">
