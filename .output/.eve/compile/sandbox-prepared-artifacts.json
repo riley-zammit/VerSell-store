@@ -1,27 +1,5 @@
 {
-  "entries": [
-    {
-      "artifact": {
-        "snapshotId": "snap_FfnZxbUqnRnxT363M2Fbyj53ENb6"
-      },
-      "nodeId": "__root__",
-      "providerName": "vercel"
-    },
-    {
-      "artifact": {
-        "snapshotId": "snap_OTm0nY4E9nT9R4buGiVwnkBWBiau"
-      },
-      "nodeId": "subagents/product-customizer",
-      "providerName": "vercel"
-    },
-    {
-      "artifact": {
-        "provider": null
-      },
-      "nodeId": "subagents/product-set-selector",
-      "providerName": "default"
-    }
-  ],
+  "entries": [],
   "kind": "eve-sandbox-prepared-artifacts",
   "version": 2
 }

@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-11-06T22:01:58.839Z",
+  "fetchedAt": "2026-11-08T23:48:13.043Z",
   "kind": "eve-model-metadata",
   "models": [
     {
@@ -843,7 +843,7 @@
         {
           "contextWindowTokens": 256000,
           "provider": "bytedance",
-          "providerModelId": "ep-20260113010502-rl889"
+          "providerModelId": "seed-1-8-251228"
         }
       ]
     },
@@ -853,7 +853,7 @@
         {
           "contextWindowTokens": 262144,
           "provider": "bytedance",
-          "providerModelId": "ep-20260913022121-44bzz"
+          "providerModelId": "dola-seed-2-1-turbo-260628"
         }
       ]
     },
@@ -2717,6 +2717,11 @@
         },
         {
           "contextWindowTokens": 1048576,
+          "provider": "digitalocean",
+          "providerModelId": "kimi-k3.1-pro"
+        },
+        {
+          "contextWindowTokens": 1048576,
           "provider": "fireworks",
           "providerModelId": "accounts/fireworks/models/kimi-k3p1-pro"
         },
@@ -2834,11 +2839,6 @@
           "contextWindowTokens": 262144,
           "provider": "deepinfra",
           "providerModelId": "nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B"
-        },
-        {
-          "contextWindowTokens": 262000,
-          "provider": "fireworks",
-          "providerModelId": "accounts/fireworks/models/nemotron-3-ultra-nvfp4"
         }
       ]
     },
@@ -2849,11 +2849,6 @@
           "contextWindowTokens": 262144,
           "provider": "deepinfra",
           "providerModelId": "nvidia/NVIDIA-Nemotron-3.5-Lightning"
-        },
-        {
-          "contextWindowTokens": 262144,
-          "provider": "fireworks",
-          "providerModelId": "accounts/fireworks/models/nemotron-lightning-3p5-30b-a3b"
         },
         {
           "contextWindowTokens": 262144,
@@ -3619,11 +3614,6 @@
           "contextWindowTokens": 131072,
           "provider": "cerebras",
           "providerModelId": "gpt-oss-120b"
-        },
-        {
-          "contextWindowTokens": 128000,
-          "provider": "fireworks",
-          "providerModelId": "accounts/fireworks/models/gpt-oss-120b"
         },
         {
           "contextWindowTokens": 131072,

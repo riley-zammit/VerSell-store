@@ -1,21 +1,20 @@
 import { getPromotion } from '@/lib/api'
 import { cacheLife } from 'next/cache'
 
-// Fixed single-line height on every breakpoint → zero CLS.
-const barClass = 'flex h-10 items-center justify-center gap-x-3 overflow-hidden whitespace-nowrap bg-foreground px-4 text-sm text-background'
+// Wraps on narrow screens. It isn't behind Suspense, so it's in the first HTML and its height can't shift the page.
+const barClass = 'flex flex-wrap items-center justify-center gap-x-3 gap-y-1 bg-foreground px-4 py-2 text-center text-sm text-background'
 
-// getPromotion is cached, so this renders into the static shell: no Suspense or skeleton needed.
 export async function PromoBanner() {
-    //local cache so discounts are distributed a bit
-    "use cache"
-    cacheLife("hours");
+    
+    "use cache: remote"
+    cacheLife("days");
 
     const promo = await getPromotion()
     return (
         <aside className={barClass}>
-            <strong className="truncate">{promo.title}</strong>
-            <span className="min-w-0 truncate opacity-80">{promo.description}</span>
-            <code className="shrink-0 rounded bg-background/15 px-2 py-0.5 font-semibold">{promo.code}</code>
+            <strong>{promo.title}</strong>
+            <span className="opacity-80">{promo.description}</span>
+            <code className="rounded bg-background/15 px-2 py-0.5 font-semibold">{promo.code}</code>
         </aside>
     )
 }

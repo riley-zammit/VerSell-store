@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 
-import { CartLines, CartSkeleton } from '@/components/cart/cart'
+import { CartLines, CartSkeleton } from '@/components/cart/cart-shared'
 import { AddError, addErrorMessages } from '@/lib/types'
 
 export const metadata: Metadata = { title: 'Your cart' }
 
-// The drawer's View cart, hard loads, shared links, modified or pre-hydration badge clicks, and the no-JS add land here.
+// The drawer's View cart, hard loads, shared links, modified or pre-hydration cart icon clicks, and the no-JS add land here.
 export default function Page({ searchParams }: PageProps<'/cart'>) {
     return (
         <>

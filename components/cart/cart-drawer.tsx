@@ -3,15 +3,14 @@
 import { catchError } from 'next/error'
 import { Suspense, useEffect, useRef } from 'react'
 
-import { CartLines, CartSkeleton } from '@/components/cart/cart'
-import { CartError } from '@/components/cart/cart-islands'
+import { CartError, CartLines, CartSkeleton } from '@/components/cart/cart-shared'
 import { useCart } from '@/components/cart/cart-provider'
 import { addErrorMessages } from '@/lib/types'
 
 // The drawer sits in the root layout, above every error.tsx, so it brings its own boundary.
 const CartBoundary = catchError((_: object, { retry }) => <CartError reset={retry} />)
 
-// Always mounted, closed until opened. Before hydration, and without JS, the badge and the add form go to the
+// Always mounted, closed until opened. Before hydration, and without JS, the cart icon and the add form go to the
 // /cart page instead.
 export function CartDrawer() {
     const { isOpen, adding, error, closeCart } = useCart()
@@ -72,7 +71,9 @@ export function CartDrawer() {
                         aria-label="Close cart"
                         className="grid size-10 place-items-center rounded-full hover:bg-foreground/5 focus-visible:ring-2 focus-visible:ring-foreground"
                     >
-                        <CloseIcon />
+                        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.75">
+                            <path d="M3 3l10 10M13 3L3 13" />
+                        </svg>
                     </button>
                 </div>
                 {/* The add in flight, or why it failed. A fixed-height row, so a message never moves the lines. */}
@@ -87,13 +88,5 @@ export function CartDrawer() {
                 </CartBoundary>
             </div>
         </dialog>
-    )
-}
-
-function CloseIcon() {
-    return (
-        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.75">
-            <path d="M3 3l10 10M13 3L3 13" />
-        </svg>
     )
 }

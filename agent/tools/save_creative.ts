@@ -1,8 +1,7 @@
 import { posix } from "node:path";
 import { defineTool } from "eve/tools";
 import { z } from "zod";
-import { putCreativeImage } from "../../lib/bundle";
-import { bundleIdFor } from "../lib/bundle-id";
+import { BundleId, putCreativeImage } from "../../lib/bundle";
 
 // Runs in the app runtime, not the sandbox: it reads the upload through the sandbox API and
 // writes it to Blob, so the sandbox needs no network access and never sees Blob credentials.
@@ -11,10 +10,11 @@ export default defineTool({
         "Save the logo or artwork the customer attached, so product-customizer can use it. Pass the path from " +
         "the image's \"Attached file\" label. Returns the creative URL to send to product-customizer.",
     inputSchema: z.object({
+        bundleId: BundleId,
         path: z.string().min(1).describe("Absolute sandbox path from the attachment label, e.g. /workspace/.eve/attachments/<hash>/logo.png"),
     }),
     label: { start: () => "Saving your artwork" },
-    async execute({ path }, ctx) {
+    async execute({ bundleId, path }, ctx) {
         const sandbox = await ctx.getSandbox();
         const filePath = posix.normalize(path);
 
@@ -34,7 +34,7 @@ export default defineTool({
             throw new Error("That file isn't a PNG or JPEG. Ask the customer for a PNG or JPG.");
         }
 
-        const creativeUrl = await putCreativeImage(bundleIdFor(ctx), bytes, mediaType);
+        const creativeUrl = await putCreativeImage(bundleId, bytes, mediaType);
         return { creativeUrl };
     },
 });

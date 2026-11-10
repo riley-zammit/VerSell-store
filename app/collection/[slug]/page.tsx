@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { GridSkeleton, pageSchema, ProductGrid } from "@/components/product/product-grid";
 import { getCategories } from "@/lib/api";
+import { cacheLife } from "next/cache";
 
 // "all" and "featured" aren't API categories, so they need their own titles. ProductGrid maps them to their filters.
 const specialTitles = new Map([
@@ -32,6 +33,8 @@ export default async function CollectionPage({ params, searchParams }: PageProps
 }
 
 async function CollectionTitle({ slug }: { slug: string }) {
+    "use cache: remote"
+    cacheLife("catalog");
     //map featured/all products to the category pattern
     const categories = await getCategories();
     const category = categories.find((category) => category.slug === slug);

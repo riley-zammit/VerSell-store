@@ -2,8 +2,7 @@ import { generateText } from "ai";
 import { defineWorkflowTool, toolOutput, toolOutputPart } from "eve/tools";
 import { FatalError } from "eve/workflow";
 import { z } from "zod";
-import { putMockupImage, setMockup } from "../../../../lib/bundle";
-import { bundleIdFor } from "../../../lib/bundle-id";
+import { BundleId, putMockupImage } from "../../../../lib/bundle";
 import { fetchImage } from "../../../lib/images";
 
 // Gemini is only for putting the creative onto the product. Anything that can be done by editing
@@ -11,6 +10,7 @@ import { fetchImage } from "../../../lib/images";
 const MOCKUP_MODEL = "google/gemini-3.1-flash-image";
 
 const inputSchema = z.object({
+    bundleId: BundleId.describe("The bundle id from the `Bundle:` line of your task"),
     itemKey: z.string().min(1),
     productTitle: z.string().min(1),
     productImageUrl: z.url(),
@@ -19,24 +19,24 @@ const inputSchema = z.object({
     feedback: z.string().optional().describe("The customer's feedback on the previous mockup, when regenerating"),
 });
 
-// A workflow tool so the generated image is checkpointed: after a crash or a failed save, the
-// retry reuses the uploaded image instead of paying for another Gemini generation.
+// A workflow tool so the generated image is checkpointed: a retry after a crash reuses the
+// uploaded draft instead of paying for another Gemini generation.
+// It only makes a draft. Gemini's first try is often off, and the customer's page would show
+// every rejected try, so the customizer checks the draft and publishes it with publish_mockup.
 export default defineWorkflowTool({
     description:
-        "Generate a new mockup of the creative printed on the product, and make it the item's current mockup. " +
-        "Use it for the first mockup, and for feedback that editing can't handle (placement, angle, print style). " +
-        "Returns the image so you can check it.",
+        "Generate a draft mockup of the creative printed on the product. The customer doesn't see it until you " +
+        "publish it with publish_mockup. Use it for the first mockup, and for feedback that editing can't handle " +
+        "(placement, angle, print style). Returns the draft so you can check it.",
     inputSchema,
     label: { start: ({ productTitle }) => `Mocking up ${productTitle}` },
     async execute(input, ctx) {
         "use workflow";
-        const bundleId = bundleIdFor(ctx);
-        const mockup = await generateMockup(bundleId, input, ctx.abortSignal);
-        await saveMockup(bundleId, input.itemKey, mockup.mockupUrl, input.creativeUrl);
+        const draft = await generateMockup(input, ctx.abortSignal);
         return {
             itemKey: input.itemKey,
-            mockupUrl: mockup.mockupUrl,
-            mediaType: mockup.mediaType,
+            draftUrl: draft.draftUrl,
+            mediaType: draft.mediaType,
         };
     },
     toModelOutput: (output) => {
@@ -46,17 +46,17 @@ export default defineWorkflowTool({
         }
         // The URL stays readable for the whole session (public Blob), so the model can keep seeing it.
         return toolOutput.content([
-            toolOutputPart.text(`New mockup for ${output.itemKey}: ${output.mockupUrl}`),
-            toolOutputPart.fileUrl(output.mockupUrl, { mediaType: output.mediaType }),
+            toolOutputPart.text(`Draft mockup for ${output.itemKey}, not published yet: ${output.draftUrl}`),
+            toolOutputPart.fileUrl(output.draftUrl, { mediaType: output.mediaType }),
         ]);
     },
 });
 
 // Generates and uploads in one step: step results are saved in the workflow history, so it
 // returns the Blob URL rather than the image bytes.
-async function generateMockup(bundleId: string, input: z.infer<typeof inputSchema>, abortSignal: AbortSignal) {
+async function generateMockup(input: z.infer<typeof inputSchema>, abortSignal: AbortSignal) {
     "use step";
-    const { itemKey, productTitle, productImageUrl, creativeUrl, placement, feedback } = input;
+    const { bundleId, itemKey, productTitle, productImageUrl, creativeUrl, placement, feedback } = input;
     const [product, creative] = await Promise.all([
         fetchImage(productImageUrl, abortSignal),
         fetchImage(creativeUrl, abortSignal),
@@ -68,6 +68,7 @@ async function generateMockup(bundleId: string, input: z.infer<typeof inputSchem
         `Print the artwork onto the product: ${placement}.`,
         "Keep the product's shape, colour, material, camera angle, lighting, and background exactly as in image 1.",
         "Reproduce the artwork faithfully. Don't redraw it, restyle it, or add any text.",
+        "Make to capture the lighting, angle, material, and any imperfections that exist on the product, and include how they would manifest on the printed logo.",
         feedback ? `Customer feedback on the previous version, apply it: ${feedback}` : "",
     ].join("\n");
 
@@ -103,18 +104,9 @@ async function generateMockup(bundleId: string, input: z.infer<typeof inputSchem
         throw new FatalError(`The image model returned no image. Its reply: ${result.text || "(empty)"}`);
     }
 
-    const mockupUrl = await putMockupImage(bundleId, itemKey, image.uint8Array, image.mediaType);
+    const draftUrl = await putMockupImage(bundleId, itemKey, image.uint8Array, image.mediaType);
     return {
-        mockupUrl,
+        draftUrl,
         mediaType: image.mediaType,
     };
-}
-
-// Its own step, so a failed save retries without generating again. Safe to repeat: it overwrites.
-async function saveMockup(bundleId: string, itemKey: string, mockupUrl: string, creativeUrl: string) {
-    "use step";
-    await setMockup(bundleId, itemKey, {
-        mockupUrl,
-        creativeUrl,
-    });
 }

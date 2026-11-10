@@ -2,8 +2,16 @@ import { Redis } from '@upstash/redis'
 import { put } from '@vercel/blob'
 import { z } from 'zod'
 
+import { visitorCookieOptions } from './visitor'
+
 // Bundles: the record lives in Redis, images live in Blob.
 // Shared by the eve agent's tools and the /bundle page, so no `server-only` or Next imports.
+//
+// Each bundle has its own random id, in its URL. Bundles are public: anyone with the link can see one, and ask Eve
+// to change it. A visitor's list on /bundles is every bundle they've opened.
+//
+// A bundle is a list of slots from the approved concept. Each slot's product is saved separately, by the finder
+// working on that slot, so products show up one by one and parallel finders never overwrite each other.
 
 export enum ItemSource {
     Store = 'store',
@@ -12,8 +20,17 @@ export enum ItemSource {
 
 export enum BundleStatus {
     Draft = 'draft',
-    Confirmed = 'confirmed',
+    Approved = 'approved',
 }
+
+export const BundleId = z.uuid().describe('The bundle id, from the /bundle/<id> page the customer is on or from get_bundle')
+
+export const BundleSlot = z.object({
+    key: z.string().regex(/^[a-z0-9-]{1,40}$/).describe('Short stable slug, e.g. "water-bottle"'),
+    label: z.string().min(1).describe('What goes here, e.g. "20 oz insulated bottle" or "laptop tote"'),
+    source: z.enum(ItemSource).describe('store for a VerSell product, shop for anything else'),
+})
+export type BundleSlot = z.infer<typeof BundleSlot>
 
 export const BundleProduct = z.object({
     title: z.string().min(1),
@@ -28,7 +45,7 @@ export const BundleProduct = z.object({
 export type BundleProduct = z.infer<typeof BundleProduct>
 
 export const BundleItem = z.object({
-    key: z.string().regex(/^[a-z0-9-]{1,40}$/).describe('Short stable slug for this slot, e.g. "water-bottle"'),
+    key: z.string().regex(/^[a-z0-9-]{1,40}$/).describe('The slot key from the brief, e.g. "water-bottle"'),
     source: z.enum(ItemSource),
     product: BundleProduct,
     alternate: BundleProduct.optional().describe("Jev's runner-up for this slot, if there was one"),
@@ -41,10 +58,10 @@ export const Bundle = z.object({
     status: z.enum(BundleStatus),
     concept: z.string(),
     brief: z.string(),
-    items: z.array(BundleItem),
+    slots: z.array(BundleSlot),
     createdAt: z.string(),
     updatedAt: z.string(),
-    confirmedAt: z.string().optional(),
+    approvedAt: z.string().optional(),
 })
 export type Bundle = z.infer<typeof Bundle>
 
@@ -55,11 +72,15 @@ export const Mockup = z.object({
 })
 export type Mockup = z.infer<typeof Mockup>
 
-// Drafts clean themselves up. confirmBundle() removes the expiry, so confirmed bundles stay.
+// Drafts clean themselves up. approveBundle() removes the expiry, so approved bundles stay.
 const DRAFT_TTL_SECONDS = 7 * 24 * 60 * 60
 
 const bundleKey = (id: string) => `bundle:${id}`
+const itemsKey = (id: string) => `bundle:${id}:items`
 const mockupsKey = (id: string) => `bundle:${id}:mockups`
+const visitorBundlesKey = (visitorId: string) => `visitor:${visitorId}:bundles`
+
+const MAX_REMEMBERED_BUNDLES = 50
 
 // Created on first use so importing this file never needs the Redis env vars.
 // The Upstash connection uses the REDIS_STORAGE_ prefix, so Redis.fromEnv() wouldn't find it.
@@ -76,7 +97,20 @@ function redis() {
 
 export async function getBundle(id: string) {
     const value = await redis().get(bundleKey(id))
-    return value ? Bundle.parse(value) : null
+    // Bundles saved before slots existed don't parse. Like an expired draft, they're gone: the page says there's no
+    // bundle, and the concierge starts a new one.
+    const parsed = Bundle.safeParse(value)
+    return parsed.success ? parsed.data : null
+}
+
+/** Saved product per slot key. A slot with no entry is still being found. */
+export async function getItems(id: string) {
+    const stored = await redis().hgetall<Record<string, unknown>>(itemsKey(id))
+    const items: Record<string, BundleItem> = {}
+    for (const [slotKey, value] of Object.entries(stored ?? {})) {
+        items[slotKey] = BundleItem.parse(value)
+    }
+    return items
 }
 
 /** Latest mockup per item key. */
@@ -89,41 +123,157 @@ export async function getMockups(id: string) {
     return mockups
 }
 
-/** Saves the whole bundle as a draft. Any change after confirming needs a new confirmation. */
-export async function saveDraft(id: string, input: Pick<Bundle, 'concept' | 'brief' | 'items'>) {
+/** Starts a new bundle from an approved concept, with every slot still empty. Earlier bundles stay as they are. */
+export async function startBundle(input: Pick<Bundle, 'concept' | 'brief' | 'slots'>) {
     const now = new Date().toISOString()
-    const existing = await getBundle(id)
     const bundle: Bundle = {
-        id,
+        id: crypto.randomUUID(),
         status: BundleStatus.Draft,
         ...input,
-        createdAt: existing?.createdAt ?? now,
+        createdAt: now,
         updatedAt: now,
     }
-    await redis()
-        .multi()
-        .set(bundleKey(id), bundle, { ex: DRAFT_TTL_SECONDS })
-        .expire(mockupsKey(id), DRAFT_TTL_SECONDS)
-        .exec()
+    await redis().set(bundleKey(bundle.id), bundle, { ex: DRAFT_TTL_SECONDS })
     return bundle
 }
 
-export async function confirmBundle(id: string) {
+/** Puts a bundle at the top of the visitor's list, keeping the newest 50. The list lasts as long as their cookie. */
+export async function rememberBundle(visitorId: string, bundleId: string) {
+    const key = visitorBundlesKey(visitorId)
+    await redis()
+        .multi()
+        .zadd(key, {
+            score: Date.now(),
+            member: bundleId,
+        })
+        .zremrangebyrank(key, 0, -(MAX_REMEMBERED_BUNDLES + 1))
+        .expire(key, visitorCookieOptions.maxAge)
+        .exec()
+}
+
+/** The visitor's bundles, newest first. Expired drafts stay listed until trimmed; getBundle returns null for them. */
+export async function getRememberedBundleIds(visitorId: string) {
+    return redis().zrange<string[]>(visitorBundlesKey(visitorId), 0, -1, { rev: true })
+}
+
+/**
+ * Saves one slot's product. Only the hash field changes, so finders saving at the same time don't collide.
+ * A new product drops the slot's mockup, which showed the old one. Returns an error for the model to read.
+ */
+export async function saveItem(id: string, item: BundleItem) {
     const bundle = await getBundle(id)
     if (!bundle) {
-        return null
+        return { error: 'There is no bundle yet. The concept has to be approved first.' }
     }
-    const confirmed: Bundle = {
+    const slotKeys = bundle.slots.map((slot) => slot.key)
+    if (!slotKeys.includes(item.key)) {
+        return { error: `No slot "${item.key}". The slots are: ${slotKeys.join(', ')}.` }
+    }
+
+    const previous = await redis().hget<unknown>(itemsKey(id), item.key)
+    const previousProductId = previous ? BundleItem.parse(previous).product.productId : null
+    const tx = redis().multi().hset(itemsKey(id), { [item.key]: item })
+    if (previousProductId !== item.product.productId) {
+        tx.hdel(mockupsKey(id), item.key)
+    }
+    if (bundle.status === BundleStatus.Approved) {
+        reopen(tx, bundle)
+    } else {
+        expireAll(tx, id)
+    }
+    await tx.exec()
+    return { saved: true as const }
+}
+
+/** Slot changes from the concierge: add or drop slots, or swap a product for its alternate. */
+export async function updateBundle(id: string, change: { add: BundleSlot[]; remove: string[]; useAlternate: string[] }) {
+    const bundle = await getBundle(id)
+    if (!bundle) {
+        return { error: 'There is no bundle yet. The concept has to be approved first.' }
+    }
+    const items = await getItems(id)
+
+    const keptSlots = bundle.slots.filter((slot) => !change.remove.includes(slot.key))
+    for (const slot of change.add) {
+        if (keptSlots.some(({ key }) => key === slot.key)) {
+            return { error: `There is already a slot "${slot.key}". Pick another key.` }
+        }
+    }
+    for (const key of change.useAlternate) {
+        if (!items[key]?.alternate) {
+            return { error: `Slot "${key}" has no alternate to swap in.` }
+        }
+    }
+
+    const slots = [...keptSlots, ...change.add]
+    const tx = redis().multi()
+    if (change.remove.length > 0) {
+        tx.hdel(itemsKey(id), ...change.remove)
+        tx.hdel(mockupsKey(id), ...change.remove)
+    }
+    for (const key of change.useAlternate) {
+        const { product, alternate } = items[key]
+        const swapped: BundleItem = {
+            ...items[key],
+            product: alternate!,
+            alternate: product,
+        }
+        tx.hset(itemsKey(id), { [key]: swapped })
+        tx.hdel(mockupsKey(id), key)
+    }
+    reopen(tx, { ...bundle, slots })
+    await tx.exec()
+    return { slots }
+}
+
+/** The customer approved the products: approved bundles don't expire. Every slot needs its product first. */
+export async function approveBundle(id: string) {
+    const bundle = await getBundle(id)
+    if (!bundle) {
+        return { error: 'There is no bundle yet.' }
+    }
+    const items = await getItems(id)
+    const emptySlots = bundle.slots.filter((slot) => !items[slot.key])
+    if (emptySlots.length > 0) {
+        return { error: `These slots have no product yet: ${emptySlots.map((slot) => slot.key).join(', ')}.` }
+    }
+
+    const approved: Bundle = {
         ...bundle,
-        status: BundleStatus.Confirmed,
-        confirmedAt: new Date().toISOString(),
+        status: BundleStatus.Approved,
+        approvedAt: new Date().toISOString(),
     }
     await redis()
         .multi()
-        .set(bundleKey(id), confirmed) // no `ex`: confirmed bundles don't expire
+        .set(bundleKey(id), approved) // no `ex`: approved bundles don't expire
+        .persist(itemsKey(id))
         .persist(mockupsKey(id))
         .exec()
-    return confirmed
+    return {
+        bundle: approved,
+        items: bundle.slots.map((slot) => items[slot.key]),
+    }
+}
+
+type Transaction = ReturnType<Redis['multi']>
+
+// Any change makes the bundle a draft again: it needs a new approval, and it expires like any draft.
+function reopen(tx: Transaction, bundle: Bundle) {
+    const draft: Bundle = {
+        ...bundle,
+        status: BundleStatus.Draft,
+        approvedAt: undefined,
+        updatedAt: new Date().toISOString(),
+    }
+    tx.set(bundleKey(bundle.id), draft, { ex: DRAFT_TTL_SECONDS })
+    expireAll(tx, bundle.id)
+}
+
+// A draft's keys expire together, counted from its latest change.
+function expireAll(tx: Transaction, id: string) {
+    tx.expire(bundleKey(id), DRAFT_TTL_SECONDS)
+    tx.expire(itemsKey(id), DRAFT_TTL_SECONDS)
+    tx.expire(mockupsKey(id), DRAFT_TTL_SECONDS)
 }
 
 /**
@@ -135,7 +285,7 @@ export async function setMockup(id: string, itemKey: string, mockup: Omit<Mockup
         ...mockup,
         updatedAt: new Date().toISOString(),
     }
-    const ttl = await redis().ttl(bundleKey(id)) // -1: confirmed (no expiry), -2: no bundle yet
+    const ttl = await redis().ttl(bundleKey(id)) // -1: approved (no expiry), -2: no bundle yet
     const tx = redis().multi().hset(mockupsKey(id), { [itemKey]: value })
     if (ttl > 0) {
         tx.expire(mockupsKey(id), ttl)

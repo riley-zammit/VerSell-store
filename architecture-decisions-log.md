@@ -13,6 +13,7 @@ so changing this here wouldn't affect other layouts. Decision: Let's not do this
 
 # Caching layer
 - Original instinct was to cache at the data layer. Going to move this into components because it provides finer-grain control. Data layer is more flexible but we're not building a general-purpose WYSIWYG here, we're building a highly-optimized site. (We're building a ferrari not a minivan!) Might shift to caching to data layer if we were to allow non-developers to edit the UI via a pagebuilder, or potentially needed the API call in a client component.
+- Cache locally for mostly static components (since remote has an added cost of a network hop), cache remotely when the component cost is high (API call)
 
 # Progressive Enhancement
 - Defined here as slow network delays JS bundle. We assume Suspense still works becuase it's inline JS
@@ -21,22 +22,29 @@ so changing this here wouldn't affect other layouts. Decision: Let's not do this
 # Decisions
 ## Product
 - Use Grid: Fixed even widths, easier to size children consistently so there's no cls between skeleton and not
-- Add collection pages to handle large product collections and pagination more gracefully. use query params so its easier to leverage partial prerendering
+- Add collection pages to handle large product collections and pagination more gracefully.
 - Minimize page-level suspense boundaries. Even just a page-level title with an immediate suspense child is better UX
-- Keep productRow as generic instead of wrapping it in CategoryRow or FeaturedRow.
-- Cache at the function level to let us create multiple product layouts
 
 ## Cart
-- We may need to make a tradeoff between optimistic ui and progressive enhancement because for PE we should be using parallel routes rather than a client cart component (client component makes makes the no-js experience feel a no-op because we can't as cleanly redirect to /cart dynamically)
 - Originally used a parallel route for cart so we could server-render but Cart should be client component to feel snappy. The server round-trip to open the drawer felt slow. Once we moved that to the client, the parallel route started getting in the way: Prefetching the route, managing the state across routes - optimistic add was a pain
 
-- Keep only the API cart token in an httpOnly cookie. Cart views are server components reading `cache(getCart)`. The header streams the numeric badge and shows the plain cart icon while it resolves.
-- Add with JS: the form opens the drawer (`router.push('/cart')`), and `CartProvider` sends the add once that navigation commits. Sent in the submit event, the add joins the navigation's transition (React renders the router's latest state, the action's), which holds the drawer until the add lands. The drawer shows "Adding…" and any error from the provider. Errors never show under the form.
+- Keep only the API cart token in an httpOnly cookie. The root layout starts `getCartView()` without awaiting it and passes the promise to the client `CartProvider`; cart readers `use()` it inside Suspense. The header shows the plain cart icon while it resolves.
+- Add with JS: `onSubmit` opens the drawer (plain client state) and sends `addToCart` in a transition with an optimistic line. The drawer shows "Adding…" and any error from the provider. Errors never show under the form.
 - Add without JS: a second action (`addToCartAndRedirect`) redirects to `/cart`, or `/cart?error=<AddError>` on failure. A code, not API text, so crafted links can't put words on the page. A redirect from a Server Action can't open the drawer: the action only sends `Next-Url` when the tree already holds an intercepted route.
-- Quantity controls are one form per line (`useActionState(setCartQuantity)`), so they work without JS. Known gap: with `cacheComponents` the post-back HTML is a PPR resume, which doesn't receive `formState`, so a no-JS quantity *error* only appears after hydration. Successful changes render fine.
+- Quantity controls are one form per line, so they work without JS: before hydration the form posts to `setCartQuantityAndRedirect` and lands back on `/cart`. With JS, `onSubmit` sends `setCartQuantity` through `CartProvider` and shows the new quantity optimistically. Known gap: a no-JS quantity *error* isn't shown; the page just shows the unchanged cart.
 - The API doesn't enforce stock on add or update (an over-stock quantity returns 201/200). Checkout is an inert button.
 
 # Agent
+## Design
+- Wrap useEveAgent in a provider to have it available across the store
+
+
+## Features
+Bundle builder and customizer. 
+- Build bundles with products from Versell AND from our partner stores
+- Customize them all with your logo
+- Purchase
+
 “We’re having a company offsite next Friday. Use our website to create a three-product capsule collection for 20 contributors under $1,200. Keep it tasteful, generate print-ready artwork, build an approval page, and prepare the cart.”
 
  That single workflow can showcase:
@@ -49,3 +57,6 @@ so changing this here wouldn't affect other layouts. Decision: Let's not do this
  - Page deployment
  - Commerce actions
  - Email when complete?
+
+## Limitations and Decisons
+- Saving bundles should obviously rely on auth in production but for demo purposes don't force everyone to go through and create accounts just to try it out. That would make it much easier to manage stale mockups and persist the bundle (which right now is just a cookie). Currently they just pile up and we proabably need a job to prune the blob store

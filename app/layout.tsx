@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { Aleo, Geist } from "next/font/google";
+import { Suspense } from "react";
 import { CartDrawer } from "@/components/cart/cart-drawer";
 import { CartProvider } from "@/components/cart/cart-provider";
+import { AgentContextProvider } from "@/components/chat/agent-provider";
+import { ChatWindow, ChatWindowWithPathname } from "@/components/chat/chat-window";
+import { ChatWindowContextProvider } from "@/components/chat/chat-window-provider";
 import { Footer } from "@/components/layout/root/footer";
 import { Header } from "@/components/layout/root/header";
 import { getCartView } from "@/lib/cart";
@@ -32,17 +36,24 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
-    // Not awaited: the shell prerenders, and only the cart's readers (badge, drawer, /cart) wait, inside Suspense.
+    // Not awaited: the shell prerenders, and only the cart's readers (cart icon, drawer, /cart) wait, inside Suspense.
     const cartView = getCartView();
 
     return (
         <html lang="en" className={`${geistSans.variable} ${aleo.variable} h-full antialiased`}>
             <body className="flex min-h-full flex-col font-sans">
                 <CartProvider cartView={cartView}>
-                    <Header />
-                    <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 font-serif">{children}</main>
-                    <Footer />
-                    <CartDrawer />
+                    <AgentContextProvider>
+                        <ChatWindowContextProvider>
+                            <Header />
+                            <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 font-serif">{children}</main>
+                            <Footer />
+                            <CartDrawer />
+                            <Suspense fallback={<ChatWindow />}>
+                                <ChatWindowWithPathname />
+                            </Suspense>
+                        </ChatWindowContextProvider>
+                    </AgentContextProvider>
                 </CartProvider>
             </body>
         </html>

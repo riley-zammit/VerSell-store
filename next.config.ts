@@ -15,7 +15,11 @@ const nextConfig: NextConfig = {
     catalog: { stale: 300, revalidate: 600 }
   },
   images: {
-    remotePatterns: [new URL("https://i8qy5y6gxkdgdcv9.public.blob.vercel-storage.com/storefront/**")],
+    remotePatterns: [
+      new URL("https://i8qy5y6gxkdgdcv9.public.blob.vercel-storage.com/storefront/**"),
+      // Bundle mockups (PUBLIC_BLOB_STORE_ID). Bundle product photos skip the optimizer instead (app/bundle).
+      new URL("https://tmvlyqmefg7ungfu.public.blob.vercel-storage.com/bundles/**"),
+    ],
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 2678400, // 31 days: product image URLs are stable
   },

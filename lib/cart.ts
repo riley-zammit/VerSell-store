@@ -55,7 +55,6 @@ function withoutToken(data: ApiCart): Cart {
 function cartInit(token: string, init?: RequestInit): RequestInit {
     return {
         ...init,
-        cache: 'no-store',
         headers: {
             [CartHeader.Token]: token,
             ...init?.headers,
@@ -132,7 +131,6 @@ function stockMessage(quantity: number, inventory: Stock | null) {
 async function createCart() {
     const { data } = await apiFetch<ApiCart>(CartPath.Create, {
         method: 'POST',
-        cache: 'no-store',
     })
     await writeCartCookie(data.token)
     return data.token

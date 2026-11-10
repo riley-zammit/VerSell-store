@@ -5,12 +5,15 @@ import { gridClassName, Pagination, pageSchema } from "@/components/product/prod
 import { ProductCard, ProductCardSkeleton } from "@/components/product/product-card";
 import { SearchForm } from "@/components/search-form";
 import { SEARCH_LIMIT, searchProducts } from "@/lib/api";
+import { cacheLife } from "next/cache";
+
 
 export const metadata: Metadata = { title: "Search", openGraph: { title: "Search" } };
 
 // searchParams are read inside the results hole, so the shell prerenders.
 //alternatively we can suspend the whole page to clean up the component tree and pass plain query and page string props
-export default function Page({ searchParams }: PageProps<"/search">) {
+export default async function Page({ searchParams }: PageProps<"/search">) {
+
     return (
         <div>
             <h1 className="mb-8 text-4xl md:text-5xl">Search</h1>

@@ -7,7 +7,7 @@ import type { Product } from "../../../../lib/types";
 export default defineTool({
     description:
         "Search the VerSell store's own catalog (bottles, cups, and mugs). Results are already in the shape " +
-        "save_bundle expects for `product`, plus a description.",
+        "save_bundle_item expects for `product`, plus a description.",
     inputSchema: z.object({
         query: z.string().optional().describe("Words to match, e.g. 'insulated'. Omit to list everything."),
         category: z.enum(Category).optional(),

@@ -1,6 +1,7 @@
 import { GridSkeleton } from "@/components/product/product-grid";
 
 // Page should never hit since we generate static params for all collections
+// Have it here for a pre-404 skeleton which hits before the 404
 export default function Loading() {
     return (
         <section>

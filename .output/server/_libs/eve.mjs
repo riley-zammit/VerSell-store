@@ -3427,7 +3427,7 @@ function truncate$4(e, t) {
 	for (; Buffer.byteLength(n, `utf8`) > t && n.length > 0;) n = n.slice(0, -1);
 	return `${n}<…truncated>`;
 }
-const log$80 = createLogger(`harness.ai-sdk-warnings`);
+const log$81 = createLogger(`harness.ai-sdk-warnings`);
 function ensureAiSdkWarningLogger() {
 	globalThis.AI_SDK_LOG_WARNINGS === void 0 && (globalThis.AI_SDK_LOG_WARNINGS = process.env.AI_SDK_LOG_WARNINGS !== `false` && logAiSdkWarnings);
 }
@@ -3438,7 +3438,7 @@ const logAiSdkWarnings = ({ warnings: e, provider: t, model: n }) => {
 			provider: t,
 			warning: r
 		}, i = `message` in r ? r.message : r.details ?? r.feature;
-		r.type === `compatibility` ? log$80.info(i, e) : log$80.warn(i, e);
+		r.type === `compatibility` ? log$81.info(i, e) : log$81.warn(i, e);
 	}
 };
 function shouldCaptureInstrumentationContent(e) {
@@ -4091,7 +4091,7 @@ function instrumentationScope(e, t) {
 function traceStepIndex(e) {
 	return traceSteps.get(e);
 }
-const log$79 = createLogger(`harness.instrumentation-dispatch`);
+const log$80 = createLogger(`harness.instrumentation-dispatch`);
 function createInstrumentationDispatcher(e, t) {
 	let n = t.handlerTimeoutMs ?? 5e3, r = normalizeDispatchGroups(e), i = [
 		...r.serialBefore,
@@ -4100,7 +4100,7 @@ function createInstrumentationDispatcher(e, t) {
 	], a = /* @__PURE__ */ new Set();
 	function forTrace(e) {
 		let t = /* @__PURE__ */ new WeakMap(), o = new Map(i.map((t) => [t, resolveTracePolicy(t.tracePolicy, e, (e) => {
-			a.has(t) || (a.add(t), log$79.warn(`instrumentation provider trace policy failed`, {
+			a.has(t) || (a.add(t), log$80.warn(`instrumentation provider trace policy failed`, {
 				error: formatError(e),
 				provider: t.name
 			}));
@@ -4147,7 +4147,7 @@ function createInstrumentationDispatcher(e, t) {
 		capturesContent: !1,
 		forTrace,
 		async publish(e) {
-			o || (o = !0, log$79.debug(`instrumentation event published without trace binding`, { eventType: e.type }));
+			o || (o = !0, log$80.debug(`instrumentation event published without trace binding`, { eventType: e.type }));
 		}
 	};
 }
@@ -4211,13 +4211,13 @@ async function dispatchToProvider(e, t, n, r) {
 			await c(e.projectEvent === void 0 ? t : await e.projectEvent(t), { state: l });
 		}, n, () => {
 			l.revoke(), i && abandonInstrumentationState(s, t.idempotencyKey, a);
-		}) || log$79.warn(`instrumentation provider timed out`, {
+		}) || log$80.warn(`instrumentation provider timed out`, {
 			boundary: t.type,
 			provider: o,
 			timeoutMs: n
 		});
 	} catch (e) {
-		log$79.warn(`instrumentation provider failed`, {
+		log$80.warn(`instrumentation provider failed`, {
 			boundary: t.type,
 			error: formatError(e),
 			provider: o
@@ -4491,7 +4491,7 @@ function resolveInstrumentationProjection(e) {
 		}
 	}
 }
-const log$78 = createLogger(`harness.instrumentation-runtime-context`);
+const log$79 = createLogger(`harness.instrumentation-runtime-context`);
 function snapshotInstrumentationRuntimeContext(e) {
 	let t = e?.get(AuthKey) ?? null;
 	return {
@@ -4504,7 +4504,7 @@ function snapshotInstrumentationRuntimeContext(e) {
 function buildTelemetryRuntimeContext(e) {
 	if (e.providerResolvers !== void 0 && e.providerResolvers.length > 0) {
 		if (e.emissionState.runId === void 0) {
-			log$78.warn(`cannot resolve instrumentation context without a model run`);
+			log$79.warn(`cannot resolve instrumentation context without a model run`);
 			return;
 		}
 		return {
@@ -4546,7 +4546,7 @@ function filterAuthoredRuntimeContext(e, t) {
 	let n = {};
 	for (let [r, i] of Object.entries(e)) {
 		if (r.startsWith(`eve.`)) {
-			log$78.warn(`ignoring reserved instrumentation runtime context key`, {
+			log$79.warn(`ignoring reserved instrumentation runtime context key`, {
 				key: r,
 				source: t
 			});
@@ -4566,7 +4566,7 @@ function resolveProviderRuntimeContext(e) {
 				let t = buildInstrumentationModelStartedInput(e);
 				return i(t);
 			},
-			log: log$78,
+			log: log$79,
 			source: t
 		});
 		if (a === void 0) continue;
@@ -4585,7 +4585,7 @@ function snapshotForInstrumentation(e, t) {
 	if (e !== void 0) try {
 		return parseJsonValue(e);
 	} catch (e) {
-		log$78.warn(`dropping non-serializable instrumentation snapshot`, {
+		log$79.warn(`dropping non-serializable instrumentation snapshot`, {
 			error: formatError(e),
 			source: t
 		});
@@ -5991,7 +5991,7 @@ var B$26 = class {
 		n.embedSpans.clear(), n.rerankSpan &&= (S$27(n.rerankSpan.span, r), n.rerankSpan.span.end(), void 0), n.decisionSpan &&= (S$27(n.decisionSpan.span, r), n.decisionSpan.span.end(), void 0), S$27(n.rootSpan, r), n.rootSpan.end(), this.cleanupCallState(t.callId);
 	}
 };
-const log$77 = createLogger(`harness.ai-sdk-telemetry`);
+const log$78 = createLogger(`harness.ai-sdk-telemetry`);
 let registered = !1;
 let eveOtelIntegration;
 let errorSafeEveOtelIntegration;
@@ -6003,7 +6003,7 @@ function getRegisteredTelemetryIntegrations(e) {
 	let t = globalThis.AI_SDK_TELEMETRY_INTEGRATIONS ?? [], n = e?.excludeEveOtelIntegration === !0 ? t.filter((e) => e !== eveOtelIntegration) : t;
 	if (e?.sanitizeEveOtelErrors !== !0) return n;
 	let r = !1, i = n.map((e) => e !== eveOtelIntegration || errorSafeEveOtelIntegration === void 0 ? e : (r = !0, errorSafeEveOtelIntegration));
-	return !r && e.excludeEveOtelIntegration !== !0 && !warnedMissingEveOtelIntegration && (warnedMissingEveOtelIntegration = !0, log$77.warn(`could not sanitize eve's AI SDK OpenTelemetry integration`, { reason: eveOtelIntegration === void 0 ? `eve OpenTelemetry integration was not registered` : `registered integration identity did not match` })), i;
+	return !r && e.excludeEveOtelIntegration !== !0 && !warnedMissingEveOtelIntegration && (warnedMissingEveOtelIntegration = !0, log$78.warn(`could not sanitize eve's AI SDK OpenTelemetry integration`, { reason: eveOtelIntegration === void 0 ? `eve OpenTelemetry integration was not registered` : `registered integration identity did not match` })), i;
 }
 function telemetryWithoutErrorContent(e) {
 	let genericError = () => Error(`AI SDK operation failed`);
@@ -8297,7 +8297,7 @@ function turnSequence(e) {
 	let t = /^turn_(\d+)$/.exec(e);
 	return t === null ? 0 : Number(t[1]);
 }
-const log$76 = createLogger(`harness.prepare-trace-context`);
+const log$77 = createLogger(`harness.prepare-trace-context`);
 async function prepareTurnTraceContext(e) {
 	let t, { channelAudience: n, channelKind: r, channelType: i, traceSeed: a, ...o } = e.session;
 	if (!e.sessionStarted && e.instrumentation?.prepareSessionTrace !== void 0) try {
@@ -8328,7 +8328,7 @@ async function prepareTurnTraceContext(e) {
 	return a === void 0 && t?.decision !== void 0 && contextStorage.getStore()?.set(SessionTraceSeedKey, t), e.traceContext ?? t;
 }
 function warn(e, t) {
-	log$76.warn(`instrumentation trace preparation failed`, {
+	log$77.warn(`instrumentation trace preparation failed`, {
 		boundary: e,
 		error: formatError(t)
 	});
@@ -8446,7 +8446,7 @@ function readInputText(e) {
 function readAnswerText(e) {
 	if (typeof e?.message == `string`) return readInputText(e) ?? e.message;
 }
-const log$75 = createLogger(`channel.adapter`);
+const log$76 = createLogger(`channel.adapter`);
 function defaultDeliverResult(e) {
 	if (e.message !== void 0) return attachClientContext(attachInputText({
 		answers: e.answers,
@@ -8479,7 +8479,7 @@ async function callAdapterEventHandler(e, t, n) {
 	if (i !== void 0) try {
 		await i(t, n);
 	} catch (t) {
-		log$75.error(`adapter event handler threw — event swallowed`, {
+		log$76.error(`adapter event handler threw — event swallowed`, {
 			adapterKind: getAdapterKind(e),
 			eventType: r,
 			error: t
@@ -27528,28 +27528,28 @@ const localDefaults = defineProgrammaticAgentSource({
 	modules: [
 		{
 			logicalPath: `agent.ts`,
-			loadNamespace: () => import("./_25.mjs")
+			loadNamespace: () => import("./_27.mjs")
 		},
 		{
 			logicalPath: `sandbox.ts`,
 			semanticRevision: `eve:default-sandbox:v1`,
-			loadNamespace: () => import("./_30.mjs")
+			loadNamespace: () => import("./_32.mjs")
 		},
 		{
 			logicalPath: `tools/bash.ts`,
-			loadNamespace: () => import("./_36.mjs")
+			loadNamespace: () => import("./_38.mjs")
 		},
 		{
 			logicalPath: `tools/read_file.ts`,
-			loadNamespace: () => import("./_37.mjs")
-		},
-		{
-			logicalPath: `tools/write_file.ts`,
 			loadNamespace: () => import("./_39.mjs")
 		},
 		{
+			logicalPath: `tools/write_file.ts`,
+			loadNamespace: () => import("./_41.mjs")
+		},
+		{
 			logicalPath: `tools/web_fetch.ts`,
-			loadNamespace: () => import("./_38.mjs")
+			loadNamespace: () => import("./_40.mjs")
 		},
 		{
 			logicalPath: `tools/web_search.ts`,
@@ -27563,15 +27563,15 @@ const rootDefaults = defineProgrammaticAgentSource({
 	modules: [
 		{
 			logicalPath: `tools/agent.ts`,
-			loadNamespace: () => import("./_35.mjs")
+			loadNamespace: () => import("./_37.mjs")
 		},
 		{
 			logicalPath: `channels/eve.ts`,
-			loadNamespace: () => import("./_27.mjs")
+			loadNamespace: () => import("./_29.mjs")
 		},
 		{
 			logicalPath: `channels/home.ts`,
-			loadNamespace: () => import("./_28.mjs")
+			loadNamespace: () => import("./_30.mjs")
 		}
 	]
 });
@@ -27581,7 +27581,7 @@ const scheduleCollectionWrapperTemplateSource = defineProgrammaticAgentSource({
 	modules: [{
 		logicalPath: `tools/schedule-collection-wrapper.ts`,
 		loadNamespace: async (e) => {
-			let { loadScheduleCollectionWrapperNamespace: t } = await import("./_31.mjs");
+			let { loadScheduleCollectionWrapperNamespace: t } = await import("./_33.mjs");
 			return await t(e);
 		}
 	}]
@@ -27592,7 +27592,7 @@ const memoryWrapperTemplateSource = defineProgrammaticAgentSource({
 	modules: [{
 		logicalPath: `tools/memory-wrapper.ts`,
 		loadNamespace: async (e) => {
-			let { loadMemoryWrapperNamespace: t } = await import("./_29.mjs");
+			let { loadMemoryWrapperNamespace: t } = await import("./_31.mjs");
 			return await t(e);
 		}
 	}]
@@ -39286,7 +39286,7 @@ function isSubagentAdapterState(e) {
 	let t = e;
 	return typeof t.callId == `string` && t.callId.length > 0 && typeof t.parentContinuationToken == `string` && t.parentContinuationToken.length > 0 && typeof t.parentSessionId == `string` && typeof t.subagentName == `string` && t.subagentName.length > 0;
 }
-const log$74 = createLogger(`execution.subagent-adapter`);
+const log$75 = createLogger(`execution.subagent-adapter`);
 const SUBAGENT_ADAPTER = {
 	kind: "subagent",
 	async "interaction.opened"(e, t) {
@@ -39324,10 +39324,10 @@ async function relay$1(e, t) {
 }
 async function forwardToParentStep(e) {
 	try {
-		let { resumeHook: t } = await import("./_26.mjs");
+		let { resumeHook: t } = await import("./_28.mjs");
 		await t(e.parentContinuationToken, e.hookPayload);
 	} catch (t) {
-		throw log$74.warn(`failed to forward a child's interaction to its parent`, {
+		throw log$75.warn(`failed to forward a child's interaction to its parent`, {
 			callId: e.hookPayload.callId,
 			childSessionId: e.hookPayload.childSessionId,
 			errorId: createErrorId(),
@@ -39589,7 +39589,7 @@ function registerInstrumentationRuntime(e) {
 function getInstrumentationRuntime() {
 	return globalRuntime[INSTRUMENTATION_RUNTIME_KEY];
 }
-const log$73 = createLogger(`instrumentation.session-init`);
+const log$74 = createLogger(`instrumentation.session-init`);
 function initializeSessionInstrumentation(e) {
 	let t = getInstrumentationRuntime(), n = e.ctx.get(ParentTraceContextKey), r = readForwardedTraceAssertion(n?.forwardedTracePolicy), a = resolveConversationContext(e.ctx.get(ConversationContextKey), {
 		channelKind: e.ctx.get(ChannelInstrumentationKey)?.kind,
@@ -39604,7 +39604,7 @@ function initializeSessionInstrumentation(e) {
 		parentTraceContext: n,
 		runtime: t
 	});
-	if (o !== void 0 && (e.ctx.set(SessionTraceSeedKey, o), r !== void 0 && log$73.info(`resolved forwarded trace policy`, {
+	if (o !== void 0 && (e.ctx.set(SessionTraceSeedKey, o), r !== void 0 && log$74.info(`resolved forwarded trace policy`, {
 		ceilingEffective: o.decision?.action === `record` ? formatTraceContentCeiling(o.decision) : `drop`,
 		ceilingIn: formatTraceContentCeiling(r.ceiling),
 		originAudience: r.originAudience
@@ -45434,7 +45434,7 @@ const we$14 = {
 		return JSON.parse(t.decode(e));
 	}
 };
-const log$72 = createLogger(`harness.local-trace-span-processor`);
+const log$73 = createLogger(`harness.local-trace-span-processor`);
 function resolveLocalTraceStoreDirectory(e) {
 	return join(e, `.eve`, `traces`);
 }
@@ -45472,7 +45472,7 @@ var LocalTraceSpanProcessor = class {
 				traceDirectory: e
 			});
 		}).catch((e) => {
-			this.#n || (this.#n = !0, log$72.warn(`local trace persistence failed`, { error: formatError(e) }));
+			this.#n || (this.#n = !0, log$73.warn(`local trace persistence failed`, { error: formatError(e) }));
 		});
 	}
 	shutdown() {
@@ -45577,7 +45577,7 @@ var AgentTraceSpanProcessor = class {
 function isSpanLike(e) {
 	return typeof e == `object` && !!e && `attributes` in e && `spanContext` in e && typeof e.spanContext == `function`;
 }
-const log$71 = createLogger(`harness.local-trace-retention`);
+const log$72 = createLogger(`harness.local-trace-retention`);
 const LOCAL_TRACE_QUIESCENCE_MS = 3e5;
 const LOCAL_TRACE_MAX_AGE_MS = 6048e5;
 const LOCAL_TRACE_MAX_TOTAL_BYTES = 536870912;
@@ -45624,13 +45624,13 @@ function startPruning() {
 	pruneRequest.running = (async () => {
 		for (; pruneRequest.requested;) pruneRequest.requested = !1, report(await pruneLocalTraceStore(pruneRequest.input));
 	})().catch((e) => {
-		log$71.warn(`local trace retention failed`, { error: formatError(e) });
+		log$72.warn(`local trace retention failed`, { error: formatError(e) });
 	}).finally(() => {
 		pruneRequest.running = void 0, pruneRequest.requested && startPruning();
 	});
 }
 function report(e) {
-	e.removedTraces !== 0 && log$71.info(`pruned local traces`, {
+	e.removedTraces !== 0 && log$72.info(`pruned local traces`, {
 		reasons: e.reasons.join(`,`),
 		reclaimedBytes: e.reclaimedBytes,
 		removedTraces: e.removedTraces,
@@ -45704,7 +45704,7 @@ function readBound(e, t, n) {
 	let i = r.trim().toLowerCase();
 	if (i === `off` || i === `false`) return !1;
 	let a = Number(i);
-	return !Number.isFinite(a) || a < 0 ? (log$71.warn(`ignoring invalid local trace retention value`, {
+	return !Number.isFinite(a) || a < 0 ? (log$72.warn(`ignoring invalid local trace retention value`, {
 		fallback: n,
 		name: t,
 		value: r
@@ -45959,7 +45959,7 @@ function refreshStatus(e, t, n) {
 	i.code !== void 0 && (e.code = i.code), n.recordOutputs && i.message !== void 0 && (e.message = i.message);
 }
 const VERCEL_REQUEST_CONTEXT$1 = Symbol.for(`@vercel/request-context`);
-const log$70 = createLogger(`tracing.vercel-runtime-span-exporter`);
+const log$71 = createLogger(`tracing.vercel-runtime-span-exporter`);
 function vercelRuntimeSpanExporter() {
 	return {
 		export(e, t) {
@@ -45989,7 +45989,7 @@ function vercelRuntimeSpanProcessor() {
 		forceFlush: () => e.forceFlush?.() ?? Promise.resolve(),
 		onEnd(n) {
 			!t && isSampled(n) && e.export([n], (e) => {
-				e.code !== 0 && log$70.warn(`Agent Runs export failed`, { error: formatError(e.error ?? Error(`Span export failed.`)) });
+				e.code !== 0 && log$71.warn(`Agent Runs export failed`, { error: formatError(e.error ?? Error(`Span export failed.`)) });
 			});
 		},
 		onStart() {},
@@ -46005,7 +46005,7 @@ function isSampled(e) {
 	let n = Reflect.apply(t, e, []);
 	return typeof n.traceFlags == `number` && (n.traceFlags & E$31.SAMPLED) === E$31.SAMPLED;
 }
-const log$69 = createLogger(`tracing.export`);
+const log$70 = createLogger(`tracing.export`);
 const OTEL_DECLARATION = Symbol.for(`eve.instrumentation.otel`);
 const OTEL_INTEGRATION = Symbol.for(`eve.instrumentation.otel-integration`);
 function managedOtelIntegration(e = {}) {
@@ -46013,7 +46013,7 @@ function managedOtelIntegration(e = {}) {
 }
 function createOtelIntegration(e) {
 	assertNoRemovedContentOptions(e);
-	let t = e.spanProcessors ?? [], n = e.traceExporter === void 0 ? t : [...t, batchSpanProcessor(e.traceExporter, { diagnostic: (e, t) => log$69.warn(e, {
+	let t = e.spanProcessors ?? [], n = e.traceExporter === void 0 ? t : [...t, batchSpanProcessor(e.traceExporter, { diagnostic: (e, t) => log$70.warn(e, {
 		...t,
 		error: t.error === void 0 ? void 0 : formatError(t.error)
 	}) })];
@@ -50279,18 +50279,18 @@ var rh = m$17((e) => {
 	async function o() {
 		if (!a) switch (r.platform) {
 			case `darwin`:
-				a = (await import("./_20.mjs")).getMachineId;
+				a = (await import("./_22.mjs")).getMachineId;
 				break;
 			case `linux`:
-				a = (await import("./_21.mjs")).getMachineId;
-				break;
-			case `freebsd`:
-				a = (await import("./_19.mjs")).getMachineId;
-				break;
-			case `win32`:
 				a = (await import("./_23.mjs")).getMachineId;
 				break;
-			default: a = (await import("./_22.mjs")).getMachineId;
+			case `freebsd`:
+				a = (await import("./_21.mjs")).getMachineId;
+				break;
+			case `win32`:
+				a = (await import("./_25.mjs")).getMachineId;
+				break;
+			default: a = (await import("./_24.mjs")).getMachineId;
 		}
 		return a();
 	}
@@ -58131,7 +58131,7 @@ function captureOptionalPeerTracerProxy() {
 		return;
 	}
 }
-const log$68 = createLogger(`tracing.install-instrumentation-runtime`);
+const log$69 = createLogger(`tracing.install-instrumentation-runtime`);
 function installInstrumentationRuntime(e) {
 	let t = [], n = [], r, i, a, runInContext = (e, t) => t(), o;
 	if (e.collected.declared) {
@@ -58209,7 +58209,7 @@ function sessionReleaseProvider(e) {
 }
 async function settleAll(e) {
 	let t = await Promise.allSettled(e.map(async (e) => e()));
-	for (let e of t) e.status === `rejected` && log$68.warn(`instrumentation drain failed`, { error: formatError(e.reason) });
+	for (let e of t) e.status === `rejected` && log$69.warn(`instrumentation drain failed`, { error: formatError(e.reason) });
 }
 const INSTRUMENTATION_PROVIDERS_GLOBAL_KEY = Symbol.for(`eve.harness-instrumentation-providers`);
 const globalContainer = globalThis;
@@ -104787,7 +104787,7 @@ var Pt$7 = c$17(((n, r) => {
 			r = e;
 		}
 		try {
-			let [{ getTokenPayload: r, isExpired: i }, { refreshToken: a }] = await Promise.all([await import("./_16.mjs").then((e) => d$14(e.default)), await import("./_15.mjs").then((e) => d$14(e.default))]);
+			let [{ getTokenPayload: r, isExpired: i }, { refreshToken: a }] = await Promise.all([await import("./_18.mjs").then((e) => d$14(e.default)), await import("./_17.mjs").then((e) => d$14(e.default))]);
 			(!n || i(r(n), e?.expirationBufferMs)) && (await a(e), n = (0, g.getVercelOidcTokenSync)());
 		} catch (e) {
 			let t = r instanceof Error ? r.message : ``;
@@ -108381,7 +108381,7 @@ function Sr$4(e) {
 }
 var Cr$4 = d$14(t$10(), 1);
 async function wr$4() {
-	return await import("./_14.mjs");
+	return await import("./_16.mjs");
 }
 function Tr$4() {
 	return process.env.NODE_ENV !== `production` && ![`1`, `true`].includes(process.env.CI || ``) && process.stdout.isTTY && process.stdin.isTTY;
@@ -116879,7 +116879,7 @@ function gc(e, t, n) {
 		})()), e.hookToken)) {
 			let r = (async () => {
 				try {
-					let { resumeHook: n } = await import("./_12.mjs").then((e) => e.i);
+					let { resumeHook: n } = await import("./_14.mjs").then((e) => e.i);
 					await n(e.hookToken, {
 						aborted: !0,
 						reason: t
@@ -118851,7 +118851,7 @@ function t$8(e, t = 8) {
 	return Math.min(8, e ?? t);
 }
 function n$9(t) {
-	import("./_18.mjs").then((t) => f$30(t.default, 1)).then(({ waitUntil: e }) => {
+	import("./_20.mjs").then((t) => f$30(t.default, 1)).then(({ waitUntil: e }) => {
 		e(t);
 	});
 }
@@ -120556,7 +120556,7 @@ var m$9 = c$31(((e, t) => {
 	var d = r$9();
 	async function f() {
 		try {
-			return (await import("./_24.mjs").then((e) => (e.n(), e.r))).WebSocketServer;
+			return (await import("./_26.mjs").then((e) => (e.n(), e.r))).WebSocketServer;
 		} catch {
 			throw Error(`The "ws" package is required for experimental_upgradeWebSocket(). Install it with: npm install ws`);
 		}
@@ -132967,7 +132967,7 @@ function sc(e, t) {
 								...H,
 								type: `ready`
 							});
-							let { runWorkflowWithQuickJS: e } = await import("./_17.mjs"), t = await e({
+							let { runWorkflowWithQuickJS: e } = await import("./_19.mjs"), t = await e({
 								workflowCode: Ke,
 								workflowName: P,
 								workflowRun: U,
@@ -135018,35 +135018,17 @@ async function readV26Prefix(e, t, n, r) {
 		e.read(a, i);
 	}
 }
-const RESERVED_STATE_NAME_PREFIXES = [`eve.`, `eve:mount.`];
-function defineState(e, t) {
-	let n = RESERVED_STATE_NAME_PREFIXES.find((t) => e.startsWith(t));
-	if (n !== void 0) throw Error(`defineState() name "${e}" uses the reserved "${n}" prefix. Use an application-owned namespace instead.`);
-	return createStateHandle(e, t);
-}
 function mountedStateKeyName(e, t) {
 	return `eve:mount.v1:${encodeURIComponent(e)}:${encodeURIComponent(t)}`;
 }
-function createStateHandle(e, t) {
-	let n = new ContextKey(e);
-	return {
-		get() {
-			return loadContext().ensure(n, t);
-		},
-		update(e) {
-			let r = loadContext(), i = r.ensure(n, t);
-			r.set(n, e(i));
-		}
-	};
-}
-const log$67 = createLogger(`context.serialize`);
+const log$68 = createLogger(`context.serialize`);
 const STATE_LAYOUT_KEY = `eve.stateLayout`;
 function serializeContext(e) {
 	let t = {};
 	for (let [n, r] of e.entries()) try {
 		t[n.name] = n.codec ? n.codec.serialize(r) : r;
 	} catch (e) {
-		throw logError(log$67, `failed to serialize context key`, e, { key: n.name }), e;
+		throw logError(log$68, `failed to serialize context key`, e, { key: n.name }), e;
 	}
 	return (t[BundleKey.name] !== void 0 || Object.keys(t).some((e) => e.startsWith(`eve:mount.`))) && (t[STATE_LAYOUT_KEY] = 1), t;
 }
@@ -135063,13 +135045,13 @@ async function deserializeContext(e) {
 		if (r === void 0 || e === BundleKey.name || e === STATE_LAYOUT_KEY) continue;
 		let t = resolveKey(e);
 		if (t === void 0) {
-			log$67.warn(`dropping unknown context key during deserialization`, { key: e });
+			log$68.warn(`dropping unknown context key during deserialization`, { key: e });
 			continue;
 		}
 		try {
 			n.set(t, t.codec ? await t.codec.deserialize(r, n) : r);
 		} catch (t) {
-			throw logError(log$67, `failed to deserialize context key`, t, { key: e }), t;
+			throw logError(log$68, `failed to deserialize context key`, t, { key: e }), t;
 		}
 	}
 	return n;
@@ -135306,7 +135288,7 @@ async function servesSession(e, t) {
 	} catch {}
 	return n.runId === t.ownerRunId;
 }
-const log$66 = createLogger(`execution.session-inbox`);
+const log$67 = createLogger(`execution.session-inbox`);
 function strandedEndPolicy(e) {
 	return `stranded-${e}`;
 }
@@ -135322,7 +135304,7 @@ async function endStrandedSession(e, t, n, r) {
 	], {
 		ownerRunId: a,
 		sessionId: i
-	}), log$66.warn(`Reset stranded session`, {
+	}), log$67.warn(`Reset stranded session`, {
 		currentEveVersion: resolveInstalledPackageInfo().version,
 		previousEveVersion: e.eveVersion ?? `unknown`,
 		previousSessionId: i,
@@ -135375,9 +135357,9 @@ async function publishTerminalEvent(e, t, n) {
 		o = setTimeout(() => e(!1), 5e3);
 	});
 	try {
-		await Promise.race([a, s]) || log$66.warn(`Timed out finishing the stranded session stream`, { sessionId: e });
+		await Promise.race([a, s]) || log$67.warn(`Timed out finishing the stranded session stream`, { sessionId: e });
 	} catch {
-		log$66.warn(`Could not finish the stranded session stream`, { sessionId: e });
+		log$67.warn(`Could not finish the stranded session stream`, { sessionId: e });
 	} finally {
 		clearTimeout(o), i.releaseLock();
 	}
@@ -135396,7 +135378,7 @@ async function readRecordedView(e) {
 	try {
 		o = !await Promise.race([r.then(() => !0), a]);
 	} catch (t) {
-		log$66.warn(`Could not read the stranded session history`, {
+		log$67.warn(`Could not read the stranded session history`, {
 			error: t,
 			sessionId: e
 		});
@@ -135517,7 +135499,7 @@ function normalizeEveAttributes(e) {
 	for (let [n, r] of Object.entries(e)) r !== void 0 && (t[n] = truncateForTag(typeof r == `string` ? r : String(r)));
 	return t;
 }
-const log$65 = createLogger(`channel.instrumentation`);
+const log$66 = createLogger(`channel.instrumentation`);
 function buildChannelInstrumentationProjection(e) {
 	let { adapter: t, channelName: n, existingKind: r } = e;
 	return {
@@ -135542,7 +135524,7 @@ function resolveMetadata(e) {
 	if (t === void 0) return {};
 	let { audience: n, ...r } = resolveInstrumentationProjection({
 		invoke: () => t(e.state),
-		log: log$65,
+		log: log$66,
 		source: getAdapterKind(e)
 	}) ?? {};
 	return r;
@@ -135649,7 +135631,7 @@ function markAgentTraceContext(e) {
 }
 const EVE_PACKAGE_INFO = resolveInstalledPackageInfo();
 const STABLE_ID_BASE = EVE_PACKAGE_INFO.name;
-const log$64 = createLogger(`execution.workflow-runtime`);
+const log$65 = createLogger(`execution.workflow-runtime`);
 const workflowEntryReference = { workflowId: `workflow//${STABLE_ID_BASE}//workflowEntry` };
 const sessionTimeoutWorkflowReference = { workflowId: `workflow//${STABLE_ID_BASE}//sessionTimeoutWorkflow` };
 const workflowToolRunWorkflowReference = { workflowId: `workflow//${STABLE_ID_BASE}//workflowToolRunWorkflow` };
@@ -135715,7 +135697,7 @@ function createWorkflowRuntime(e) {
 			};
 			l !== void 0 && (e.experimental_retention = l), m = await startWorkflowOnDeployment(workflowEntryReference, [f], f.ownerDeploymentId, e);
 		} catch (e) {
-			throw log$64.error(`failed to start workflow run`, { error: formatCapabilityError(e, [t.continuationToken]) }), e;
+			throw log$65.error(`failed to start workflow run`, { error: formatCapabilityError(e, [t.continuationToken]) }), e;
 		}
 		let h = m.runId;
 		if (t.idempotencyKey !== void 0 && t.continuationToken !== void 0) {
@@ -135804,7 +135786,7 @@ async function dispatchWorkflowCommand(e, t) {
 		}
 		if (isInactiveCommandTarget(n)) return r && await isRunActive(e.sessionId) ? i : inactiveCommandResult(t);
 		let a = logicalSessionToken(e);
-		throw log$64.error(`failed to dispatch session command`, {
+		throw log$65.error(`failed to dispatch session command`, {
 			command: t.kind,
 			error: formatCapabilityError(n, [a, sessionInboxHookToken(a)])
 		}), n;
@@ -135890,7 +135872,7 @@ async function resolveContinuation(e, t) {
 		n = await resolveSessionInbox(e);
 	} catch (t) {
 		if (j$17.is(t)) return;
-		throw log$64.error(`failed to resolve session by continuation token`, { error: formatCapabilityError(t, [e]) }), t;
+		throw log$65.error(`failed to resolve session by continuation token`, { error: formatCapabilityError(t, [e]) }), t;
 	}
 	if (t?.runnable !== !0) return n;
 	try {
@@ -135979,7 +135961,7 @@ function identifyCommand(e) {
 		})
 	};
 }
-const log$63 = createLogger(`eve.channel`);
+const log$64 = createLogger(`eve.channel`);
 function healthResponse() {
 	return Response.json({
 		ok: !0,
@@ -136046,7 +136028,7 @@ async function resolveOnMessage(e) {
 			sessionId: e.sessionId
 		} }, e.message), n == null) throw TypeError(`eveChannel onMessage must return an auth result.`);
 	} catch (t) {
-		let n = logError(log$63, `onMessage handler failed`, t, { sessionId: e.sessionId });
+		let n = logError(log$64, `onMessage handler failed`, t, { sessionId: e.sessionId });
 		return Response.json({
 			error: `onMessage handler failed.`,
 			errorId: n,
@@ -136969,7 +136951,7 @@ async function handleExpiredLegacyAuthorization() {
 		error: `This authorization link predates the session upgrade. Request authorization again.`
 	}, { status: 410 });
 }
-const log$62 = createLogger(`channel.forwarded-principal`);
+const log$63 = createLogger(`channel.forwarded-principal`);
 const FORWARDED_BY_ATTRIBUTE = `eve:forwarded-by`;
 const attributeValueSchema = vc$1.union([vc$1.string(), vc$1.array(vc$1.string()).readonly()]);
 const forwardedPrincipalContextSchema = vc$1.object({
@@ -137006,7 +136988,7 @@ async function resolveForwardedPrincipal(e) {
 			initiator: i
 		} });
 	} catch (t) {
-		let n = logError(log$62, `trustedForwarders handler failed`, t, { forwarder: e.forwarder.principalId });
+		let n = logError(log$63, `trustedForwarders handler failed`, t, { forwarder: e.forwarder.principalId });
 		return Response.json({
 			error: `trustedForwarders handler failed.`,
 			errorId: n,
@@ -137935,7 +137917,7 @@ function sessionAuthFromResult(e) {
 function defaultEveAudience(e) {
 	return e.caller.type === `principal` && (e.caller.principal.kind === `user` || e.caller.principal.kind === `service` || e.caller.principal.kind === `runtime`) ? `private` : `unknown`;
 }
-const log$61 = createLogger(`eve.channel`);
+const log$62 = createLogger(`eve.channel`);
 const AGENT_INFO_PRINCIPAL_TYPES = /* @__PURE__ */ new Set([
 	`service`,
 	`runtime`,
@@ -138007,22 +137989,22 @@ function eveChannel(e) {
 				if (c instanceof Response) return c;
 				let l = c.callback === void 0 ? `absent` : readForwardedParentSessionBaggage(n.headers.get(`baggage`)), u;
 				if (typeof l == `object`) {
-					if (l.callId !== c.callback?.callId) log$61.warn(`ignoring remote parent lineage with a mismatched callback`, { forwarder: i.principalId });
+					if (l.callId !== c.callback?.callId) log$62.warn(`ignoring remote parent lineage with a mismatched callback`, { forwarder: i.principalId });
 					else {
 						let t = s.accepted;
 						if (!t && e.trustedForwarders !== void 0) try {
 							t = await e.trustedForwarders(a, {});
 						} catch (e) {
-							let t = logError(log$61, `trustedForwarders handler failed`, e, { forwarder: i.principalId });
+							let t = logError(log$62, `trustedForwarders handler failed`, e, { forwarder: i.principalId });
 							return Response.json({
 								error: `trustedForwarders handler failed.`,
 								errorId: t,
 								ok: !1
 							}, { status: 500 });
 						}
-						t ? u = l : log$61.warn(`ignoring remote parent lineage from an untrusted forwarder`, { forwarder: i.principalId });
+						t ? u = l : log$62.warn(`ignoring remote parent lineage from an untrusted forwarder`, { forwarder: i.principalId });
 					}
-				} else l === `malformed` && log$61.warn(`ignoring malformed remote parent lineage`, { forwarder: i.principalId });
+				} else l === `malformed` && log$62.warn(`ignoring malformed remote parent lineage`, { forwarder: i.principalId });
 				let d = c.callback === void 0 ? void 0 : parseTraceparent(n.headers.get(`traceparent`)), f = c.callback === void 0 ? void 0 : readAgentDispatchTraceContext(n.headers.get(`tracestate`), d) ?? d, p = checkUploadPolicy(c, t);
 				if (p !== null) return p;
 				if (c.operationId !== void 0 && s.auth.principalType === `anonymous`) return Response.json({
@@ -138047,7 +138029,7 @@ function eveChannel(e) {
 				_ !== void 0 && f !== void 0 && (v = {
 					...f,
 					forwardedTracePolicy: _
-				}), g === `malformed` ? log$61.warn(`using metadata-only policy for malformed forwarded audience baggage`, { forwarder: i.principalId }) : typeof g == `object` && (_ === void 0 ? log$61.warn(`ignoring forwarded trace policy without an accepted sampled principal`, { forwarder: i.principalId }) : log$61.info(`accepted forwarded trace policy`, {
+				}), g === `malformed` ? log$62.warn(`using metadata-only policy for malformed forwarded audience baggage`, { forwarder: i.principalId }) : typeof g == `object` && (_ === void 0 ? log$62.warn(`ignoring forwarded trace policy without an accepted sampled principal`, { forwarder: i.principalId }) : log$62.info(`accepted forwarded trace policy`, {
 					audience: g.originAudience,
 					ceiling: formatTraceContentCeiling(g.ceiling),
 					forwarder: i.principalId
@@ -138108,7 +138090,7 @@ function eveChannel(e) {
 						error: e.message,
 						ok: !1
 					}, { status: 400 });
-					let t = logError(log$61, `session-create request failed`, e);
+					let t = logError(log$62, `session-create request failed`, e);
 					return Response.json({
 						error: `Failed to create the session.`,
 						errorId: t,
@@ -138140,7 +138122,7 @@ function eveChannel(e) {
 						status: e.status === `accepted` ? 202 : 200
 					});
 				} catch (e) {
-					let t = logError(log$61, `session-prewarm request failed`, e, { sessionId: o });
+					let t = logError(log$62, `session-prewarm request failed`, e, { sessionId: o });
 					return Response.json({
 						ok: !1,
 						error: `Failed to prewarm the session.`,
@@ -138190,7 +138172,7 @@ function eveChannel(e) {
 				} catch (e) {
 					let t = sessionCommandErrorResponse(e);
 					if (t !== void 0) return t;
-					let n = logError(log$61, `session-message request failed`, e, { sessionId: o });
+					let n = logError(log$62, `session-message request failed`, e, { sessionId: o });
 					return Response.json({
 						error: `Failed to send the session message.`,
 						errorId: n,
@@ -138215,7 +138197,7 @@ function eveChannel(e) {
 				} catch (e) {
 					let t = sessionCommandErrorResponse(e);
 					if (t !== void 0) return t;
-					let n = logError(log$61, `cancel-turn request failed`, e, { sessionId: a });
+					let n = logError(log$62, `cancel-turn request failed`, e, { sessionId: a });
 					return Response.json({
 						error: `Failed to cancel the turn.`,
 						errorId: n,
@@ -138237,7 +138219,7 @@ function eveChannel(e) {
 				} catch (e) {
 					let t = sessionCommandErrorResponse(e);
 					if (t !== void 0) return t;
-					let n = logError(log$61, `session-compaction request failed`, e, { sessionId: a });
+					let n = logError(log$62, `session-compaction request failed`, e, { sessionId: a });
 					return Response.json({
 						error: `Failed to compact the session.`,
 						errorId: n,
@@ -138259,7 +138241,7 @@ function eveChannel(e) {
 				} catch (e) {
 					let t = sessionCommandErrorResponse(e);
 					if (t !== void 0) return t;
-					let n = logError(log$61, `session-clear request failed`, e, { sessionId: a });
+					let n = logError(log$62, `session-clear request failed`, e, { sessionId: a });
 					return Response.json({
 						error: `Failed to clear the session context.`,
 						errorId: n,
@@ -138284,7 +138266,7 @@ function eveChannel(e) {
 				} catch (e) {
 					let t = sessionCommandErrorResponse(e);
 					if (t !== void 0) return t;
-					let n = logError(log$61, `session-end request failed`, e, { sessionId: a });
+					let n = logError(log$62, `session-end request failed`, e, { sessionId: a });
 					return Response.json({
 						error: `Failed to end the session.`,
 						errorId: n,
@@ -138311,7 +138293,7 @@ function eveChannel(e) {
 						ok: !1
 					}, { status: 404 });
 				} catch (e) {
-					let t = logError(log$61, `tool-stub verification request failed`, e, { sessionId: i });
+					let t = logError(log$62, `tool-stub verification request failed`, e, { sessionId: i });
 					return Response.json({
 						error: `Failed to verify tool stubs.`,
 						errorId: t,
@@ -140451,7 +140433,7 @@ function digest(e, t) {
 function utf8Bytes(e) {
 	return Buffer.byteLength(e, `utf8`);
 }
-const log$60 = createLogger(`memory`);
+const log$61 = createLogger(`memory`);
 const instrumentations = /* @__PURE__ */ new WeakMap();
 function bindMemoryInstrumentation(e, t) {
 	t === void 0 ? instrumentations.delete(e) : instrumentations.set(e, t);
@@ -140508,7 +140490,7 @@ function memoryReactions(e) {
 					turn: r
 				}), { value: void 0 }));
 			} catch (t) {
-				log$60.error(`Completed-turn memory capture failed.`, {
+				log$61.error(`Completed-turn memory capture failed.`, {
 					error: t,
 					slot: e.slot
 				});
@@ -140615,7 +140597,7 @@ function compactionCapture(e) {
 					turn: o
 				}), { value: void 0 }));
 			} catch (t) {
-				log$60.error(`Memory capture before compaction failed; the compaction fails.`, {
+				log$61.error(`Memory capture before compaction failed; the compaction fails.`, {
 					error: t,
 					slot: e.slot
 				}), compactionCaptureFailures.has(n.ctx) || compactionCaptureFailures.set(n.ctx, t);
@@ -140670,7 +140652,7 @@ async function resolveMemoryScope(e, t) {
 	});
 }
 function disabled(e, t) {
-	return isEveDevEnvironment() && log$60.info(`Memory slot is disabled for this operation`, {
+	return isEveDevEnvironment() && log$61.info(`Memory slot is disabled for this operation`, {
 		resolver: t,
 		slot: e
 	}), null;
@@ -142254,7 +142236,7 @@ function withToolSessionRetention(e) {
 	};
 }
 function createVercelSandbox(e = {}) {
-	let t = e.loadSandboxModule ?? (async () => await import("./_10.mjs")), n = {
+	let t = e.loadSandboxModule ?? (async () => await import("./_12.mjs")), n = {
 		...e.createOptions,
 		env: {
 			...SANDBOX_AGENT_ENV,
@@ -157441,7 +157423,7 @@ function assertPublicHostname(e, t) {
 	if (isBlockedDestinationHost(e, t)) throw new UnsafeDestinationError();
 }
 async function createPublicDispatcher(e) {
-	let { Agent: t, Dispatcher1Wrapper: n } = await import("./_40.mjs").then((m) => /* @__PURE__ */ __toESM(m.default, 1));
+	let { Agent: t, Dispatcher1Wrapper: n } = await import("./_42.mjs").then((m) => /* @__PURE__ */ __toESM(m.default, 1));
 	return new n(new t({ connect: { lookup: createPublicLookup(e) } }));
 }
 function findUnsafeDestinationError(e) {
@@ -159910,7 +159892,7 @@ function formatSubagentPrompt(e) {
 function formatDescriptionLines(e) {
 	return e.trim().length > 0 ? [`Description: ${e}`] : [];
 }
-const log$59 = createLogger(`reactions.memos`);
+const log$60 = createLogger(`reactions.memos`);
 const RUNNING_GLOBAL_KEY = Symbol.for(`eve.reactions.memo-running`);
 function keyOf(e, t, n) {
 	let r = toJson(e ?? null, `"${t}": ${n} key`, { key: !0 }), i = Buffer.byteLength(canonicalJson$1(r));
@@ -159938,7 +159920,7 @@ function openMemos(e) {
 				abortSignal: e.abortSignal,
 				idempotencyKey: `${e.sessionId}:${e.scope}:memo:${o}`
 			}, l = Date.now(), u = toJson(await withContextScopeValue(RUNNING_GLOBAL_KEY, t, () => r(c)) ?? null, `"${e.label}": ctx.memo (key ${o}) returned`);
-			return assertResultSize(u, e.label, o), log$59.debug(`Ran a memo`, {
+			return assertResultSize(u, e.label, o), log$60.debug(`Ran a memo`, {
 				durationMs: Date.now() - l,
 				file: e.label,
 				key: o,
@@ -161962,7 +161944,7 @@ function isConnectionAuthorizationFailedError(e) {
 function resolveApprovalPolicy(e) {
 	return typeof e == `function` ? e : e.request;
 }
-const log$58 = createLogger(`harness.tool-model-output`);
+const log$59 = createLogger(`harness.tool-model-output`);
 const CONTENT_FILE_WARN_BYTES = 3145728;
 const UNSUPPORTED_FILE_DATA_TAGS = /* @__PURE__ */ new Set([`reference`, `text`]);
 const toolModelOutputPartSchema = vc$1.discriminatedUnion(`type`, [vc$1.object({
@@ -162057,7 +162039,7 @@ function assertSupportedFilePartData(e) {
 }
 function warnOversizedFilePayload(e, t, n) {
 	let r = Math.floor(e.length * 3 / 4);
-	r <= CONTENT_FILE_WARN_BYTES || log$58.warn(`content-part file payload exceeds the inline size guideline — it is persisted in history and re-sent on every subsequent model call`, {
+	r <= CONTENT_FILE_WARN_BYTES || log$59.warn(`content-part file payload exceeds the inline size guideline — it is persisted in history and re-sent on every subsequent model call`, {
 		estimatedBytes: r,
 		mediaType: t,
 		toolName: n,
@@ -162442,15 +162424,15 @@ async function resolveWebSearchProviderTool(e) {
 			return e.tools.browserbaseSearch();
 		}
 		case `openai`: {
-			let { openai: t } = await import("./_9.mjs");
+			let { openai: t } = await import("./_11.mjs");
 			return attachWebSearchOutputSchema(t.tools.webSearch({}), e);
 		}
 		case `anthropic`: {
-			let { anthropic: t } = await import("./_7.mjs");
+			let { anthropic: t } = await import("./_9.mjs");
 			return attachWebSearchOutputSchema(t.tools.webSearch_20250305(), e);
 		}
 		case `google`: {
-			let { google: t } = await import("./_8.mjs");
+			let { google: t } = await import("./_10.mjs");
 			return attachWebSearchOutputSchema(t.tools.googleSearch({}), e);
 		}
 		case `exa`: {
@@ -162472,7 +162454,7 @@ function attachWebSearchOutputSchema(e, t) {
 		outputSchema: jsonSchema(resolveWebSearchOutputSchema(t))
 	};
 }
-const log$57 = createLogger(`harness.tools`);
+const log$58 = createLogger(`harness.tools`);
 function buildToolSet(e) {
 	let t = {}, n = e.disabledProviderTools;
 	for (let r of e.tools.values()) n?.has(r.name) || (t[r.name] = tool({
@@ -162512,7 +162494,7 @@ async function buildToolSetWithProviderTools(e) {
 		let i = r.behavior?.handling;
 		if (i?.kind === `provider-tool` && r.execute === void 0 && !t?.has(r.name)) {
 			let t = resolveWebSearchBackend(e.profile, i);
-			t === null ? (log$57.debug(`model has no web search backend; leaving the tool out`, {
+			t === null ? (log$58.debug(`model has no web search backend; leaving the tool out`, {
 				gateway: e.profile.gateway,
 				modelProvider: e.profile.provider,
 				searchProvider: i.provider,
@@ -163382,7 +163364,7 @@ function getInvalidToolCallInputError(e) {
 		throw e;
 	}
 }
-const log$56 = createLogger(`harness.tool-loop`);
+const log$57 = createLogger(`harness.tool-loop`);
 const APPROVED_CALL_INTERRUPTED_MESSAGE = `The turn was cancelled while this approved tool call was running. It may have partially run; it was not retried.`;
 async function executeToolCall(e, t, n) {
 	let { callId: r, toolName: i, input: a } = e, { definition: o } = t, s = [], c = [], l = !1, u;
@@ -163475,7 +163457,7 @@ async function executeToolCall(e, t, n) {
 				toolCallId: r,
 				toolName: i,
 				type: `tool-error`
-			}, _), throwIfTurnAborted(t.abortSignal), logError(log$56, `tool execution failed`, e, {
+			}, _), throwIfTurnAborted(t.abortSignal), logError(log$57, `tool execution failed`, e, {
 				toolName: i,
 				toolCallId: r
 			}), p = !0, h = toError$1(e), f = h.message, m = modelFacingError(e);
@@ -163534,7 +163516,7 @@ async function executeToolCall(e, t, n) {
 			toolResults: c
 		};
 		let n = toError$1(e);
-		logError(log$56, `tool call failed`, e, {
+		logError(log$57, `tool call failed`, e, {
 			toolName: i,
 			toolCallId: r
 		}), await t.beforeResult?.(n);
@@ -164243,7 +164225,7 @@ async function handleApprovalResponsePolicyError(e) {
 const UNAUTHENTICATED_FEEDBACK = `Authentication is required to respond to this approval.`;
 const TEMPORARILY_UNAVAILABLE_REASON = `Approval authorization is temporarily unavailable. Please try again.`;
 const FAILED_REASON = `We couldn’t verify your response. Please try again.`;
-const log$55 = createLogger(`harness.hitl`);
+const log$56 = createLogger(`harness.hitl`);
 function checkResponders(e, t, n) {
 	let r = [], i = [], a = {}, o = /* @__PURE__ */ new Set();
 	for (let s of t?.answers ?? []) {
@@ -164389,7 +164371,7 @@ async function weigh(e) {
 	try {
 		t = await e.toolsOf(e.step);
 	} catch (t) {
-		return logError(log$55, `approval tools could not be restored`, t, { interactionId: e.request.interactionId }), {
+		return logError(log$56, `approval tools could not be restored`, t, { interactionId: e.request.interactionId }), {
 			kind: `failed`,
 			reason: TEMPORARILY_UNAVAILABLE_REASON
 		};
@@ -167322,7 +167304,7 @@ function continueTurnAuth(e, t) {
 	if (principalOf(t) !== principalOf(e)) throw Error(`A message from another principal cannot join a running turn. Gate it with isSteeringDelivery so it waits for the turn to end.`);
 	return t;
 }
-const log$54 = createLogger(`connection.events`);
+const log$55 = createLogger(`connection.events`);
 function connectionEventTraceContext(e) {
 	if (typeof e != `object` || !e) return;
 	let { traceId: t, spanId: n, traceFlags: r } = e;
@@ -167380,7 +167362,7 @@ async function withConnectionEventSpan(e, t) {
 			try {
 				return await t(n);
 			} catch (t) {
-				throw logError(log$54, `connection event operation failed`, connectionEventError(t), {
+				throw logError(log$55, `connection event operation failed`, connectionEventError(t), {
 					...o,
 					operation: e.operation
 				}), t;
@@ -167432,7 +167414,7 @@ async function withConnectionEventSpan(e, t) {
 		} catch (e) {
 			throw h.setAttribute(`eve.connection.event.outcome`, `failed`), h.fail(void 0, `connection_event_error`), e;
 		} finally {
-			h.end(), await n.forceFlush().catch(() => log$54.warn(`flushing connection event traces failed`));
+			h.end(), await n.forceFlush().catch(() => log$55.warn(`flushing connection event traces failed`));
 		}
 	});
 }
@@ -167533,7 +167515,7 @@ var ConnectionEventActions = class {
 		}));
 	}
 	async execute(e, t, n) {
-		let r = parseJsonObject(t), { ctx: i, principal: a, backend: o, sessionId: s, owner: c, executionPrincipal: l, caller: u } = this.scope(), { findConnectionEventOwner: d, startConnectionEventOwner: f, retireConnectionEventOwner: p } = await import("./_34.mjs");
+		let r = parseJsonObject(t), { ctx: i, principal: a, backend: o, sessionId: s, owner: c, executionPrincipal: l, caller: u } = this.scope(), { findConnectionEventOwner: d, startConnectionEventOwner: f, retireConnectionEventOwner: p } = await import("./_36.mjs");
 		if (e === GET || e === STOP) {
 			if (typeof r.id != `string`) throw Error(`id must be a subscription id.`);
 			let t = r.id, n = await d(t);
@@ -167967,7 +167949,7 @@ async function resolveHeadersDefinition(e, t) {
 async function resolveHeaderValue(e, t) {
 	return typeof e == `function` ? await e(t()) : await e;
 }
-const log$53 = createLogger(`framework.catalog-connections`);
+const log$54 = createLogger(`framework.catalog-connections`);
 async function completeConnectionSignIn(e, t) {
 	assertPendingSignInInstance(t);
 	let n = await interactiveAuthorization(t), r = createAuthorizationExecution();
@@ -167987,7 +167969,7 @@ async function listConnectionTools(e, { auth: t, client: n, scoped: r }) {
 		return isConnectionAuthorizationRequiredError(e) ? r === void 0 ? { failure: `"${i}" requires authorization and cannot start interactive sign-in.` } : t.isJustAuthorized(r) ? { failure: `Authorization failed for "${i}": the service rejected the token immediately after authorization.` } : {
 			authorization: r,
 			error: e
-		} : (log$53.warn(`failed to load connection tools`, {
+		} : (log$54.warn(`failed to load connection tools`, {
 			connection: i,
 			error: e
 		}), { failure: listingFailureMessage(i, e) });
@@ -168026,7 +168008,7 @@ async function listEventActions(e, t, n) {
 		return await Promise.race([t.metadata(), n]);
 	} catch (n) {
 		if (isConnectionAuthorizationRequiredError(n)) throw n;
-		return log$53.warn(`failed to discover connection events`, {
+		return log$54.warn(`failed to discover connection events`, {
 			connection: e,
 			error: n
 		}), t.recoveryMetadata();
@@ -168475,7 +168457,7 @@ function signInCandidate(e, t) {
 function clampInteger(e, t, n, r) {
 	return typeof e != `number` || !Number.isFinite(e) ? r : Math.min(n, Math.max(t, Math.trunc(e)));
 }
-const log$52 = createLogger(`dynamic-skills`);
+const log$53 = createLogger(`dynamic-skills`);
 function skillReaction(e) {
 	return {
 		contribute: (t) => {
@@ -168498,7 +168480,7 @@ function skillReaction(e) {
 }
 function dynamicSkillManifest(e) {
 	let t = {};
-	for (let { id: n, skills: r } of ownedSkills(e, (e, t, n) => log$52.error(`Dynamic skill "${e}" from "${t}" collides with "${n}".`))) r.length > 0 && (t[n] = r);
+	for (let { id: n, skills: r } of ownedSkills(e, (e, t, n) => log$53.error(`Dynamic skill "${e}" from "${t}" collides with "${n}".`))) r.length > 0 && (t[n] = r);
 	return t;
 }
 function ownedSkills(e, t) {
@@ -168635,7 +168617,7 @@ const SKILL_INPUT_SCHEMA = toInputSchema({
 	additionalProperties: !1
 });
 const ConnectionRegistryKey = new ContextKey(`eve.connectionRegistry`);
-const log$51 = createLogger(`dynamic-tools`);
+const log$52 = createLogger(`dynamic-tools`);
 function toolReaction(e) {
 	return {
 		contribute: (t, { ctx: n }) => {
@@ -168661,7 +168643,7 @@ function dynamicTools(e) {
 				version: a(o[e] ?? null)
 			};
 			if (t.has(r.name)) {
-				log$51.error(`Dynamic tool "${r.name}" from "${n}" collides with another dynamic tool.`);
+				log$52.error(`Dynamic tool "${r.name}" from "${n}" collides with another dynamic tool.`);
 				continue;
 			}
 			t.set(r.name, r);
@@ -168989,7 +168971,7 @@ function substituteServerVariables(e, t) {
 		return isObject$2(r) && typeof r.default == `string` ? r.default : e;
 	});
 }
-const log$50 = createLogger(`runtime.connections.openapi-client`);
+const log$51 = createLogger(`runtime.connections.openapi-client`);
 const SWAGGER_PARAMETER_SCHEMA_KEYS = [
 	`default`,
 	`enum`,
@@ -169066,7 +169048,7 @@ var OpenApiConnectionClient = class {
 		};
 	}
 	#a(e, t) {
-		log$50.warn(`omitting OpenAPI operation with an invalid input schema`, {
+		log$51.warn(`omitting OpenAPI operation with an invalid input schema`, {
 			connectionName: this.#n.connectionName,
 			error: t,
 			toolName: e
@@ -171536,7 +171518,7 @@ function truncateSnippet(e, t) {
 function decide(e, t, n) {
 	return t.reduce((t, r) => e.meet(t, r(n)), e.open);
 }
-const log$49 = createLogger(`harness.tool-loop`);
+const log$50 = createLogger(`harness.tool-loop`);
 const ALLOW_RETRY = {
 	delayMs: 0,
 	retry: !0
@@ -171571,7 +171553,7 @@ async function runModelCallWithRetries(e, t, n) {
 			});
 			if (!a.retry) throw e;
 			let { delayMs: o } = a;
-			log$49.warn(`model call failed transiently — retrying`, {
+			log$50.warn(`model call failed transiently — retrying`, {
 				attempt: i,
 				delayMs: o,
 				sessionId: t.sessionId,
@@ -171623,7 +171605,7 @@ let WARNED_ABOUT_TAG_FAILURE = !1;
 async function setEveAttributes(e) {
 	let t = normalizeEveAttributes(e);
 	if (Object.keys(t).length !== 0) try {
-		let { setAttributes: e } = await import("./_13.mjs");
+		let { setAttributes: e } = await import("./_15.mjs");
 		await e(t, { allowReservedAttributes: !0 });
 	} catch (e) {
 		if (isTerminalRunAttributeError(e)) return;
@@ -171731,7 +171713,7 @@ function mergeGatewaySessionId(e, t) {
 		}
 	};
 }
-const log$48 = createLogger(`harness.tool-loop`);
+const log$49 = createLogger(`harness.tool-loop`);
 function assertFixedPartFits(e) {
 	let t = e.requestEnvelopeTokens + e.protectedTokens;
 	if (t >= e.threshold) throw new CompactionOverLimitError(`The agent's system prompt, tools, memory and context take ~${Math.round(t)} tokens, over this model's ~${e.threshold}-token compaction limit. Shorten the instructions, remove tools or trim memory.`);
@@ -171796,7 +171778,7 @@ async function compactHistory(e) {
 			changeId: a,
 			error: t
 		});
-		n.length > 0 && await e.publish(n), logError(log$48, `manual session compaction failed`, t, { sessionId: e.session.sessionId });
+		n.length > 0 && await e.publish(n), logError(log$49, `manual session compaction failed`, t, { sessionId: e.session.sessionId });
 	}
 	let l = c === `failed` ? `compaction-failed` : void 0;
 	return await e.apply([fact(`delivery.settled`, {
@@ -172006,7 +171988,7 @@ function saveTransition(e, t) {
 function dropClosedRecords(e, t) {
 	return writeHitlState(e, {}, t.view);
 }
-const log$47 = createLogger(`hooks`);
+const log$48 = createLogger(`hooks`);
 function queueCommands(e, t, n, r) {
 	if (r.length === 0) return;
 	let i = readReactionsState(e), a = [...i.intents ?? []], { continuation: o } = i, s = activeTurnIdOf(currentProjection(e)), c = !1;
@@ -172044,7 +172026,7 @@ function takeIntents(e, t) {
 }
 function reportReactionFailure(e, t, n, r) {
 	let i = activeTurnIdOf(currentProjection(e)), a = toErrorMessage(n), o = `${t.kind === `memory` ? `Memory` : `Hook`} "${t.label}"`;
-	if (log$47.error(`${o} failed.`, {
+	if (log$48.error(`${o} failed.`, {
 		error: a,
 		occurrence: r,
 		turnId: i
@@ -172295,7 +172277,7 @@ async function buildReactions(e) {
 		reactions: r
 	};
 }
-const log$46 = createLogger(`reactions`);
+const log$47 = createLogger(`reactions`);
 const neverAborted = new AbortController().signal;
 async function runReactions(e, t) {
 	let { reactions: n } = await bundleReactions(e);
@@ -172341,7 +172323,7 @@ async function evaluateValues(e, t) {
 		} catch (e) {
 			throw failed$1(r, e);
 		}
-		a.changed && i.add(r.kind), log$46.debug(`Evaluated a dynamic value`, {
+		a.changed && i.add(r.kind), log$47.debug(`Evaluated a dynamic value`, {
 			changed: a.changed,
 			durationMs: Date.now() - n,
 			reaction: r.label
@@ -172350,7 +172332,7 @@ async function evaluateValues(e, t) {
 	for (let t of i) await r[t]?.(e);
 }
 function failed$1(e, t) {
-	return log$46.error(`Dynamic value "${e.label}" failed; the turn fails.`, {
+	return log$47.error(`Dynamic value "${e.label}" failed; the turn fails.`, {
 		error: toErrorMessage(t),
 		kind: e.kind
 	}), new ReactionFailedError(e.label, t);
@@ -172359,7 +172341,7 @@ async function restoreReactions(e, t = {}) {
 	let n = readReactionsState(e);
 	if (t.revision !== void 0 && t.revision !== n.revision) {
 		let r = n.revision !== void 0 && n.memos !== void 0;
-		r && log$46.info(`The session moved to another deployment; its memos run again.`);
+		r && log$47.info(`The session moved to another deployment; its memos run again.`);
 		let { memos: i, ...a } = n;
 		writeReactionsState(e, {
 			...r ? {
@@ -172383,7 +172365,7 @@ async function restoreReactions(e, t = {}) {
 				mode: `restore`
 			});
 		} catch (e) {
-			log$46.warn(`Dynamic value "${n.label}" didn't evaluate for this step.`, { error: toErrorMessage(e) });
+			log$47.warn(`Dynamic value "${n.label}" didn't evaluate for this step.`, { error: toErrorMessage(e) });
 		}
 	}
 }
@@ -172448,7 +172430,7 @@ async function evaluate(e, t, n) {
 		used: c
 	});
 	let d = readSlot(e, t.id), f = d?.digest === u;
-	!f && d !== void 0 && n.mode === `restore` && log$46.warn(`Dynamic value "${t.label}" offers something other than what the session was offered after a restart: code outside its memos answered differently. eve offers the new value from the next model call.`);
+	!f && d !== void 0 && n.mode === `restore` && log$47.warn(`Dynamic value "${t.label}" offers something other than what the session was offered after a restart: code outside its memos answered differently. eve offers the new value from the next model call.`);
 	let p = readReactionsState(e).latest[`*`] ?? 0, m = {
 		digest: u,
 		since: f ? d.since : p,
@@ -172472,9 +172454,9 @@ async function checkStable(e, t, n) {
 			memo: r.memo
 		});
 		if (digestOf(parseJsonValue((await t.contribute(await t.evaluate(i), i)).value ?? null)) === n.digest) return;
-		log$46.warn(`Dynamic value "${t.label}" returned something different when evaluated again with the same memos. Code outside a memo, such as Math.random() or Date.now() in a name or description, makes eve rebuild it before every model call; move it into a memo, or use ctx.now.`);
+		log$47.warn(`Dynamic value "${t.label}" returned something different when evaluated again with the same memos. Code outside a memo, such as Math.random() or Date.now() in a name or description, makes eve rebuild it before every model call; move it into a memo, or use ctx.now.`);
 	} catch (e) {
-		log$46.warn(`Dynamic value "${t.label}" failed when evaluated again with the same memos.`, { error: toErrorMessage(e) });
+		log$47.warn(`Dynamic value "${t.label}" failed when evaluated again with the same memos.`, { error: toErrorMessage(e) });
 	} finally {
 		r.close();
 	}
@@ -172631,7 +172613,7 @@ function refusal(e, t, n) {
 		message: t
 	});
 }
-const log$45 = createLogger(`harness.attachment-staging`);
+const log$46 = createLogger(`harness.attachment-staging`);
 const UNSAFE_FILENAME_CHARS = /[^\w.-]+/g;
 const CACHED_REF_BYTES_LIMIT = 67108864;
 const cachedRefBytes = /* @__PURE__ */ new Map();
@@ -172724,7 +172706,7 @@ async function activeSandbox(e) {
 	try {
 		return await e.open();
 	} catch (e) {
-		return log$45.warn(`session sandbox unavailable, degrading attachments to text`, { error: e }), null;
+		return log$46.warn(`session sandbox unavailable, degrading attachments to text`, { error: e }), null;
 	}
 }
 function replaceUnresolvedFileParts(e) {
@@ -172786,7 +172768,7 @@ async function stageToolOutputFiles(e, t) {
 				mediaType: r.mediaType
 			};
 		} catch (t) {
-			return log$45.warn(`sandbox write failed for a tool-result file, degrading it to text`, { error: t }), unstoredFileNote(e);
+			return log$46.warn(`sandbox write failed for a tool-result file, degrading it to text`, { error: t }), unstoredFileNote(e);
 		}
 	}));
 	return {
@@ -172848,11 +172830,11 @@ async function hydrateToolOutput(e, t) {
 async function readSandboxRefBytes(e, t) {
 	if (t === null) return null;
 	let n = await t.readBinaryFile({ path: e.path });
-	return n === null ? (log$45.warn(`sandbox-ref attachment bytes missing on hydration — degrading to text reference`, {
+	return n === null ? (log$46.warn(`sandbox-ref attachment bytes missing on hydration — degrading to text reference`, {
 		mediaType: e.mediaType,
 		path: e.path,
 		size: e.size
-	}), null) : n.byteLength !== e.size || sha256Prefix(n) !== basename(dirname(e.path)) ? (log$45.warn(`sandbox-ref attachment bytes changed since staging — degrading to text reference`, {
+	}), null) : n.byteLength !== e.size || sha256Prefix(n) !== basename(dirname(e.path)) ? (log$46.warn(`sandbox-ref attachment bytes changed since staging — degrading to text reference`, {
 		mediaType: e.mediaType,
 		path: e.path,
 		size: e.size
@@ -172917,7 +172899,7 @@ async function stageFilePart(e, t, n, r, i) {
 	let a = readFileData(e.data);
 	if (a.kind === `bytes`) return stageResolvedBytes(e, { bytes: a.bytes }, t, i);
 	if (a.kind === `reference`) return e;
-	if (a.kind === `unreadable`) return log$45.warn(`attachment data is not bytes, base64, or a URL — degrading to text part`, {
+	if (a.kind === `unreadable`) return log$46.warn(`attachment data is not bytes, base64, or a URL — degrading to text part`, {
 		filename: e.filename,
 		mediaType: e.mediaType
 	}), attachmentNote(e, `could not be read.`);
@@ -172926,7 +172908,7 @@ async function stageFilePart(e, t, n, r, i) {
 		o = await resolveLink(a.url, n, r);
 	} catch (t) {
 		if (!(t instanceof EveAttachmentError)) throw t;
-		return log$45.warn(`attachment resolver failed — degrading to text part`, {
+		return log$46.warn(`attachment resolver failed — degrading to text part`, {
 			adapterKind: t.adapterKind,
 			error: t.cause,
 			filename: e.filename,
@@ -173285,7 +173267,7 @@ function compactPrompt(e, t, n) {
 	}
 	t.messages = n;
 }
-const log$44 = createLogger(`harness.step`);
+const log$45 = createLogger(`harness.step`);
 function createStep(e) {
 	let { ctx: t, live: n } = e, r = t?.get(ParentSessionKey) !== void 0 || t?.get(SessionCallbackKey) !== void 0, i = {
 		session: e.session,
@@ -173357,7 +173339,7 @@ async function failTurnForReaction(e) {
 async function failTurn(e, t, n) {
 	throwIfTurnAborted(e.config.abortSignal), e.instrumentation?.recordError(t);
 	let r = toErrorMessage(t), i = createErrorId();
-	return log$44.error(`turn failed`, {
+	return log$45.error(`turn failed`, {
 		code: n,
 		error: t,
 		errorId: i,
@@ -173383,7 +173365,7 @@ async function failBoundaryEvent(e, t) {
 async function failModelSelection(e, t) {
 	if (throwIfTurnAborted(e.config.abortSignal), isTurnCancellation(t) || (e.instrumentation?.recordError(t), e.emit === void 0)) throw t;
 	let n = createErrorId(), r = toErrorMessage(t), { session: i } = e;
-	return log$44.error(`model selection failed terminally`, {
+	return log$45.error(`model selection failed terminally`, {
 		error: t,
 		errorId: n,
 		sessionId: i.sessionId,
@@ -173475,7 +173457,7 @@ function* causeChainMessages(e) {
 		return;
 	}
 }
-const log$43 = createLogger(`harness.tool-loop`);
+const log$44 = createLogger(`harness.tool-loop`);
 function modelCallErrorInfo(e) {
 	return {
 		code: `MODEL_CALL_FAILED`,
@@ -173489,7 +173471,7 @@ async function reportModelCallFailure(e, t) {
 		sessionId: n,
 		turnId: r
 	}, o = extractWorkflowStreamWriteErrorDetails(t);
-	if (o !== null) return log$43.error(`workflow stream write failed — parking session for retry by the user`, {
+	if (o !== null) return log$44.error(`workflow stream write failed — parking session for retry by the user`, {
 		...o,
 		...a,
 		error: t
@@ -173520,10 +173502,10 @@ async function reportModelCallFailure(e, t) {
 		...d,
 		...s.hint !== void 0 && { hint: s.hint }
 	}, p = classifyModelCallError(t) === `terminal`;
-	return p && s !== null ? log$43.error(`${s.name}: ${s.message}`, {
+	return p && s !== null ? log$44.error(`${s.name}: ${s.message}`, {
 		...a,
 		hint: s.hint
-	}) : log$43.error(c?.message ?? (p ? `model call failed terminally` : `model call failed — parking session for retry by the user`), s !== null || c !== null ? {
+	}) : log$44.error(c?.message ?? (p ? `model call failed terminally` : `model call failed — parking session for retry by the user`), s !== null || c !== null ? {
 		...a,
 		details: d
 	} : {
@@ -173558,7 +173540,7 @@ async function reportModelCallFailure(e, t) {
 }
 async function reportCompactionFailure(e, t) {
 	let { sessionId: n } = e.session;
-	return log$43.error(t.message, {
+	return log$44.error(t.message, {
 		sessionId: n,
 		turnId: e.position().turnId
 	}), await e.apply(fail(e.view(), {
@@ -173683,12 +173665,12 @@ function frameworkToolNames(e) {
 		e.get("eve:load-skill")
 	].flatMap((e) => e?.frameworkTool === !0 ? [e.name] : []));
 }
-const log$42 = createLogger(`harness.tool-loop`);
+const log$43 = createLogger(`harness.tool-loop`);
 function recoverModelCall(e, t, n) {
 	if (t.retryReason === void 0) {
 		if (t.disabledProviderTools === void 0) {
 			let t = extractUnsupportedProviderToolTypes(e), r = [...new Set(t.flatMap((e) => resolveFrameworkToolFromUpstreamType(e) ?? []))];
-			if (r.length > 0) return log$42.warn(`disabling unsupported provider tool(s); retrying step once`, {
+			if (r.length > 0) return log$43.warn(`disabling unsupported provider tool(s); retrying step once`, {
 				...n,
 				disabled: r,
 				upstreamTypes: t
@@ -173697,7 +173679,7 @@ function recoverModelCall(e, t, n) {
 				extraSystemNote: buildDisabledToolNote(r)
 			};
 		}
-		if (e instanceof EmptyModelResponseError) return log$42.warn(`empty model response; reissuing the model call once`, n), {
+		if (e instanceof EmptyModelResponseError) return log$43.warn(`empty model response; reissuing the model call once`, n), {
 			...t,
 			retryReason: `empty-response`,
 			trailingUserNote: EMPTY_RESPONSE_NUDGE
@@ -174523,7 +174505,7 @@ function readGatewayMetadata(e) {
 	return t && typeof t == `object` && !Array.isArray(t) ? t : void 0;
 }
 const environment$1 = process.env.NODE_ENV ?? `unknown`;
-const log$41 = createLogger(`harness.tool-loop`);
+const log$42 = createLogger(`harness.tool-loop`);
 const MODEL_OUTPUT_TIMEOUT_MS = 6e5;
 var ModelCaller = class {
 	profile;
@@ -174715,7 +174697,7 @@ var ModelCaller = class {
 				}));
 			},
 			onError(e) {
-				n.interrupted || summarizeKnownError(e.error)?.tags.includes(`config`) !== !0 && logError(log$41, `tool-loop stream error`, e.error);
+				n.interrupted || summarizeKnownError(e.error)?.tags.includes(`config`) !== !0 && logError(log$42, `tool-loop stream error`, e.error);
 			},
 			onStepEnd: d.onStepEnd,
 			onStepStart: d.onStepStart,
@@ -174794,7 +174776,7 @@ function assertUsableResponse(e, t, n) {
 function isAbortError(e) {
 	return e instanceof Error && (e.name === `AbortError` || e.name === `TimeoutError`);
 }
-const log$40 = createLogger(`harness.tool-loop`);
+const log$41 = createLogger(`harness.tool-loop`);
 function getInvalidToolCallInputErrors(e) {
 	let t = [];
 	for (let n of e.toolCalls) {
@@ -174914,7 +174896,7 @@ async function callEndsTurn(e, t, n) {
 	try {
 		return await e(t) === !0;
 	} catch (e) {
-		return log$40.warn(`endsTurn threw; continuing the turn`, {
+		return log$41.warn(`endsTurn threw; continuing the turn`, {
 			callId: n.toolCallId,
 			error: e,
 			toolName: n.toolName
@@ -175185,7 +175167,7 @@ function deliveriesOf(...e) {
 function hasStepInput(e) {
 	return e === void 0 ? !1 : e.message !== void 0 || (e.answers?.length ?? 0) > 0;
 }
-const log$39 = createLogger(`execution.node-step`);
+const log$40 = createLogger(`execution.node-step`);
 function createExecutionNodeStep(e) {
 	let t = createRuntimeModelResolver(e.modelResolutionScope), n = createNodeHarnessTools({ node: e.node }), r = e.instrumentation, i = r?.prepareExecution(), a = createToolLoopHarness({
 		steeringSignal: e.steeringSignal,
@@ -175243,7 +175225,7 @@ function createNodeHarnessTools(e) {
 }
 function resolveHarnessToolDefinition(e) {
 	let t = findRegisteredRuntimeTool(e.node.toolRegistry, e.tool.name), n = workflowIdForHandling(e.tool.behavior?.handling);
-	return n === void 0 ? t === null ? (log$39.warn(`declared tool is not registered — omitting from toolset`, {
+	return n === void 0 ? t === null ? (log$40.warn(`declared tool is not registered — omitting from toolset`, {
 		toolName: e.tool.name,
 		nodeId: e.node.nodeId
 	}), null) : createRegisteredHarnessToolDefinition({
@@ -175348,7 +175330,7 @@ function isSandboxPreparedArtifact(e) {
 	return e === null || typeof e == `boolean` || typeof e == `number` || typeof e == `string` ? !0 : Array.isArray(e) ? e.every(isSandboxPreparedArtifact) : typeof e == `object` && !!e && Object.values(e).every(isSandboxPreparedArtifact);
 }
 const pendingSandboxStarts = /* @__PURE__ */ new Map();
-const log$38 = createLogger(`execution.sandbox`);
+const log$39 = createLogger(`execution.sandbox`);
 async function ensureSandboxAccess(e) {
 	let t = e.registry.sandbox, n = t === null ? void 0 : owningSandboxDefinition(t), r = resolvePersistedSandboxSessionState(e.state?.session, n?.kind === `independent` ? getSandboxEnvironmentRuntime(n.environment) : void 0), i, a, o, s, c = e.shutdownTracking ?? `session`, l = getRuntimeCompiledArtifactsSandboxAppRoot(e.compiledArtifactsSource) ?? process.cwd(), captured = () => ({ session: r });
 	if (t === null) return {
@@ -175450,7 +175432,7 @@ async function ensureSandboxAccess(e) {
 			return await resumePersisted(a);
 		} catch (n) {
 			if (!SandboxSessionGoneError.is(n) || t.resumeOnly) throw n;
-			log$38.warn(`session sandbox is gone, starting a fresh one`, {
+			log$39.warn(`session sandbox is gone, starting a fresh one`, {
 				error: n,
 				providerName: r.providerName,
 				sessionId: e.sessionId
@@ -175499,7 +175481,7 @@ async function ensureSandboxAccess(e) {
 	let f = Promise.resolve();
 	function enqueue(t, n = { retry: !0 }) {
 		let report = (t) => {
-			log$38.warn(`background sandbox preparation failed; it runs again when it is needed`, {
+			log$39.warn(`background sandbox preparation failed; it runs again when it is needed`, {
 				error: t,
 				sessionId: e.sessionId
 			});
@@ -175543,7 +175525,7 @@ async function ensureSandboxAccess(e) {
 		async end(t) {
 			if (e.ownsSandbox === !1) return;
 			await f, s !== void 0 && await s.catch(() => void 0), await i?.close().catch((t) => {
-				log$38.warn(`failed to close a sandbox connection at session end`, {
+				log$39.warn(`failed to close a sandbox connection at session end`, {
 					error: t,
 					sessionId: e.sessionId
 				});
@@ -175604,7 +175586,7 @@ async function ensureSandboxAccess(e) {
 			a = createConnectionSession(r);
 		} catch (t) {
 			throw await r.close?.().catch((t) => {
-				log$38.warn(`failed to close a sandbox connection eve could not use`, {
+				log$39.warn(`failed to close a sandbox connection eve could not use`, {
 					error: t,
 					sessionId: e.sessionId
 				});
@@ -175648,7 +175630,7 @@ function once(e) {
 		throw t = void 0, e;
 	});
 }
-const log$37 = createLogger(`invoke-tool`);
+const log$38 = createLogger(`invoke-tool`);
 const agentTelemetry = () => ve$17({
 	tracerName: `eve.agent`,
 	mapping: eveOutputMapping()
@@ -175659,7 +175641,7 @@ async function withInvokeToolSpan(e, t) {
 		return await G$23.with(n, () => traced(e, n, t));
 	} finally {
 		await r?.forceFlush().catch((e) => {
-			log$37.warn(`flushing a tool call's trace failed`, { error: formatError(e) });
+			log$38.warn(`flushing a tool call's trace failed`, { error: formatError(e) });
 		});
 	}
 }
@@ -175686,7 +175668,7 @@ async function traced(e, t, n) {
 	let u = resolveTracePolicy(l.tracePolicy, {
 		agentName: e.agentName,
 		...a
-	}, (e) => log$37.warn(`tracePolicy threw; dropping the tool call's trace`, { error: formatError(e) }));
+	}, (e) => log$38.warn(`tracePolicy threw; dropping the tool call's trace`, { error: formatError(e) }));
 	if (u.action === `drop`) return await i.suppressed(() => c.run(n, void 0));
 	let d = applyLiveDeliveryAudienceCeiling({
 		...u,
@@ -175811,7 +175793,7 @@ function toolCallEvents(e, t, n) {
 function setDefined(e, t) {
 	for (let [n, r] of Object.entries(t)) r !== void 0 && e.setAttribute(n, r);
 }
-const log$36 = createLogger(`invoke-tool`);
+const log$37 = createLogger(`invoke-tool`);
 function ineligibility(e, t) {
 	if (!isInvocableCompiledTool(e, t)) return compiledToolOwner(e, t).kind === `framework` ? `it is a framework tool, which needs a conversation` : t.behavior?.handling === void 0 ? `it has no server-side execute` : `the harness or the model provider runs it, not its execute`;
 }
@@ -175872,7 +175854,7 @@ async function runInvocation(e) {
 		}));
 	} finally {
 		await l.release().catch((e) => {
-			logError(log$36, `failed to release a call's sandbox`, e, {
+			logError(log$37, `failed to release a call's sandbox`, e, {
 				sessionId: s,
 				toolName: r
 			});
@@ -176017,7 +175999,7 @@ function failed(e, t = `TOOL_FAILED`) {
 	};
 }
 function failedFromError(e, t, n) {
-	let r = G$23.with($$23.deleteSpan(G$23.active()), () => logError(log$36, `invokeTool ${n}`, e, { toolName: t }));
+	let r = G$23.with($$23.deleteSpan(G$23.active()), () => logError(log$37, `invokeTool ${n}`, e, { toolName: t }));
 	return {
 		outcome: `failed`,
 		error: {
@@ -176055,7 +176037,7 @@ async function loadInvokeToolRuntime(e) {
 		tools: createNodeHarnessTools({ node: i })
 	};
 }
-const log$35 = createLogger(`channel.dispatch`);
+const log$36 = createLogger(`channel.dispatch`);
 async function dispatchChannelRequest(e, t, n) {
 	let r = getRouterParams(e, { decode: !0 });
 	return await traceChannelRequest({
@@ -176093,7 +176075,7 @@ async function dispatchChannelRequest(e, t, n) {
 		} catch (e) {
 			let n = sessionCommandErrorResponse(e);
 			if (n !== void 0) return n;
-			let r = logError(log$35, `channel handler threw`, e, {
+			let r = logError(log$36, `channel handler threw`, e, {
 				routeKey: t,
 				channel: s.name
 			});
@@ -176120,7 +176102,7 @@ async function withDevelopmentVercelOidcContext(e, t, n) {
 async function buildRouteArgs(e) {
 	let { bundle: t, channel: n, channelKind: r, config: i, event: a, params: o, requestTraceContext: s } = e, c = n.name, l = readVercelRequestId(a.req.headers), u = extractRequestIp(a, i), waitUntil = (t) => {
 		a.waitUntil(Promise.resolve(t).catch((t) => {
-			logError(log$35, `channel background task failed`, t, {
+			logError(log$36, `channel background task failed`, t, {
 				routeKey: e.routeKey,
 				channel: c
 			});
@@ -176163,7 +176145,7 @@ async function buildRouteArgs(e) {
 		to: h,
 		waitUntil
 	}, async () => {
-		let { handleAgentInfoRequest: e } = await import("./_32.mjs");
+		let { handleAgentInfoRequest: e } = await import("./_34.mjs");
 		return await e(i);
 	}), c), { agentName: t.agentName }), async (e) => {
 		let { deliveryId: n, ...r } = e, i = createChannelDeliveryMetadata(f), a = n === void 0 ? i : {
@@ -182647,7 +182629,7 @@ function formatInboundRichTextLink(e, t) {
 		throw n;
 	}
 }
-const log$34 = createLogger(`slack.code-channel`);
+const log$35 = createLogger(`slack.code-channel`);
 const codeChannelCache = /* @__PURE__ */ new Map();
 async function isSlackCodeChannel(e, t) {
 	let n = codeChannelCache.get(e);
@@ -182656,13 +182638,13 @@ async function isSlackCodeChannel(e, t) {
 	let r;
 	try {
 		let n = await t(`conversations.info`, { channel: e });
-		if (n.ok !== !0) return log$34.error(n.error === `missing_scope` ? `conversations.info needs the channels:read and groups:read scopes to detect code channels; reinstall the Slack app` : `conversations.info failed; treating the channel as an ordinary channel`, {
+		if (n.ok !== !0) return log$35.error(n.error === `missing_scope` ? `conversations.info needs the channels:read and groups:read scopes to detect code channels; reinstall the Slack app` : `conversations.info failed; treating the channel as an ordinary channel`, {
 			channelId: e,
 			error: n.error
 		}), cacheLookup(e, { failedAtMs: Date.now() }), !1;
 		r = n.channel?.properties?.record_channel?.record_type === `agent_channel`;
 	} catch (t) {
-		return logError(log$34, `conversations.info threw; treating the channel as an ordinary channel`, t, { channelId: e }), cacheLookup(e, { failedAtMs: Date.now() }), !1;
+		return logError(log$35, `conversations.info threw; treating the channel as an ordinary channel`, t, { channelId: e }), cacheLookup(e, { failedAtMs: Date.now() }), !1;
 	}
 	return cacheLookup(e, r), r;
 }
@@ -182721,12 +182703,12 @@ async function setSlackCodeChannelStatus(e, t, n) {
 			channel_id: t,
 			status: n
 		});
-		r.ok !== !0 && log$34.warn(`agents.sessions.setStatus returned not-ok`, {
+		r.ok !== !0 && log$35.warn(`agents.sessions.setStatus returned not-ok`, {
 			error: r.error,
 			status: n
 		});
 	} catch (e) {
-		logError(log$34, `agents.sessions.setStatus threw`, e, { channelId: t });
+		logError(log$35, `agents.sessions.setStatus threw`, e, { channelId: t });
 	}
 }
 function slackThreadTsParam(e) {
@@ -182845,7 +182827,7 @@ async function callSlackApiTrackingResponse(e, t, n) {
 function isSlackResponseError(e) {
 	return typeof e == `object` && !!e && slackResponseErrors.has(e);
 }
-const log$33 = createLogger(`slack.api`);
+const log$34 = createLogger(`slack.api`);
 function slackContinuationToken({ channelId: e, threadTs: t }) {
 	return `${e}:${t}`;
 }
@@ -182936,7 +182918,7 @@ function buildSlackBinding(e) {
 					botUserId: e.botUserId
 				}));
 			} catch (t) {
-				logError(log$33, `refresh threw — swallowed`, t, { channelId: e.channelId });
+				logError(log$34, `refresh threw — swallowed`, t, { channelId: e.channelId });
 			}
 		}
 		let t = fetchAndReplace().finally(() => {
@@ -182986,7 +182968,7 @@ function buildSlackBinding(e) {
 			if ((c || a) && e.onPosted?.(), hasSessionThread() && (s = !0), handleMessageTs(u), i.length > 0 && o) try {
 				await uploadFiles(i);
 			} catch (e) {
-				log$33.warn(`file upload after message post failed`, { error: e });
+				log$34.warn(`file upload after message post failed`, { error: e });
 			}
 			return {
 				id: u,
@@ -183026,9 +183008,9 @@ function buildSlackBinding(e) {
 					};
 					n.length > 0 && (r.loading_messages = [n]);
 					let i = await request(`assistant.threads.setStatus`, r);
-					i.ok !== !0 && log$33.warn(`assistant.threads.setStatus returned not-ok`, { error: i.error });
+					i.ok !== !0 && log$34.warn(`assistant.threads.setStatus returned not-ok`, { error: i.error });
 				} catch (t) {
-					logError(log$33, `startTyping threw — swallowed`, t, { channelId: e.channelId });
+					logError(log$34, `startTyping threw — swallowed`, t, { channelId: e.channelId });
 				}
 			}
 		},
@@ -183128,7 +183110,7 @@ function withUndeliveredReplyNote(e, t, n) {
 		context: [i, ...t.context ?? []]
 	};
 }
-const log$32 = createLogger(`slack.reply`);
+const log$33 = createLogger(`slack.reply`);
 const LONG_RESPONSE_NOTICE = `Here's a snippet with the full response.`;
 const FALLBACK_LOG = `Slack refused the final reply; delivering it with a fallback`;
 const REFUSED_PAYLOAD_ERRORS = /* @__PURE__ */ new Set([
@@ -183141,7 +183123,7 @@ const REFUSED_PAYLOAD_ERRORS = /* @__PURE__ */ new Set([
 async function deliverCompletedSlackReply(e, t, n) {
 	let { blocks: r, markdown: i, text: a } = typeof t == `string` ? { markdown: t } : t;
 	if (await threadRootIsGone(e)) {
-		log$32.warn(`Slack thread root was deleted; dropping the final reply`, n);
+		log$33.warn(`Slack thread root was deleted; dropping the final reply`, n);
 		return;
 	}
 	let o;
@@ -183155,7 +183137,7 @@ async function deliverCompletedSlackReply(e, t, n) {
 		if (o = refusedPayloadError(e), o === void 0) throw e;
 	}
 	if (i.length <= 12e3) {
-		o !== void 0 && log$32.warn(FALLBACK_LOG, {
+		o !== void 0 && log$33.warn(FALLBACK_LOG, {
 			fallback: `inline`,
 			slackError: o,
 			...n
@@ -183167,7 +183149,7 @@ async function deliverCompletedSlackReply(e, t, n) {
 			if (o = refusedPayloadError(e), o === void 0) throw e;
 		}
 	}
-	o !== void 0 && log$32.warn(FALLBACK_LOG, {
+	o !== void 0 && log$33.warn(FALLBACK_LOG, {
 		fallback: `snippet`,
 		slackError: o,
 		...n
@@ -183220,7 +183202,7 @@ function withFinalReplyDelivery(e) {
 		} catch (e) {
 			let { channel: t } = n;
 			await reportUndeliveredReply({
-				log: log$32,
+				log: log$33,
 				name: `Slack`,
 				post: (e) => t.thread.post(e),
 				state: t.state
@@ -183497,7 +183479,7 @@ function reviewingResults(e) {
 	let [t] = e;
 	return t != null && t !== "agent" && e.every((e) => e === t) ? `Reviewing ${displayName(t)}'s results...` : `Reviewing results...`;
 }
-const log$31 = createLogger(`slack.interactions`);
+const log$32 = createLogger(`slack.interactions`);
 function parseSignInCancelTarget(e) {
 	if (typeof e != `string`) return;
 	let t;
@@ -183534,7 +183516,7 @@ async function cancelHeldSignIn(e, t) {
 	try {
 		await t.from(slackSessionToken(e.target)).cancel({ turnId: n });
 	} catch (e) {
-		log$31.error(`sign-in cancel delivery failed`, { error: e });
+		log$32.error(`sign-in cancel delivery failed`, { error: e });
 		return;
 	}
 	if (e.responseUrl !== void 0) try {
@@ -183544,7 +183526,7 @@ async function cancelHeldSignIn(e, t) {
 			method: `POST`
 		});
 	} catch (e) {
-		log$31.warn(`failed to remove the cancelled sign-in prompt`, { error: e });
+		log$32.warn(`failed to remove the cancelled sign-in prompt`, { error: e });
 	}
 }
 function isObjectRecord$2(e) {
@@ -184024,7 +184006,7 @@ async function updateSettledCard(e) {
 		}
 	});
 }
-const log$30 = createLogger(`slack.interaction-card`);
+const log$31 = createLogger(`slack.interaction-card`);
 function defaultInteractionCard(e, t) {
 	let { interaction: n } = e, r = renderInteractionPostParts(n, t);
 	if (n.status === `open` && n.answer === void 0) return r;
@@ -184071,12 +184053,12 @@ function renderRequestCard(e, t, n) {
 			fallback: r,
 			parts: a
 		};
-		log$30.warn(`interactionCard result rejected; using eve's default`, {
+		log$31.warn(`interactionCard result rejected; using eve's default`, {
 			interactionId: i,
 			problem: o
 		});
 	} catch (e) {
-		logError(log$30, `interactionCard renderer failed; using eve's default`, e, { interactionId: i });
+		logError(log$31, `interactionCard renderer failed; using eve's default`, e, { interactionId: i });
 	}
 	return {
 		fallback: r,
@@ -184129,13 +184111,13 @@ async function sendWithFallback(e, t, n) {
 		return await e(t);
 	} catch (r) {
 		if (refusedPayloadError(r) === void 0 || sameJson(t, n)) throw r;
-		return logError(log$30, `Slack rejected a rendered input request; sending eve's default`, r), n === void 0 ? void 0 : await e(n);
+		return logError(log$31, `Slack rejected a rendered input request; sending eve's default`, r), n === void 0 ? void 0 : await e(n);
 	}
 }
 function sameJson(e, t) {
 	return JSON.stringify(e) === JSON.stringify(t);
 }
-const log$29 = createLogger(`slack.private-approval-delivery`);
+const log$30 = createLogger(`slack.private-approval-delivery`);
 async function deliverPrivateInteraction(e) {
 	let t = await e.slack.request(`conversations.open`, { users: e.reviewer }), n = t.ok === !0 ? t.channel?.id : void 0;
 	if (typeof n != `string` || n.length === 0) throw Error(`Slack conversations.open failed: ${t.error ?? `unknown_error`}`);
@@ -184177,7 +184159,7 @@ async function deliverPrivateInteraction(e) {
 					ts: t
 				});
 			} catch (e) {
-				logError(log$29, `failed to roll back partial private approval delivery`, e, {
+				logError(log$30, `failed to roll back partial private approval delivery`, e, {
 					channelId: n,
 					messageTs: t
 				});
@@ -184198,7 +184180,7 @@ async function postMessage(e, t) {
 	if (n.ok !== !0 || typeof n.ts != `string` || n.ts.length === 0) throw Object.assign(Error(`Slack chat.postMessage failed: ${n.error ?? `unknown_error`}`), { response: n });
 	return n.ts;
 }
-const log$28 = createLogger(`slack.request-cards`);
+const log$29 = createLogger(`slack.request-cards`);
 async function postRequestCards(e, t, n, r) {
 	forgetSettledCards(t);
 	let i = [], a = [];
@@ -184210,7 +184192,7 @@ async function postThreadCards(e, t, n) {
 	let { channel: r } = t, i = r.state.channelId;
 	if (e.length === 0) return;
 	if (i === null) {
-		log$28.warn(`thread input requests not delivered because the session has no Slack channel`, {
+		log$29.warn(`thread input requests not delivered because the session has no Slack channel`, {
 			requestIds: e.map((e) => e.interactionId),
 			sessionId: t.session.id
 		});
@@ -184245,7 +184227,7 @@ async function postGroups(e, t, n, r) {
 	} catch (r) {
 		let i = e.filter((e) => n.some((t) => t.interactionId === e.interactionId)), a = i.every((e) => sameJson(e.parts[t], e.fallback[t]));
 		if (refusedPayloadError(r) === void 0 || a) throw r;
-		logError(log$28, `Slack refused rendered input requests; posting eve's defaults`, r);
+		logError(log$29, `Slack refused rendered input requests; posting eve's defaults`, r);
 		for (let e of groupParts(i, (e) => e.fallback[t])) await send(e);
 	}
 }
@@ -184275,7 +184257,7 @@ function joinParts(e) {
 async function postDirectMessageCard(e, t, n) {
 	let { channel: r } = t, i = slackUserIdFromAuthContext(t.session.auth.current) ?? r.state.triggeringUserId;
 	if (!i) {
-		log$28.warn(`direct-message input request not delivered because no reviewer was resolved`, {
+		log$29.warn(`direct-message input request not delivered because no reviewer was resolved`, {
 			requestId: e.interactionId,
 			sessionId: t.session.id
 		});
@@ -184301,7 +184283,7 @@ async function postDirectMessageCard(e, t, n) {
 			announcementTs: t.id
 		});
 	} catch (n) {
-		logError(log$28, `failed to announce private input request`, n, {
+		logError(log$29, `failed to announce private input request`, n, {
 			requestId: e.interactionId,
 			sessionId: t.session.id
 		});
@@ -184367,7 +184349,7 @@ async function writeRequests(e, t, n, r) {
 `))
 		};
 	}).filter((e) => blocksOf(e.requests).length <= 50);
-	if (o === void 0 || (o.kind !== `rendered` && log$28.warn(`input request card would pass Slack's 50 blocks; using eve's default`, {
+	if (o === void 0 || (o.kind !== `rendered` && log$29.warn(`input request card would pass Slack's 50 blocks; using eve's default`, {
 		fallback: o.kind,
 		requestIds: r
 	}), sameJson(blocksOf(o.requests), blocksOf(n.requests)))) return n;
@@ -184404,13 +184386,13 @@ async function retireDetails(e, t, n) {
 async function callSlack(e, t, n, r) {
 	try {
 		let i = await e.slack.request(t, r);
-		return i.ok === !0 ? `ok` : (log$28.warn(`failed to update input request message`, {
+		return i.ok === !0 ? `ok` : (log$29.warn(`failed to update input request message`, {
 			error: i.error,
 			operation: t,
 			requestId: n
 		}), isRefusedPayloadCode(i.error) ? `refused` : `failed`);
 	} catch (e) {
-		return logError(log$28, `failed to update input request message`, e, {
+		return logError(log$29, `failed to update input request message`, e, {
 			operation: t,
 			requestId: n
 		}), `failed`;
@@ -184528,7 +184510,7 @@ function reasoningStatus(e, t) {
 function isProse(e) {
 	return !e.startsWith("```") && /\p{L}/u.test(e);
 }
-const log$27 = createLogger(`slack.defaults`);
+const log$28 = createLogger(`slack.defaults`);
 const streamByState = /* @__PURE__ */ new WeakMap();
 function stepStream(e, t) {
 	let n = streamByState.get(e);
@@ -184628,7 +184610,7 @@ async function showSlackSignIn(e, t) {
 				[e.name]: n.id
 			});
 		} catch (t) {
-			log$27.error(`Slack auth public message delivery failed`, {
+			log$28.error(`Slack auth public message delivery failed`, {
 				name: e.name,
 				error: t
 			});
@@ -184652,7 +184634,7 @@ async function showSlackSignIn(e, t) {
 				text: buildAuthEphemeralText(s)
 			});
 		} catch (t) {
-			log$27.error(`Slack auth ephemeral delivery failed`, {
+			log$28.error(`Slack auth ephemeral delivery failed`, {
 				name: e.name,
 				error: t
 			});
@@ -184676,7 +184658,7 @@ async function settleSlackSignIn(e, t, n) {
 			text: o
 		});
 	} catch (t) {
-		log$27.error(`Slack auth status edit failed`, {
+		log$28.error(`Slack auth status edit failed`, {
 			name: e.name,
 			error: t
 		});
@@ -184706,7 +184688,7 @@ function defaultInteractionEvents(e, t) {
 			if (a !== void 0) try {
 				await notifyRefusedResponder(a, n.channel);
 			} catch (e) {
-				logError(log$27, `failed to tell a refused responder why`, e, { interactionId: a.interactionId });
+				logError(log$28, `failed to tell a refused responder why`, e, { interactionId: a.interactionId });
 			}
 		},
 		async "interaction.settled"({ data: e }, n) {
@@ -185373,7 +185355,7 @@ function withSlackResponder(e, t) {
 		triggeringUserId: t
 	} : e;
 }
-const log$26 = createLogger(`slack.attachments`);
+const log$27 = createLogger(`slack.attachments`);
 function collectSlackFileParts(e, t) {
 	let n = [];
 	for (let r of e ?? []) {
@@ -185381,7 +185363,7 @@ function collectSlackFileParts(e, t) {
 		if (e === null) continue;
 		let i = evaluateFilePart(e, t);
 		if (i !== null) {
-			log$26.warn(`dropped attachment — ${formatUploadPolicyViolation(i)}`, { name: r.name });
+			log$27.warn(`dropped attachment — ${formatUploadPolicyViolation(i)}`, { name: r.name });
 			continue;
 		}
 		n.push(e);
@@ -185394,7 +185376,7 @@ function toSlackFilePart(e, t) {
 		mediaType: e.mimeType ?? `application/octet-stream`,
 		filename: e.name ?? `attachment-${t}`,
 		data: new URL(e.url)
-	} : (log$26.warn(`dropped attachment — no url available`, { name: e.name }), null);
+	} : (log$27.warn(`dropped attachment — no url available`, { name: e.name }), null);
 }
 async function collectInboundFileParts(e) {
 	let t = collectSlackFileParts(e.mention.attachments, e.policy);
@@ -185403,7 +185385,7 @@ async function collectInboundFileParts(e) {
 	if (e.thread.recentMessages.length === 0) try {
 		await e.thread.refresh();
 	} catch (e) {
-		return log$26.warn(`slack thread refresh failed for attachment collection`, { error: e }), [];
+		return log$27.warn(`slack thread refresh failed for attachment collection`, { error: e }), [];
 	}
 	let n = await withTrigger(e), r = n.findIndex((t) => t.ts === e.mention.ts);
 	if (r === -1) return [];
@@ -185424,7 +185406,7 @@ async function withTrigger(e) {
 	try {
 		return await e.fetchThreadWindow(e.mention.ts, 11) ?? [];
 	} catch (e) {
-		return log$26.warn(`slack thread window fetch failed for attachment collection`, { error: e }), [];
+		return log$27.warn(`slack thread window fetch failed for attachment collection`, { error: e }), [];
 	}
 }
 function mentionsApp(e, t) {
@@ -185465,7 +185447,7 @@ function isSlackFileUrl(e) {
 	let t = URL.parse(e);
 	return t?.protocol === `https:` ? t.hostname === `files.slack.com` || (t.hostname === `enterprise.slack.com` || t.hostname.endsWith(`.enterprise.slack.com`)) && t.pathname.startsWith(`/files/`) : !1;
 }
-const log$25 = createLogger(`slack.task-card`);
+const log$26 = createLogger(`slack.task-card`);
 function renderDefaultSlackTaskCard(e) {
 	let t = sessionTables(e.view), n = {
 		...e,
@@ -185691,14 +185673,14 @@ function renderCard(e, t) {
 	try {
 		return e(t);
 	} catch (e) {
-		return logError(log$25, `task card renderer failed`, e, { turnId: t.turnId }), null;
+		return logError(log$26, `task card renderer failed`, e, { turnId: t.turnId }), null;
 	}
 }
 async function writeCardWithRetry(e, t) {
 	for (let n of [1, 2]) try {
 		return await writeCard(e, t);
 	} catch (e) {
-		logError(log$25, `task card write failed`, e, { attempt: n }), n === 1 && await new Promise((e) => setTimeout(e, 1e3));
+		logError(log$26, `task card write failed`, e, { attempt: n }), n === 1 && await new Promise((e) => setTimeout(e, 1e3));
 	}
 }
 async function writeCard(e, t) {
@@ -185851,7 +185833,7 @@ function readConversationInfoPrivacy(e) {
 function isRecord(e) {
 	return typeof e == `object` && !!e && !Array.isArray(e);
 }
-const log$24 = createLogger(`slack.user-info`);
+const log$25 = createLogger(`slack.user-info`);
 function createSlackUserResolver(e, t = Date.now) {
 	if (e === void 0 || e === !1) return;
 	let n = e === !0 || e.name !== !1, r = e !== !0 && e.email === !0;
@@ -185864,7 +185846,7 @@ function createSlackUserResolver(e, t = Date.now) {
 			e !== void 0 && a.delete(e);
 		}
 		let s = t(), c = fetchSlackUserInfo(e, r).catch((t) => {
-			logError(log$24, `Slack user lookup failed; omitting it`, t, { userId: e }), a.get(i)?.profile === c && a.set(i, {
+			logError(log$25, `Slack user lookup failed; omitting it`, t, { userId: e }), a.get(i)?.profile === c && a.set(i, {
 				expiresAt: s + 6e4,
 				profile: c
 			});
@@ -185882,7 +185864,7 @@ function createSlackUserResolver(e, t = Date.now) {
 		try {
 			let i = await Promise.race([o(e), new Promise((n) => {
 				t = setTimeout(() => {
-					log$24.warn(`Slack user lookup timed out; omitting it`, { userId: e.userId }), n(void 0);
+					log$25.warn(`Slack user lookup timed out; omitting it`, { userId: e.userId }), n(void 0);
 				}, 2e3);
 			})]);
 			if (i === void 0) return;
@@ -185893,7 +185875,7 @@ function createSlackUserResolver(e, t = Date.now) {
 				...r && c && { email: c }
 			};
 		} catch (t) {
-			logError(log$24, `Slack user lookup threw; omitting it`, t, { userId: e.userId });
+			logError(log$25, `Slack user lookup threw; omitting it`, t, { userId: e.userId });
 			return;
 		} finally {
 			clearTimeout(t);
@@ -186020,7 +186002,7 @@ async function respondOrRetireInactivePrompt(e, t, n) {
 		retirement: t.retirePrompt("No longer active").catch((e) => n.error(`inactive prompt edit failed`, { error: e }))
 	};
 }
-const log$23 = createLogger(`slack.interactions`);
+const log$24 = createLogger(`slack.interactions`);
 async function authorizeAnswer(e) {
 	let { channelId: t, codeChannel: n, threadTs: r = `` } = e.target, i = buildSlackAuthContext({
 		channelId: t,
@@ -186045,14 +186027,14 @@ async function authorizeAnswer(e) {
 	try {
 		return await e.deps.onAnswers(s, e.submission);
 	} catch (e) {
-		return log$23.error(`HITL input response authorization failed`, { error: e }), null;
+		return log$24.error(`HITL input response authorization failed`, { error: e }), null;
 	}
 }
-const log$22 = createLogger(`slack.slash-command`);
+const log$23 = createLogger(`slack.slash-command`);
 function dispatchSlashCommand(e, t, n) {
 	let r = parseSlashCommandPayload(e), i = n.config.onSlashCommand;
 	if (i === void 0) {
-		log$22.warn(`Slack slash command ignored because onSlashCommand is not configured`, { command: r.command });
+		log$23.warn(`Slack slash command ignored because onSlashCommand is not configured`, { command: r.command });
 		return;
 	}
 	let a = { slack: buildSlackWorkspaceHandle({
@@ -186062,7 +186044,7 @@ function dispatchSlashCommand(e, t, n) {
 		teamId: r.teamId
 	}) };
 	t.waitUntil(Promise.resolve().then(() => i(r, a)).catch((e) => {
-		log$22.error(`slash command handler failed`, { error: e });
+		log$23.error(`slash command handler failed`, { error: e });
 	}));
 }
 function parseSlashCommandPayload(e) {
@@ -186082,7 +186064,7 @@ function parseSlashCommandPayload(e) {
 		responseUrl: e.responseUrl
 	};
 }
-const log$21 = createLogger(`slack.interactions`);
+const log$22 = createLogger(`slack.interactions`);
 function parseBlockActionsPayload(e) {
 	if (isSharedBlockActionsPayload(e)) return parseSharedBlockActionsPayload(e);
 	let t = e, n = t.actions;
@@ -186181,15 +186163,15 @@ async function handleInteractionPost(e, t, n) {
 	try {
 		i = p$1(e, { contentType: `application/x-www-form-urlencoded` });
 	} catch {
-		return log$21.warn(`failed to parse Slack interaction payload`), r;
+		return log$22.warn(`failed to parse Slack interaction payload`), r;
 	}
 	if (i.kind === `view_submission`) return handleViewSubmission(i, t, n);
 	if (i.kind === `slash_command`) return dispatchSlashCommand(i, t, n), new Response(null, { status: 200 });
 	if (i.kind === `unsupported`) {
 		let e = parseShortcutPayload(i.raw);
-		return e === null ? (log$21.warn(`unsupported Slack interaction payload ignored`, { type: i.type }), r) : (dispatchShortcut(e, readInstallationTeamId(i.raw), t, n), new Response(null, { status: 200 }));
+		return e === null ? (log$22.warn(`unsupported Slack interaction payload ignored`, { type: i.type }), r) : (dispatchShortcut(e, readInstallationTeamId(i.raw), t, n), new Response(null, { status: 200 }));
 	}
-	if (i.kind !== `block_actions`) return log$21.warn(`unsupported Slack interaction payload ignored`, { type: i.kind }), r;
+	if (i.kind !== `block_actions`) return log$22.warn(`unsupported Slack interaction payload ignored`, { type: i.kind }), r;
 	if (dispatchSignInCancel(i.raw, t)) return r;
 	let a = parseBlockActionsPayload(i);
 	if (!a) return r;
@@ -186233,7 +186215,7 @@ async function handleInteractionPost(e, t, n) {
 			interaction: a,
 			onInteraction: c
 		}).catch((e) => {
-			log$21.error(`custom interaction dispatch failed`, { error: e });
+			log$22.error(`custom interaction dispatch failed`, { error: e });
 		}));
 	}
 	return r;
@@ -186285,7 +186267,7 @@ async function dispatchCustomInteractions(e) {
 		slack: d
 	};
 	await Promise.all(n.map((e) => Promise.resolve().then(() => a(e, f)).catch((e) => {
-		log$21.error(`custom interaction handler failed`, { error: e });
+		log$22.error(`custom interaction handler failed`, { error: e });
 	})));
 }
 function parseShortcutPayload(e) {
@@ -186332,7 +186314,7 @@ function readOptionalString(e) {
 function dispatchShortcut(e, t, n, r) {
 	let i = r.config.onShortcut;
 	if (i === void 0) {
-		log$21.warn(`Slack shortcut ignored because onShortcut is not configured`, { type: e.type });
+		log$22.warn(`Slack shortcut ignored because onShortcut is not configured`, { type: e.type });
 		return;
 	}
 	let a = { slack: buildSlackWorkspaceHandle({
@@ -186345,7 +186327,7 @@ function dispatchShortcut(e, t, n, r) {
 }
 function dispatchInteractionHook(e, t, n) {
 	t.waitUntil(Promise.resolve().then(e).catch((e) => {
-		log$21.error(n, { error: e });
+		log$22.error(n, { error: e });
 	}));
 }
 async function dispatchBlockAnswers(e) {
@@ -186366,7 +186348,7 @@ async function dispatchBlockAnswers(e) {
 	}), { retirePrompt: (t) => settleHitlCard(e.interaction, e.deps, {
 		label: t,
 		text: t
-	}) }, log$21);
+	}) }, log$22);
 	r.outcome === `inactive` && await Promise.all([r.retirement, postEphemeralNotice({
 		channelId: e.interaction.channelId,
 		deps: e.deps,
@@ -186388,28 +186370,28 @@ async function postEphemeralNotice(e) {
 	try {
 		await t.postEphemeral(e.userId, "This request is no longer active. Send a new message to start again.");
 	} catch (e) {
-		log$21.error(`inactive prompt notice failed`, { error: e });
+		log$22.error(`inactive prompt notice failed`, { error: e });
 	}
 }
 async function openFreeformModal(e) {
 	let t = e.payload.trigger_id;
 	if (typeof t != `string` || t.length === 0) {
-		log$21.warn(`freeform button click missing trigger_id — cannot open modal`);
+		log$22.warn(`freeform button click missing trigger_id — cannot open modal`);
 		return;
 	}
 	let n = decodeFreeformHitlActionId(e.freeformAction.actionId);
 	if (n === null) {
-		log$21.warn(`freeform button click carries invalid metadata`);
+		log$22.warn(`freeform button click carries invalid metadata`);
 		return;
 	}
 	let r = n.requestId;
 	if (!r) {
-		log$21.warn(`freeform button click missing requestId`);
+		log$22.warn(`freeform button click missing requestId`);
 		return;
 	}
 	let i = e.freeformAction.messageTs;
 	if (!i) {
-		log$21.warn(`freeform button click missing messageTs`);
+		log$22.warn(`freeform button click missing messageTs`);
 		return;
 	}
 	let a = n.route ?? {
@@ -186438,7 +186420,7 @@ async function openFreeformModal(e) {
 		});
 	} catch (e) {
 		if (!isSlackResponseError(e)) throw e;
-		log$21.error(`Slack views.open failed`, { error: e });
+		log$22.error(`Slack views.open failed`, { error: e });
 	}
 }
 async function handleViewSubmission(e, t, n) {
@@ -186448,7 +186430,7 @@ async function handleViewSubmission(e, t, n) {
 	try {
 		i = JSON.parse(e.privateMetadata ?? ``);
 	} catch {
-		return log$21.warn(`freeform view_submission carries invalid private_metadata`), r;
+		return log$22.warn(`freeform view_submission carries invalid private_metadata`), r;
 	}
 	if (!i.continuationToken || !i.requestId || !i.messageTs || !i.channelId || i.codeChannel !== !0 && !i.threadTs) return r;
 	let a = e.values?.find((e) => e.blockId === "eve_freeform_block" && e.actionId === "eve_freeform_text")?.value ?? ``;
@@ -186496,7 +186478,7 @@ async function dispatchViewAnswer(e) {
 		deps: e.deps,
 		installationTeamId: e.installationTeamId,
 		messageTs: e.metadata.messageTs
-	}) }, log$21);
+	}) }, log$22);
 	a.outcome === `inactive` && await Promise.all([a.retirement, postEphemeralNotice({
 		channelId: i,
 		deps: e.deps,
@@ -186518,7 +186500,7 @@ function normalizeSlackWebhookError(e) {
 	let t = e instanceof Error ? e.message : String(e);
 	return t.includes(`verifier rejected`) ? Error(`slackChannel: inbound webhook verifier rejected the request.`) : t.includes(`signature headers`) ? Error(`slackChannel: inbound request missing Slack signature headers.`) : t.includes(`timestamp is invalid`) ? Error(`slackChannel: inbound request has malformed timestamp.`) : t.includes(`timestamp is too old`) ? Error(`slackChannel: inbound request timestamp outside allowed skew.`) : t.includes(`signature is invalid`) ? Error(`slackChannel: inbound request signature mismatch.`) : e instanceof Error ? e : Error(t);
 }
-const log$20 = createLogger(`slack.channel`);
+const log$21 = createLogger(`slack.channel`);
 function rebuildSlackContext(e, t, n, r) {
 	let { thread: i, slack: a } = buildSlackBinding({
 		api: n,
@@ -186672,7 +186654,7 @@ async function receiveOnSlack(e, t) {
 		if (u = (await e.post(i)).id, r?.length) try {
 			await n.uploadFiles(r);
 		} catch (e) {
-			log$20.warn(`file upload after initial message post failed`, { error: e });
+			log$21.warn(`file upload after initial message post failed`, { error: e });
 		}
 	}
 	let d = u || (i.idempotencyKey === void 0 ? crypto.randomUUID() : threadlessIdentityFromKey(i.idempotencyKey)), f = a.audience === void 0 ? void 0 : normalizeChannelAudience(a.audience), p = {
@@ -186758,7 +186740,7 @@ async function handleEventPost(e) {
 	try {
 		n = p$1(e.body, { headers: e.headers }), r = parseSlackEventEnvelope(e.body);
 	} catch (e) {
-		return log$20.warn(`inbound webhook body is not valid JSON`, { error: e }), new Response(`ok`);
+		return log$21.warn(`inbound webhook body is not valid JSON`, { error: e }), new Response(`ok`);
 	}
 	if (n.kind === `url_verification`) return new Response(n.challenge, {
 		status: 200,
@@ -186791,7 +186773,7 @@ async function handleEventPost(e) {
 			}
 			await cancelledARunningTurn(e.from, l) || await setSlackCodeChannelStatus(i, l, `active`);
 		})().catch((e) => {
-			logError(log$20, `agent_session_stopped handling failed`, e, { channelId: l });
+			logError(log$21, `agent_session_stopped handling failed`, e, { channelId: l });
 		})), new Response(`ok`);
 	}
 	let u = null, d = null, dispatchMessage = (n, r, c, l) => () => dispatchSlackMessage({
@@ -186856,7 +186838,7 @@ async function handleEventPost(e) {
 }
 function isDuplicateEvent(e, t, n) {
 	let r = e.event_id;
-	return r ? n.has(r) ? (log$20.warn(`received a duplicate event`, {
+	return r ? n.has(r) ? (log$21.warn(`received a duplicate event`, {
 		event_id: r,
 		event_time: e.event_time,
 		retry_num: t?.num ?? `(null)`,
@@ -186953,7 +186935,7 @@ async function dispatchSlackMessage(e) {
 	try {
 		x = await e.handler(y, i);
 	} catch (t) {
-		logError(log$20, `${e.kind} handler failed`, t, { channelId: e.message.channelId });
+		logError(log$21, `${e.kind} handler failed`, t, { channelId: e.message.channelId });
 	}
 	if (x == null) {
 		b !== void 0 && (await b, await f.startTyping());
@@ -187014,7 +186996,7 @@ async function acknowledgeMessage(e, t, n) {
 	try {
 		await e(t, n);
 	} catch (e) {
-		logError(log$20, `received renderer failed`, e, { channelId: t.channelId });
+		logError(log$21, `received renderer failed`, e, { channelId: t.channelId });
 	}
 }
 async function dispatchSlackEvent(e) {
@@ -187055,7 +187037,7 @@ async function dispatchSlackEvent(e) {
 	try {
 		await e.handler(i, e.envelope.event);
 	} catch (t) {
-		logError(log$20, `event handler failed`, t, {
+		logError(log$21, `event handler failed`, t, {
 			eventId: e.envelope.event_id,
 			eventType: e.envelope.event.type
 		});
@@ -187069,7 +187051,7 @@ async function verifyInbound(e, t) {
 			webhookVerifier: t?.webhookVerifier
 		});
 	} catch (e) {
-		return log$20.warn(`slack inbound verification failed`, { error: e }), null;
+		return log$21.warn(`slack inbound verification failed`, { error: e }), null;
 	}
 }
 async function deliverSlackMessage(e) {
@@ -187105,7 +187087,7 @@ async function deliverSlackMessage(e) {
 		}, c.length === 0 ? m : void 0);
 		await e.sessionOperations.send(d, h);
 	} catch (n) {
-		logError(log$20, `${e.kind} delivery failed`, n, { channelId: t.channelId });
+		logError(log$21, `${e.kind} delivery failed`, n, { channelId: t.channelId });
 	}
 }
 function slackTypedText(e, t) {
@@ -187146,6 +187128,148 @@ function workflowQueuePrefix(e) {
 function installEveWorkflowQueueNamespace(e) {
 	let t = deriveEveWorkflowQueueNamespace(e);
 	return process.env["WORKFLOW_QUEUE_NAMESPACE"] = t, t;
+}
+function createToolChannelTo(e) {
+	return (t, n) => {
+		if (e.delegated) throw Error(`ctx.to() isn't available in a delegated session (a subagent, a root copy, or a remote agent call): a session it started would outlive the delegation and act for the caller. Return the result to the caller, and send from a tool on the root agent.`);
+		return { async send(r, i) {
+			let a = await e.loadBundle(), o = createCrossChannelToFn(createWorkflowRuntime({ compiledArtifactsSource: a.compiledArtifactsSource }), toCrossChannelTargets(a.graph.root.channels));
+			return await contextStorage.run(new ContextContainer(), () => o(t, n).send(r, i));
+		} };
+	};
+}
+async function completeWorkflowStepAuthorization(e) {
+	let t = getAuthorizationResults().find((t) => t.name === e.scope && t.instanceId === e.instanceId);
+	if (t === void 0) return !1;
+	let { stepId: n, attempt: r } = O$11(), i = `eve.authorization.${n}.${t.attemptId}`;
+	if (r > 1) {
+		let t = ti$1(k$11().workflowRunId).getReadable({ namespace: i });
+		try {
+			if (await t.getTailIndex() >= 0) return consumeAuthorizationResult(e.scope, e.instanceId), !0;
+		} finally {
+			await t.cancel().catch(() => {});
+		}
+	}
+	if (!await completeScopedAuthorization(e)) return !1;
+	let a = A$10({ namespace: i }).getWriter();
+	try {
+		await a.write(!0);
+	} finally {
+		a.releaseLock();
+	}
+	return !0;
+}
+const log$20 = createLogger(`workflow-step`);
+function withWorkflowStepAuthorization(e) {
+	let wrapped = async function(t) {
+		let { args: n, context: r } = t;
+		O$11();
+		let i = new ContextContainer();
+		i.set(AuthKey, r.session.auth.current), i.set(InitiatorAuthKey, r.session.auth.initiator), i.set(SessionIdKey, r.session.id), i.setVirtualContext(SessionKey, {
+			...r.session,
+			sessionId: r.session.id
+		}), i.set(CallbackBaseUrlKey, resolveWorkflowCallbackBaseUrl(r.baseUrl)), i.setVirtualContext(AuthorizationHookKey, r.token), i.setVirtualContext(PendingAuthorizationResultKey, r.authorizationResults);
+		let a = stepAgentLoader(r), o = openStepSandbox(r, a);
+		return contextStorage.run(i, async () => {
+			let s = createAuthorizationContext({
+				scope: r.toolName,
+				completeAuthorization: completeWorkflowStepAuthorization
+			}), c = buildBaseToolContext({
+				toolName: r.toolName,
+				options: {
+					abortSignal: r.abortSignal,
+					toolCallId: r.callId
+				}
+			}), l = {
+				...c,
+				agent: () => unavailableInStep(`ctx.agent()`, `Call ctx.agent() in the workflow body.`),
+				ask: () => unavailableInStep(`ctx.ask()`, `Call ctx.ask() in the workflow body.`),
+				getSandbox: (async (e) => {
+					let t = await o.open();
+					if (e !== void 0 && t.environment?.provider !== e.provider) throw fatal(`ctx.getSandbox() in a "use step" function received a sandbox environment the session's sandbox does not use. Pass the environment the agent's sandbox definition opens, or call ctx.getSandbox() without one.`);
+					return i.setVirtualContext(SandboxKey, t), await c.getSandbox();
+				}),
+				getToken: s.getToken,
+				requireAuth: s.requireAuth,
+				channel: r.channel,
+				to: createToolChannelTo({
+					delegated: r.delegated,
+					loadBundle: a
+				})
+			};
+			Object.defineProperty(l, "agents", { get: () => unavailableInStep(`ctx.agents`, `Read ctx.agents in the workflow body and pass the required serializable metadata into the step.`) });
+			let u;
+			try {
+				u = await s.run(() => Reflect.apply(e, this, n.map((e, n) => t.contextIndexes.includes(n) ? l : e)));
+			} catch (e) {
+				throw isConnectionAuthorizationFailedError(e) && !e.retryable && Object.assign(e, { fatal: !0 }), e;
+			} finally {
+				await o.release();
+			}
+			let d = i.get(PendingAuthorizationResultKey) ?? [], f = r.authorizationResults.filter((e) => !d.includes(e)).map((e) => e.attemptId);
+			return isAuthorizationSignal(u) ? {
+				kind: `authorization-required`,
+				signal: u,
+				authorized: f
+			} : {
+				kind: `result`,
+				output: u,
+				authorized: f
+			};
+		});
+	};
+	return Object.defineProperty(wrapped, "maxRetries", { get: () => Reflect.get(e, `maxRetries`) }), wrapped;
+}
+function stepAgentLoader(e) {
+	let { bundle: t } = e.sandbox, n = contextStorage.getStore(), resolveSource = () => resolveDurableCompiledArtifactsSource(t.source);
+	return async () => await getCompiledRuntimeAgentBundle({
+		compiledArtifactsSource: n === void 0 ? resolveSource() : contextStorage.run(n, resolveSource),
+		nodeId: t.nodeId
+	});
+}
+function openStepSandbox(e, t) {
+	let { sessionId: n, state: r } = e.sandbox, i, a = !1, open = async () => {
+		let e = await t(), i = e.graph.root;
+		return await ensureSandboxAccess({
+			compiledArtifactsSource: e.compiledArtifactsSource,
+			nodeId: i.nodeId,
+			ownsSandbox: !1,
+			registry: i.sandboxRegistry,
+			sessionId: n,
+			state: r ?? null,
+			shutdownTracking: `none`
+		});
+	}, openOnce = () => (i ??= open().catch((e) => {
+		throw i = void 0, e;
+	}), i);
+	return {
+		async open() {
+			if (a) throw fatal(`ctx.getSandbox() was called after the "use step" function of tool "${e.toolName}" returned. Call it inside the step, which lets go of the sandbox when it ends.`);
+			return {
+				...await openOnce(),
+				delete: () => unavailableInStep(`sandbox.delete()`, `The step borrows the session's sandbox, and only the session can delete it.`),
+				stop: () => unavailableInStep(`sandbox.stop()`, `The session's turns may be using the sandbox; eve closes the step's connection when the step ends.`)
+			};
+		},
+		async release() {
+			a = !0;
+			let t = await i?.catch(() => void 0);
+			try {
+				await t?.release();
+			} catch (t) {
+				logError(log$20, `failed to release a workflow step's sandbox`, t, {
+					sessionId: n,
+					toolName: e.toolName
+				});
+			}
+		}
+	};
+}
+function unavailableInStep(e, t) {
+	throw fatal(`${e} is unavailable inside a "use step" function. ${t}`);
+}
+function fatal(e) {
+	return Object.assign(Error(e), { fatal: !0 });
 }
 const log$19 = createLogger(`execution.agent-target`);
 function resolveAgentAction(e) {
@@ -188456,7 +188580,7 @@ function sameLine(e, t) {
 function openSessionEventPublisher(e) {
 	let { ctx: t } = e, n = [...e.orphaned ?? []], r = createSessionEventDispatcher(e), i = openSessionEventWriter(e.sessionWritable), a, o, emitOne = async (e) => {
 		if (a === void 0 && checksSessionEvents()) {
-			let { schemaViolation: e } = await import("./_33.mjs");
+			let { schemaViolation: e } = await import("./_35.mjs");
 			a = createStreamChecker({
 				seed: currentProjection(t).view,
 				validate: e
@@ -190413,7 +190537,7 @@ async function recordSessionOwnerStep(e) {
 	await recordSessionOwner(e.sessionId);
 }
 async function recordSessionOwner(e) {
-	let { setAttributes: t } = await import("./_13.mjs");
+	let { setAttributes: t } = await import("./_15.mjs");
 	await t({
 		["$eve.session"]: e,
 		["$eve.prewarm"]: `1`,
@@ -190931,15 +191055,6 @@ function pausedOrParked(e, t, n) {
 		...t
 	};
 }
-function createToolChannelTo(e) {
-	return (t, n) => {
-		if (e.delegated) throw Error(`ctx.to() isn't available in a delegated session (a subagent, a root copy, or a remote agent call): a session it started would outlive the delegation and act for the caller. Return the result to the caller, and send from a tool on the root agent.`);
-		return { async send(r, i) {
-			let a = await e.loadBundle(), o = createCrossChannelToFn(createWorkflowRuntime({ compiledArtifactsSource: a.compiledArtifactsSource }), toCrossChannelTargets(a.graph.root.channels));
-			return await contextStorage.run(new ContextContainer(), () => o(t, n).send(r, i));
-		} };
-	};
-}
 function matchAuthorizationCallbacks(e, t) {
 	let n = [], r = [], i = /* @__PURE__ */ new Set();
 	for (let a of t) {
@@ -191252,7 +191367,7 @@ async function runSessionStepBody(e, t) {
 	s.length > 0 && enterSessionProjectionAt(o, foldOrphanedLines(currentProjection(o), s));
 	let l = o.require(ChannelKey), u = o.require(BundleKey), d = resolveEffectiveAgentRuntime(u, o);
 	try {
-		let { getWorkflowMetadata: e } = await import("./_13.mjs"), t = e();
+		let { getWorkflowMetadata: e } = await import("./_15.mjs"), t = e();
 		typeof t.url == `string` && o.set(CallbackBaseUrlKey, resolveWorkflowCallbackBaseUrl(t.url));
 	} catch {}
 	let { signIns: f } = readHitlState(a.state), p;
@@ -210397,7 +210512,7 @@ function aa(e) {
 		},
 		async clear() {
 			if (a$52(), r) {
-				let e = n.dataDir, t = a.join(e, `hooks`), i = await Ot(t, r), { HookSchema: a$51 } = await import("./_11.mjs").then((e) => e.t);
+				let e = n.dataDir, t = a.join(e, `hooks`), i = await Ot(t, r), { HookSchema: a$51 } = await import("./_13.mjs").then((e) => e.t);
 				await U(i.map(async (n) => {
 					let r = await X(a.join(t, n), a$51);
 					r?.token && (await Z(a.join(t, `tokens`, `${rn(r.token)}.json`)), await Z(xn(e, r.token, r.runId, r.hookId)));
@@ -210651,4 +210766,4 @@ function sandboxShutdownPlugin(e) {
 		process
 	}));
 }
-export { $$5 as $, $$8 as $$1, $$23 as $$2, A$10 as A, B$29 as B, BASH_INPUT_SCHEMA, BASH_OUTPUT_SCHEMA, Be$5 as Be, C$11 as C, C$28 as C$1, Ce$17 as Ce, Ci$4 as Ci, ConnectionAuthorizationFailedError, ConnectionAuthorizationRequiredError, D$11 as D, D$14 as D$1, D$15 as D$2, D$32 as D$3, E$12 as E, E$13 as E$1, E$31 as E$2, Ee$5 as Ee, Er$6 as Er, Et$8 as Et, F$9 as F, F$29 as F$1, FACT_SCHEMAS, G$23 as G, Ge$6 as Ge, Gr$2 as Gr, Gt$3 as Gt, Gt$5 as Gt$1, H$26 as H, H3Core, HTTPError, He$5 as He, He$14 as He$1, Hr$2 as Hr, Ht$5 as Ht, I$8 as I, I$30 as I$1, Ie$6 as Ie, Ir$6 as Ir, It$7 as It, J$25 as J, K$25 as K, Kr$2 as Kr, Kr$4 as Kr$1, Kr$6 as Kr$2, L$8 as L, L$9 as L$1, L$28 as L$2, Lt$7 as Lt, M$7 as M, Mi$5 as Mi, NodeResponse, O$11 as O, O$14 as O$1, O$33 as O$2, Oe$5 as Oe, Oi$5 as Oi, Ot$6 as Ot, PROGRESS_SCHEMAS, Qt$5 as Qt, R$7 as R, READ_FILE_INPUT_SCHEMA, READ_FILE_OUTPUT_SCHEMA, Re$5 as Re, S$9 as S, S$10 as S$1, S$13 as S$2, S$31 as S$3, Se$5 as Se, Sr$6 as Sr, St$6 as St, T$14 as T, U$8 as U, U$12 as U$1, U$16 as U$2, U$24 as U$3, Ur$2 as Ur, Ur$4 as Ur$1, V$27 as V, VercelSandbox, Vr$2 as Vr, W$5 as W, W$8 as W$1, W$15 as W$2, WEB_FETCH_INPUT_SCHEMA, WEB_FETCH_OUTPUT_SCHEMA, WRITE_FILE_INPUT_SCHEMA, WRITE_FILE_OUTPUT_SCHEMA, Wr$2 as Wr, Wt$5 as Wt, X$7 as X, X$10 as X$1, Y$8 as Y, Yr$3 as Yr, Z$25 as Z, Ze$16 as Ze, _e$5 as _e, _n$4 as _n, aa, agent, agent_default, an$4 as an, applyLocalWorkflowWorldDeliveryTimeoutDefaults, authenticateLocalWorkflowDeliveries, b$11 as b, bash, c$8 as c, callSlackApi, cn$5 as cn, createDefaultEveChannel, ct$6 as ct, da, de$7 as de, decide$1 as decide, defaultWebSearch, defineHandler, defineInteractiveAuthorization, defineMcpClientConnection, defineSandbox, defineState, defineTool, defineWorkflowTool, di$3 as di, dispatchChannelRequest, dn$4 as dn, e$5 as e, ee$5 as ee, ee$6 as ee$1, ei$1 as ei, environment$2 as environment, et$7 as et, eveChannel, f$29 as f, fe$7 as fe, finalizeInstrumentationProviders, findConnectionEventOwner, fn$4 as fn, ft$5 as ft, functions_CKkqf9V6_default, g$27 as g, ge$5 as ge, h$25 as h, handleAgentInfoRequest, home_channel_default, i$13 as i, i$20 as i$1, installBundledCompiledArtifacts, installBundledSkillFiles, installEveWorkflowQueueNamespace, installWorkflowDeploymentId, installWorkflowWorld, interopAuthoredModuleNamespace, ir$6 as ir, isWebSearchToolDefinition, it$6 as it, j$8 as j, k$9 as k, k$11 as k$1, k$34 as k$2, ke$5 as ke, kt$6 as kt, l$9 as l, l$10 as l$1, l$14 as l$2, la, ln$3 as ln, lo$2 as lo, loadFrameworkProgrammaticModule, loadMemoryWrapperNamespace, loadScheduleCollectionWrapperNamespace, localDev, m$28 as m, memoizeModuleNamespaceFactories, mi$4 as mi, mn$3 as mn, na$4 as na, ne$5 as ne, nn$4 as nn, none, oe$5 as oe, oe$16 as oe$1, on$5 as on, pi$4 as pi, q$6 as q, qi$5 as qi, qr$2 as qr, qr$6 as qr$1, readFile$1 as readFile, rejectHeadRequest, resolveLocalWorkflowWorldDataDirectory, retireConnectionEventOwner, rn$5 as rn, rr$7 as rr, rt$7 as rt, sa, sandboxShutdownPlugin, sandbox_default, sc, schemaViolation, seedInstrumentationProviders, serve, setWorld, shutdownInstrumentationProviders, slackChannel, startConnectionEventDeliveryRun, startConnectionEventOwner, subscriptionFromOutcome, ta$4 as ta, ti$1 as ti, toEventHandler, token_DHGH_jVc_default, token_util_CcvxNv76_default, toolOutput, toolOutputPart, tt$8 as tt, u$9 as u, u$10 as u$1, ua, un$4 as un, ut$6 as ut, vercelOidc, vn$4 as vn, webFetch, webSearch, writeFile$1 as writeFile, wt$6 as wt, x$10 as x, x$31 as x$1, xe$5 as xe, xi$4 as xi, xt$7 as xt, yt$5 as yt, z$28 as z, zr$2 as zr };
+export { $$5 as $, $$8 as $$1, $$23 as $$2, A$10 as A, B$29 as B, BASH_INPUT_SCHEMA, BASH_OUTPUT_SCHEMA, Be$5 as Be, C$11 as C, C$28 as C$1, Ce$17 as Ce, Ci$4 as Ci, ConnectionAuthorizationFailedError, ConnectionAuthorizationRequiredError, D$11 as D, D$14 as D$1, D$15 as D$2, D$32 as D$3, E$12 as E, E$13 as E$1, E$31 as E$2, Ee$5 as Ee, Er$6 as Er, Et$8 as Et, F$9 as F, F$29 as F$1, FACT_SCHEMAS, G$23 as G, Ge$6 as Ge, Gr$2 as Gr, Gt$3 as Gt, Gt$5 as Gt$1, H$26 as H, H3Core, HTTPError, He$5 as He, He$14 as He$1, Hr$2 as Hr, Ht$5 as Ht, I$8 as I, I$30 as I$1, Ie$6 as Ie, Ir$6 as Ir, It$7 as It, J$25 as J, K$25 as K, Kr$2 as Kr, Kr$4 as Kr$1, Kr$6 as Kr$2, L$8 as L, L$9 as L$1, L$28 as L$2, Lt$7 as Lt, M$7 as M, Mi$5 as Mi, NodeResponse, O$11 as O, O$14 as O$1, O$33 as O$2, Oe$5 as Oe, Oi$5 as Oi, Ot$6 as Ot, PROGRESS_SCHEMAS, Qt$5 as Qt, R$7 as R, READ_FILE_INPUT_SCHEMA, READ_FILE_OUTPUT_SCHEMA, Re$5 as Re, S$9 as S, S$10 as S$1, S$13 as S$2, S$31 as S$3, Se$5 as Se, Sr$6 as Sr, St$6 as St, T$14 as T, U$8 as U, U$12 as U$1, U$16 as U$2, U$24 as U$3, Ur$2 as Ur, Ur$4 as Ur$1, V$27 as V, VercelSandbox, Vr$2 as Vr, W$5 as W, W$8 as W$1, W$15 as W$2, WEB_FETCH_INPUT_SCHEMA, WEB_FETCH_OUTPUT_SCHEMA, WRITE_FILE_INPUT_SCHEMA, WRITE_FILE_OUTPUT_SCHEMA, Wr$2 as Wr, Wt$5 as Wt, X$7 as X, X$10 as X$1, Y$8 as Y, Yr$3 as Yr, Z$25 as Z, Ze$16 as Ze, _e$5 as _e, _n$4 as _n, aa, agent, agent_default, an$4 as an, applyLocalWorkflowWorldDeliveryTimeoutDefaults, authenticateLocalWorkflowDeliveries, b$11 as b, bash, c$8 as c, cn$5 as cn, createDefaultEveChannel, ct$6 as ct, da, de$7 as de, decide$1 as decide, defaultWebSearch, defineHandler, defineInteractiveAuthorization, defineMcpClientConnection, defineSandbox, defineTool, defineWorkflowTool, di$3 as di, dispatchChannelRequest, dn$4 as dn, e$5 as e, ee$5 as ee, ee$6 as ee$1, ei$1 as ei, environment$2 as environment, et$7 as et, eveChannel, f$18 as f, f$29 as f$1, fe$7 as fe, finalizeInstrumentationProviders, findConnectionEventOwner, fn$4 as fn, ft$5 as ft, functions_CKkqf9V6_default, g$27 as g, ge$5 as ge, h$25 as h, handleAgentInfoRequest, home_channel_default, i$13 as i, i$20 as i$1, installBundledCompiledArtifacts, installBundledSkillFiles, installEveWorkflowQueueNamespace, installWorkflowDeploymentId, installWorkflowWorld, interopAuthoredModuleNamespace, ir$6 as ir, isWebSearchToolDefinition, it$6 as it, j$8 as j, k$9 as k, k$11 as k$1, k$34 as k$2, ke$5 as ke, kt$6 as kt, l$9 as l, l$10 as l$1, l$14 as l$2, la, ln$3 as ln, lo$2 as lo, loadFrameworkProgrammaticModule, loadMemoryWrapperNamespace, loadScheduleCollectionWrapperNamespace, localDev, m$28 as m, memoizeModuleNamespaceFactories, mi$4 as mi, mn$3 as mn, na$4 as na, ne$5 as ne, nn$4 as nn, none, oe$5 as oe, oe$16 as oe$1, on$5 as on, pi$4 as pi, q$6 as q, qi$5 as qi, qr$2 as qr, qr$6 as qr$1, readFile$1 as readFile, rejectHeadRequest, resolveLocalWorkflowWorldDataDirectory, retireConnectionEventOwner, rn$5 as rn, rr$7 as rr, rt$7 as rt, sa, sandboxShutdownPlugin, sandbox_default, sc, schemaViolation, seedInstrumentationProviders, serve, setWorld, shutdownInstrumentationProviders, slackChannel, startConnectionEventDeliveryRun, startConnectionEventOwner, subscriptionFromOutcome, ta$4 as ta, ti$1 as ti, toEventHandler, token_DHGH_jVc_default, token_util_CcvxNv76_default, toolOutput, toolOutputPart, tt$8 as tt, u$9 as u, u$10 as u$1, ua, un$4 as un, ut$6 as ut, vercelOidc, vn$4 as vn, webFetch, webSearch, withWorkflowStepAuthorization, writeFile$1 as writeFile, wt$6 as wt, x$10 as x, x$31 as x$1, xe$5 as xe, xi$4 as xi, xt$7 as xt, yt$5 as yt, z$28 as z, zr$2 as zr };

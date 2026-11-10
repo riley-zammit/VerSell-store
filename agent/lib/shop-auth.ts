@@ -6,7 +6,7 @@ import {
   type TokenResult,
 } from "eve/connections";
 
-// Shared by the root's Shop connection and product-set-selector's, so one sign-in covers both.
+// Shared by the root's Shop connection and product-finder's, so one sign-in covers both.
 // Both connection files are named shop-mcp.ts, which is the name used in the errors below.
 const CONNECTION = "shop-mcp";
 

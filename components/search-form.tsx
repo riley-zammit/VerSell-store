@@ -9,6 +9,7 @@ export function SearchForm() {
     const pathname = usePathname();
     const searchParams = useSearchParams()
     const [isPending, startTransition] = useTransition()
+    
     // Debounced so each keystroke doesn't trigger a server render + uncached API call.
     const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
     useEffect(() => () => clearTimeout(timer.current), []) // don't navigate back to /search after leaving
@@ -36,7 +37,7 @@ export function SearchForm() {
                 onChange={(e) => {
                     const term = e.target.value
                     clearTimeout(timer.current)
-                    timer.current = setTimeout(() => handleSearch(term), 300)
+                    timer.current = setTimeout(() => handleSearch(term), 150)
                 }}
                 defaultValue={searchParams.get('query')?.toString()}
             />

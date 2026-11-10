@@ -3,48 +3,53 @@ import { interopAuthoredModuleNamespace, loadFrameworkProgrammaticModule as load
 import * as imported_module_0 from "../../../agent/channels/eve.ts";
 import * as imported_module_1 from "../../../agent/channels/slack.ts";
 import * as imported_module_2 from "../../../agent/connections/shop-mcp.ts";
-import * as imported_module_6 from "../../../agent/sandbox.ts";
-import * as imported_module_7 from "../../../agent/tools/approve_bundle_concept.ts";
-import * as imported_module_8 from "../../../agent/tools/confirm_bundle.ts";
-import * as imported_module_9 from "../../../agent/tools/escalate.ts";
-import * as imported_module_10 from "../../../agent/tools/get_bundle.ts";
-import * as imported_module_15 from "../../../agent/subagents/product-customizer/sandbox.ts";
-import * as imported_module_16 from "../../../agent/subagents/product-customizer/tools/generate_mockup.ts";
-import * as imported_module_17 from "../../../agent/subagents/product-customizer/tools/load_image.ts";
-import * as imported_module_18 from "../../../agent/subagents/product-customizer/tools/publish_mockup.ts";
-import * as imported_module_19 from "../../../agent/subagents/product-set-selector/connections/shop-mcp.ts";
-import * as imported_module_25 from "../../../agent/subagents/product-set-selector/tools/rank_products.ts";
-import * as imported_module_26 from "../../../agent/subagents/product-set-selector/tools/save_bundle.ts";
-import * as imported_module_27 from "../../../agent/subagents/product-set-selector/tools/search_store_products.ts";
+import * as imported_module_9 from "../../../agent/sandbox.ts";
+import * as imported_module_10 from "../../../agent/tools/approve_bundle_concept.ts";
+import * as imported_module_11 from "../../../agent/tools/finalize_bundle.ts";
+import * as imported_module_12 from "../../../agent/tools/get_bundle.ts";
+import * as imported_module_13 from "../../../agent/tools/save_creative.ts";
+import * as imported_module_14 from "../../../agent/tools/update_bundle.ts";
+import * as imported_module_19 from "../../../agent/subagents/product-customizer/sandbox.ts";
+import * as imported_module_20 from "../../../agent/subagents/product-customizer/tools/generate_mockup.ts";
+import * as imported_module_21 from "../../../agent/subagents/product-customizer/tools/load_image.ts";
+import * as imported_module_22 from "../../../agent/subagents/product-customizer/tools/publish_mockup.ts";
+import * as imported_module_23 from "../../../agent/subagents/product-finder/connections/shop-mcp.ts";
+import * as imported_module_29 from "../../../agent/subagents/product-finder/tools/rank_products.ts";
+import * as imported_module_30 from "../../../agent/subagents/product-finder/tools/save_bundle_item.ts";
+import * as imported_module_31 from "../../../agent/subagents/product-finder/tools/search_store_products.ts";
 
 const module_0 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_0));
 const module_1 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_1));
 const module_2 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_2));
-const module_3 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/web_fetch.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
-const module_4 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"channels/home.ts","registryId":"eve:root-defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
-const module_5 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/agent.ts","registryId":"eve:root-defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
-const module_6 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_6));
-const module_7 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_7));
-const module_8 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_8));
+const module_3 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/bash.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
+const module_4 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/read_file.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
+const module_5 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/web_fetch.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
+const module_6 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/write_file.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
+const module_7 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"channels/home.ts","registryId":"eve:root-defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
+const module_8 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/agent.ts","registryId":"eve:root-defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
 const module_9 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_9));
 const module_10 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_10));
-const module_11 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/bash.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
-const module_12 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/read_file.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
-const module_13 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/web_fetch.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
-const module_14 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/write_file.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
-const module_15 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_15));
-const module_16 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_16));
-const module_17 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_17));
-const module_18 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_18));
+const module_11 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_11));
+const module_12 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_12));
+const module_13 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_13));
+const module_14 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_14));
+const module_15 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/bash.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
+const module_16 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/read_file.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
+const module_17 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/web_fetch.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
+const module_18 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/write_file.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
 const module_19 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_19));
-const module_20 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"sandbox.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53","semanticRevision":"eve:default-sandbox:v1"}, Object.freeze({}));
-const module_21 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/bash.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
-const module_22 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/read_file.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
-const module_23 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/web_fetch.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
-const module_24 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/write_file.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
-const module_25 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_25));
-const module_26 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_26));
-const module_27 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_27));
+const module_20 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_20));
+const module_21 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_21));
+const module_22 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_22));
+const module_23 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_23));
+const module_24 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"sandbox.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53","semanticRevision":"eve:default-sandbox:v1"}, Object.freeze({}));
+const module_25 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/bash.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
+const module_26 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/read_file.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
+const module_27 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/web_fetch.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
+const module_28 = await loadProgrammaticModule({"kind":"programmatic","moduleId":"tools/write_file.ts","registryId":"eve:defaults","revision":"eve@1.0.0-rc.1:compiled-manifest-v53"}, Object.freeze({}));
+const module_29 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_29));
+const module_30 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_30));
+const module_31 = memoizeModuleNamespaceFactories(interopAuthoredModuleNamespace(imported_module_31));
 
 export const moduleMap = Object.freeze({
   "nodes": Object.freeze({
@@ -53,39 +58,43 @@ export const moduleMap = Object.freeze({
                   "channels/eve.ts": module_0,
                   "channels/slack.ts": module_1,
                   "connections/shop-mcp.ts": module_2,
-                  "eve:defaults:tools/web_fetch.ts": module_3,
-                  "eve:root-defaults:channels/home.ts": module_4,
-                  "eve:root-defaults:tools/agent.ts": module_5,
-                  "sandbox.ts": module_6,
-                  "tools/approve_bundle_concept.ts": module_7,
-                  "tools/confirm_bundle.ts": module_8,
-                  "tools/escalate.ts": module_9,
-                  "tools/get_bundle.ts": module_10
+                  "eve:defaults:tools/bash.ts": module_3,
+                  "eve:defaults:tools/read_file.ts": module_4,
+                  "eve:defaults:tools/web_fetch.ts": module_5,
+                  "eve:defaults:tools/write_file.ts": module_6,
+                  "eve:root-defaults:channels/home.ts": module_7,
+                  "eve:root-defaults:tools/agent.ts": module_8,
+                  "sandbox.ts": module_9,
+                  "tools/approve_bundle_concept.ts": module_10,
+                  "tools/finalize_bundle.ts": module_11,
+                  "tools/get_bundle.ts": module_12,
+                  "tools/save_creative.ts": module_13,
+                  "tools/update_bundle.ts": module_14
                 })
             }),
       "subagents/product-customizer": Object.freeze({
               "modules": Object.freeze({
-                  "eve:defaults:tools/bash.ts": module_11,
-                  "eve:defaults:tools/read_file.ts": module_12,
-                  "eve:defaults:tools/web_fetch.ts": module_13,
-                  "eve:defaults:tools/write_file.ts": module_14,
-                  "sandbox.ts": module_15,
-                  "tools/generate_mockup.ts": module_16,
-                  "tools/load_image.ts": module_17,
-                  "tools/publish_mockup.ts": module_18
+                  "eve:defaults:tools/bash.ts": module_15,
+                  "eve:defaults:tools/read_file.ts": module_16,
+                  "eve:defaults:tools/web_fetch.ts": module_17,
+                  "eve:defaults:tools/write_file.ts": module_18,
+                  "sandbox.ts": module_19,
+                  "tools/generate_mockup.ts": module_20,
+                  "tools/load_image.ts": module_21,
+                  "tools/publish_mockup.ts": module_22
                 })
             }),
-      "subagents/product-set-selector": Object.freeze({
+      "subagents/product-finder": Object.freeze({
               "modules": Object.freeze({
-                  "connections/shop-mcp.ts": module_19,
-                  "eve:defaults:sandbox.ts": module_20,
-                  "eve:defaults:tools/bash.ts": module_21,
-                  "eve:defaults:tools/read_file.ts": module_22,
-                  "eve:defaults:tools/web_fetch.ts": module_23,
-                  "eve:defaults:tools/write_file.ts": module_24,
-                  "tools/rank_products.ts": module_25,
-                  "tools/save_bundle.ts": module_26,
-                  "tools/search_store_products.ts": module_27
+                  "connections/shop-mcp.ts": module_23,
+                  "eve:defaults:sandbox.ts": module_24,
+                  "eve:defaults:tools/bash.ts": module_25,
+                  "eve:defaults:tools/read_file.ts": module_26,
+                  "eve:defaults:tools/web_fetch.ts": module_27,
+                  "eve:defaults:tools/write_file.ts": module_28,
+                  "tools/rank_products.ts": module_29,
+                  "tools/save_bundle_item.ts": module_30,
+                  "tools/search_store_products.ts": module_31
                 })
             })
     })
