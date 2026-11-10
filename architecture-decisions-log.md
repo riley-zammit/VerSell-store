@@ -41,7 +41,6 @@ so changing this here wouldn't affect other layouts. Decision: Let's not do this
 # Agent
 ## Design
 - Wrap useEveAgent in a provider to have it available across the store
-- Pull out eve as its own Vercel Service to a) reduce coupling to the storefront, b) more closely align with production deployment shape, c) to more easily reason about the e2e architecture and d) more easily allow for future additions
 - Tie a bundle to a specific conversation ID. Eve manages context, so there's no benefit to allowing a new conversation within a bundle. This also removes some complexity which comes from either a) keying bundles to a session cookie and b) fetching related sessions, possibly multiple, per bundle.
 - Use redis because bundles are short-lived and drafts can expire. Also we only ever query by ID - no complex schema management needed.
 

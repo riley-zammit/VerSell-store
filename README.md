@@ -12,13 +12,13 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 | `OPENAI_API_KEY` | For the Eve agent | Read implicitly by `@ai-sdk/openai` in `agent/agent.ts`. |
 | `VERCEL_PROJECT_PRODUCTION_URL` | No | Set by Vercel; used for `metadataBase`. Falls back to `http://localhost:3000`. |
 
-Then start the store and the agent together (Vercel CLI 59.16+):
+Then start the store and the agent together (`withEve` in `next.config.ts` starts the agent alongside Next.js):
 
 ```bash
-npm run dev:all
+npm run dev
 ```
 
-`npm run dev` starts only Next.js, so `/eve/v1/*` isn't served. `npm run dev:eve` starts only the agent, with the eve terminal UI.
+`npm run dev:eve` starts only the agent, with the eve terminal UI.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

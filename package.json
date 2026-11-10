@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:all": "vercel dev --local",
     "dev:eve": "eve dev",
     "build": "next build",
     "start": "next start",
