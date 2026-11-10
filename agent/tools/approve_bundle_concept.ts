@@ -1,6 +1,7 @@
 import { defineWorkflowTool } from "eve/tools";
 import { z } from "zod";
-import { BundleSlot, ItemSource, startBundle } from "../../lib/bundle";
+import { startBundle } from "../../lib/bundle";
+import { BundleSlot, ItemSource } from "../../lib/bundle-schema";
 
 // A workflow tool so the turn pauses on ctx.ask until the customer clicks an answer.
 // The pause is durable, so the customer can take as long as they like to answer.

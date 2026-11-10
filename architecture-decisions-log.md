@@ -26,18 +26,20 @@ so changing this here wouldn't affect other layouts. Decision: Let's not do this
 - Minimize page-level suspense boundaries. Even just a page-level title with an immediate suspense child is better UX
 
 ## Cart
-- Originally used a parallel route for cart so we could server-render but Cart should be client component to feel snappy. The server round-trip to open the drawer felt slow. Once we moved that to the client, the parallel route started getting in the way: Prefetching the route, managing the state across routes - optimistic add was a pain
-
+- Originally used a parallel route for cart so we could server-render but Cart should be client component to feel snappy. The server round-trip to open the drawer felt slow. Once we moved that to the client, the parallel route started getting in the way: Prefetching the route, managing the state across routes - optimistic add was too complex
+- Enforce random stock differences in the cart as a second layer. Typically we'd do this at checkout if we accept the cart add, but bring it up since we're not writing checkout.
 - Keep only the API cart token in an httpOnly cookie. The root layout starts `getCartView()` without awaiting it and passes the promise to the client `CartProvider`; cart readers `use()` it inside Suspense. The header shows the plain cart icon while it resolves.
 - Add with JS: `onSubmit` opens the drawer (plain client state) and sends `addToCart` in a transition with an optimistic line. The drawer shows "Adding…" and any error from the provider. Errors never show under the form.
-- Add without JS: a second action (`addToCartAndRedirect`) redirects to `/cart`, or `/cart?error=<AddError>` on failure. A code, not API text, so crafted links can't put words on the page. A redirect from a Server Action can't open the drawer: the action only sends `Next-Url` when the tree already holds an intercepted route.
-- Quantity controls are one form per line, so they work without JS: before hydration the form posts to `setCartQuantityAndRedirect` and lands back on `/cart`. With JS, `onSubmit` sends `setCartQuantity` through `CartProvider` and shows the new quantity optimistically. Known gap: a no-JS quantity *error* isn't shown; the page just shows the unchanged cart.
-- The API doesn't enforce stock on add or update (an over-stock quantity returns 201/200). Checkout is an inert button.
+- Add without JS: a second action (`addToCartAndRedirect`) redirects to `/cart`, or `/cart?error=<AddError>` on failure
+- Ensure errors show on non-JS cart page via redirect
+
 
 # Agent
 ## Design
 - Wrap useEveAgent in a provider to have it available across the store
-
+- Pull out eve as its own Vercel Service to a) reduce coupling to the storefront, b) more closely align with production deployment shape, c) to more easily reason about the e2e architecture and d) more easily allow for future additions
+- Tie a bundle to a specific conversation ID. Eve manages context, so there's no benefit to allowing a new conversation within a bundle. This also removes some complexity which comes from either a) keying bundles to a session cookie and b) fetching related sessions, possibly multiple, per bundle.
+- Use redis because bundles are short-lived and drafts can expire. Also we only ever query by ID - no complex schema management needed.
 
 ## Features
 Bundle builder and customizer. 

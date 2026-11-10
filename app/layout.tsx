@@ -9,6 +9,7 @@ import { ChatWindowContextProvider } from "@/components/chat/chat-window-provide
 import { Footer } from "@/components/layout/root/footer";
 import { Header } from "@/components/layout/root/header";
 import { getCartView } from "@/lib/cart";
+import { siteOpenGraph } from "@/lib/metadata";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -21,8 +22,6 @@ const aleo = Aleo({
     subsets: ["latin"],
 });
 
-const description = "Official Vercel swag: bottles, mugs, tees, hoodies and more.";
-
 export const metadata: Metadata = {
     metadataBase: new URL(
         process.env.VERCEL_PROJECT_PRODUCTION_URL
@@ -30,8 +29,9 @@ export const metadata: Metadata = {
             : "http://localhost:3000",
     ),
     title: { default: 'Versell', template: "%s | Versell" },
-    description,
-    openGraph: { siteName: 'Versell', type: "website", locale: "en_US", description },
+    description: "Official Vercel swag: bottles, mugs, tees, hoodies and more.",
+    // The image comes from app/opengraph-image.png. Pages that don't set openGraph inherit it.
+    openGraph: siteOpenGraph,
     twitter: { card: "summary_large_image" },
 };
 

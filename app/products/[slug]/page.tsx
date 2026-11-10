@@ -1,9 +1,11 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { AddToCartForm } from "@/components/cart/add-to-cart-form";
 import { Category, getProduct, getProductStock, getProductsByCategory, STOP_SELLING_AT_INVENTORY_LEVEL } from "@/lib/api";
 import { formatPrice } from "@/lib/format";
+import { siteOpenGraph } from "@/lib/metadata";
 import type { Product } from "@/lib/types";
 import { cacheLife } from "next/cache";
 
@@ -14,6 +16,28 @@ import { cacheLife } from "next/cache";
 export async function generateStaticParams() {
     const lists = await Promise.all([Category.Bottles, Category.Cups, Category.Mugs].map(getProductsByCategory));
     return lists.flat().map(({ slug }) => ({ slug }));
+}
+
+// Cached like the page, so the metadata prerenders into the shell instead of streaming in.
+export async function generateMetadata({ params }: PageProps<"/products/[slug]">): Promise<Metadata> {
+    "use cache: remote"
+    cacheLife('catalog');
+
+    const { slug } = await params;
+    const product = await getProduct(slug);
+    if (!product) {
+        notFound();
+    }
+    const { name, description, images } = product;
+
+    return {
+        title: name,
+        description,
+        openGraph: {
+            ...siteOpenGraph,
+            images: [{ url: images[0], alt: name }],
+        },
+    };
 }
 
 export default async function Page({ params }: PageProps<"/products/[slug]">) {
@@ -49,7 +73,8 @@ async function ProductCardAndInventory({ product }: { product: Product }) {
     // A failed stock check shouldn't take down the page; keep the optimistic form and let checkout decide.
     const inventory = await getProductStock(product.id).catch(() => null)
     
-    //Don't expose inventory count
-    const soldOut = inventory !== null && inventory.stock <= STOP_SELLING_AT_INVENTORY_LEVEL
-    return <AddToCartForm product={product} disabled={soldOut} />
+    // What's left to sell, not the raw stock. Null when the check failed.
+    const available = inventory ? inventory.stock - STOP_SELLING_AT_INVENTORY_LEVEL : null
+    const soldOut = available !== null && available <= 0
+    return <AddToCartForm product={product} inventory={available} disabled={soldOut} />
 }

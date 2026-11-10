@@ -2,7 +2,8 @@ import { generateText } from "ai";
 import { defineWorkflowTool, toolOutput, toolOutputPart } from "eve/tools";
 import { FatalError } from "eve/workflow";
 import { z } from "zod";
-import { BundleId, putMockupImage } from "../../../../lib/bundle";
+import { putMockupImage } from "../../../../lib/bundle";
+import { BundleId } from "../../../../lib/bundle-schema";
 import { fetchImage } from "../../../lib/images";
 
 // Gemini is only for putting the creative onto the product. Anything that can be done by editing

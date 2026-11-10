@@ -1,6 +1,7 @@
 import { defineWorkflowTool } from "eve/tools";
 import { z } from "zod";
-import { approveBundle, BundleId, getBundle, getItems, ItemSource } from "../../lib/bundle";
+import { approveBundle, getBundle, getItems } from "../../lib/bundle";
+import { BundleId, ItemSource } from "../../lib/bundle-schema";
 import { formatMoney } from "../../lib/format";
 
 // Same gate as the concept: two buttons, and changes come as an ordinary chat message.

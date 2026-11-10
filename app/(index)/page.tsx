@@ -4,8 +4,7 @@ import { Hero } from "@/app/(index)/hero";
 import { FeaturedProduct } from "@/components/product/featured-product";
 import { ProductRow, RowSkeleton } from "@/components/product/product-row";
 
-const title = "Versell | Official Vercel Swag";
-export const metadata: Metadata = { title: { absolute: title }, openGraph: { title } };
+export const metadata: Metadata = { title: { absolute: "Versell | Official Vercel Swag" } };
 
 export default function HomePage() {
     return (

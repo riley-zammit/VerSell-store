@@ -20,6 +20,8 @@ export default function Loading() {
                     <div className="h-12 w-24 animate-pulse rounded-full bg-foreground/10" />
                     <div className="h-12 w-36 animate-pulse rounded-full bg-foreground/10" />
                 </div>
+                {/* The stock line: the form's gap-3, then its h-5 row. */}
+                <div className="mt-3 h-5 w-20 animate-pulse rounded bg-foreground/10" />
             </div>
         </article>
     )

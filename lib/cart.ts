@@ -2,7 +2,7 @@ import 'server-only'
 import { cookies } from 'next/headers'
 
 import { ApiError, apiFetch, getProductStock, STOP_SELLING_AT_INVENTORY_LEVEL } from './api'
-import { AddError, type Cart, type CartResult, type CartView, type Stock } from './types'
+import { CartErrorCode, type Cart, type CartResult, type CartView, type Stock } from './types'
 
 const cartCookie = 'cart-token'
 
@@ -165,15 +165,26 @@ async function cartExists(token: string) {
 // What a definitive add failure means for the shopper. The cart's own 404 is retried before this.
 function toAddError(error: ApiError) {
     if (error.status === 404) {
-        return AddError.ProductUnavailable
+        return CartErrorCode.ProductUnavailable
     }
     if (error.status === 422) {
-        return AddError.InvalidQuantity
+        return CartErrorCode.InvalidQuantity
     }
-    return AddError.Failed
+    return CartErrorCode.AddFailed
 }
 
-export async function addItem(productId: string, quantity: number): Promise<{ cart: Cart } | { error: AddError }> {
+// What a definitive quantity change or removal failure means for the shopper. 404 is the cart or the line.
+function toUpdateError(error: ApiError) {
+    if (error.status === 404) {
+        return CartErrorCode.ItemMissing
+    }
+    if (error.status === 422) {
+        return CartErrorCode.InvalidQuantity
+    }
+    return CartErrorCode.UpdateFailed
+}
+
+export async function addItem(productId: string, quantity: number): Promise<CartResult> {
     let token = await readCartToken()
     if (!token) {
         token = await createCart()
@@ -207,7 +218,7 @@ export async function addItem(productId: string, quantity: number): Promise<{ ca
 async function sendItem(productId: string, init: RequestInit): Promise<CartResult> {
     const token = await readCartToken()
     if (!token) {
-        return { error: 'Your cart expired. Add the item again.' }
+        return { error: CartErrorCode.ItemMissing }
     }
     try {
         const path = `${CartPath.Root}/${encodeURIComponent(productId)}`
@@ -216,7 +227,7 @@ async function sendItem(productId: string, init: RequestInit): Promise<CartResul
         return { cart: withoutToken(data) }
     } catch (error) {
         if (definitive(error)) {
-            return { error: error.message }
+            return { error: toUpdateError(error) }
         }
         throw error
     }

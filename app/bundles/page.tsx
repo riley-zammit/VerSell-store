@@ -4,7 +4,8 @@ import Image from 'next/image'
 import { Suspense } from 'react'
 
 import { NavLink } from '@/components/nav-link'
-import { BundleStatus, getBundle, getItems, getMockups, getRememberedBundleIds } from '@/lib/bundle'
+import { getBundle, getItems, getMockups, getRememberedBundleIds } from '@/lib/bundle'
+import { BundleStatus } from '@/lib/bundle-schema'
 import { isVisitorId, VISITOR_COOKIE } from '@/lib/visitor'
 
 export const metadata: Metadata = {

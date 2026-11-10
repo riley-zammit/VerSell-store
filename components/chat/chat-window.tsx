@@ -1,5 +1,6 @@
 'use client'
 
+import { catchError } from 'next/error'
 import { usePathname } from 'next/navigation'
 
 import { useAgent, useIsHydrated } from '@/components/chat/agent-provider'
@@ -15,6 +16,10 @@ import { ChatMessages } from '@/components/chat/parts/chat-messages'
 const bubbleClass =
     'fixed inset-0 z-40 flex flex-col bg-white transition-[height,right,bottom,border-radius,box-shadow,opacity,translate] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] starting:translate-y-4 starting:opacity-0 motion-reduce:transition-none sm:inset-auto sm:right-4 sm:bottom-4 sm:h-[min(40rem,calc(100dvh-2rem))] sm:w-100 sm:rounded-[25px] sm:shadow-card'
 const dockedClass = 'lg:right-0 lg:bottom-0 lg:h-dvh lg:w-(--chat-width) lg:rounded-none lg:border-l lg:border-black/10 lg:shadow-none'
+
+// The window sits in the root layout, above every error.tsx, so it brings its own boundary. It wraps only the body,
+// so the header's close button still works when the chat breaks.
+const ChatBoundary = catchError((_: object, { reset }) => <ChatError reset={reset} />)
 
 // Reads the URL, which a page with an unknown param only has at request time, so the layout renders it inside
 // Suspense with a plain ChatWindow fallback. Both are fixed-position, so the swap shifts nothing.
@@ -69,13 +74,42 @@ export function ChatWindow({ isDocked = false }: { isDocked?: boolean }) {
                             </button>
                         </div>
                     </header>
-                    <ChatMessages />
-                    <ChatInput />
+                    <ChatBoundary>
+                        <ChatMessages />
+                        <ChatInput />
+                    </ChatBoundary>
                     <noscript>
                         <p className="px-4 pb-3 text-sm text-red-700">This chat needs JavaScript.</p>
                     </noscript>
                 </aside>
             ) : null}
         </>
+    )
+}
+
+// The chat's state is all in the browser, so reset (a plain re-render) is enough; retry would also refetch the page.
+// If the saved conversation itself is what breaks, re-rendering hits it again, so starting fresh is the way out.
+function ChatError({ reset }: { reset: () => void }) {
+    const agent = useAgent()
+
+    return (
+        <div className="flex flex-1 flex-col items-center justify-center gap-6 p-4 text-center">
+            <p className="text-lg">The chat hit a snag.</p>
+            <div className="flex gap-2">
+                <button className="button-light" onClick={reset} type="button">
+                    Try again
+                </button>
+                <button
+                    className="button-dark"
+                    onClick={() => {
+                        agent.newSession()
+                        reset()
+                    }}
+                    type="button"
+                >
+                    Start a new chat
+                </button>
+            </div>
+        </div>
     )
 }

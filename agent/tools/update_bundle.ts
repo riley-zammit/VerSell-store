@@ -1,6 +1,7 @@
 import { defineTool } from "eve/tools";
 import { z } from "zod";
-import { BundleId, BundleSlot, updateBundle } from "../../lib/bundle";
+import { updateBundle } from "../../lib/bundle";
+import { BundleId, BundleSlot } from "../../lib/bundle-schema";
 
 export default defineTool({
     description:

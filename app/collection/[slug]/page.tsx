@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { GridSkeleton, pageSchema, ProductGrid } from "@/components/product/product-grid";
@@ -18,6 +19,21 @@ export async function generateStaticParams() {
     return slugs.map((slug) => ({ slug }));
 }
 
+// Cached like CollectionTitle, so the metadata prerenders into the shell instead of streaming in.
+export async function generateMetadata({ params }: PageProps<"/collection/[slug]">): Promise<Metadata> {
+    "use cache: remote"
+    cacheLife("catalog");
+
+    const { slug } = await params;
+    const title = await getCollectionTitle(slug);
+    if (!title) {
+        notFound();
+    }
+    return {
+        title,
+        description: `Shop ${title} from the official Vercel swag store.`,
+    };
+}
 
 export default async function CollectionPage({ params, searchParams }: PageProps<"/collection/[slug]">) {
     const { slug } = await params;
@@ -35,14 +51,19 @@ export default async function CollectionPage({ params, searchParams }: PageProps
 async function CollectionTitle({ slug }: { slug: string }) {
     "use cache: remote"
     cacheLife("catalog");
-    //map featured/all products to the category pattern
-    const categories = await getCategories();
-    const category = categories.find((category) => category.slug === slug);
-    const title = specialTitles.get(slug) ?? category?.name;
+    const title = await getCollectionTitle(slug);
     if (!title) {
         notFound();
     }
     return <h1 className="mb-8 text-4xl capitalize md:text-5xl">{title}</h1>;
+}
+
+// Shared by the heading and the metadata. Callers cache it.
+async function getCollectionTitle(slug: string) {
+    //map featured/all products to the category pattern
+    const categories = await getCategories();
+    const category = categories.find((category) => category.slug === slug);
+    return specialTitles.get(slug) ?? category?.name;
 }
 
 // ?page= is request data so it needs to be at request time otherwise the whole page becomes dynamic. Keep ProductGrid pure and static so we can cache it easily

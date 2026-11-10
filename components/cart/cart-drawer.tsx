@@ -5,7 +5,7 @@ import { Suspense, useEffect, useRef } from 'react'
 
 import { CartError, CartLines, CartSkeleton } from '@/components/cart/cart-shared'
 import { useCart } from '@/components/cart/cart-provider'
-import { addErrorMessages } from '@/lib/types'
+import { cartErrorMessages } from '@/lib/types'
 
 // The drawer sits in the root layout, above every error.tsx, so it brings its own boundary.
 const CartBoundary = catchError((_: object, { retry }) => <CartError reset={retry} />)
@@ -79,7 +79,7 @@ export function CartDrawer() {
                 {/* The add in flight, or why it failed. A fixed-height row, so a message never moves the lines. */}
                 <div aria-live="polite" className="h-6 shrink-0 px-5 text-sm text-foreground/70">
                     {adding ? <p className="truncate">Adding {adding.name}…</p> : null}
-                    {error ? <p role="alert" className="truncate">{addErrorMessages[error]}</p> : null}
+                    {error ? <p role="alert" className="truncate">{cartErrorMessages[error]}</p> : null}
                 </div>
                 <CartBoundary>
                     <Suspense fallback={<CartSkeleton />}>

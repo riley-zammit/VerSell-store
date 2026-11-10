@@ -2,8 +2,8 @@
 
 import { createContext, startTransition, use, useContext, useOptimistic, useState, type ReactNode } from 'react'
 
-import { addToCart, setCartQuantity } from '@/lib/cart-actions'
-import { AddError, CartField, type CartView, type Product } from '@/lib/types'
+import { addToCart, setCartQuantity } from '@/actions/cart'
+import { CartErrorCode, cartErrorMessages, CartField, type CartView, type Product } from '@/lib/types'
 
 enum CartChangeType {
     Add = 'add',
@@ -21,7 +21,7 @@ type CartContextValue = {
     pendingChanges: CartChange[]
     setQuantity: (productId: string, formData: FormData) => Promise<string | null>
     adding: Product | null
-    error: AddError | null
+    error: CartErrorCode | null
     add: (product: Product, formData: FormData) => void
     isOpen: boolean
     openCart: () => void
@@ -102,7 +102,7 @@ export function CartProvider({ cartView, children }: { cartView: Promise<CartVie
         [],
         (changes, change) => [...changes, change],
     )
-    const [error, setError] = useState<AddError | null>(null)
+    const [error, setError] = useState<CartErrorCode | null>(null)
     const [isOpen, setIsOpen] = useState(false)
 
     const pendingAdd = pendingChanges.find((change) => change.type === CartChangeType.Add)
@@ -115,9 +115,9 @@ export function CartProvider({ cartView, children }: { cartView: Promise<CartVie
             quantity: Number(formData.get(CartField.Quantity)),
         })
         // Timeouts, 5xx, or the shopper went offline.
-        const result = await setCartQuantity(formData).catch(() => ({ error: 'We couldn’t update the quantity. Try again.' }))
+        const result = await setCartQuantity(formData).catch(() => ({ error: CartErrorCode.UpdateFailed }))
         if ('error' in result) {
-            return result.error
+            return cartErrorMessages[result.error]
         }
         // Updates after an await need their own transition to join the action.
         startTransition(() => {
@@ -138,7 +138,7 @@ export function CartProvider({ cartView, children }: { cartView: Promise<CartVie
                 quantity: Number(formData.get(CartField.Quantity)),
             })
             // Timeouts, 5xx, or the shopper went offline.
-            const result = await addToCart(formData).catch(() => ({ error: AddError.Failed }))
+            const result = await addToCart(formData).catch(() => ({ error: CartErrorCode.AddFailed }))
             // Updates after an await need their own transition to join the action.
             startTransition(() => {
                 if ('error' in result) {

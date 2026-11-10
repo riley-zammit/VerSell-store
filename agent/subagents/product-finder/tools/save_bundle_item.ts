@@ -1,5 +1,6 @@
 import { defineTool } from "eve/tools";
-import { BundleId, BundleItem, saveItem } from "../../../../lib/bundle";
+import { saveItem } from "../../../../lib/bundle";
+import { BundleId, BundleItem } from "../../../../lib/bundle-schema";
 
 export default defineTool({
     description:

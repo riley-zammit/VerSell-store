@@ -1,6 +1,6 @@
 import { defineTool } from "eve/tools";
 import { z } from "zod";
-import type { BundleProduct } from "../../../../lib/bundle";
+import type { BundleProduct } from "../../../../lib/bundle-schema";
 import { apiFetch, Category } from "../../../../lib/swag-api";
 import type { Product } from "../../../../lib/types";
 

@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 
 import { useCart } from '@/components/cart/cart-provider'
-import { getStoreProducts } from '@/lib/bundle-actions'
+import { getStoreProducts } from '@/actions/bundle'
 import { CartField, type Product } from '@/lib/types'
 
 export const FINDER_AGENT = 'product-finder'

@@ -1,7 +1,8 @@
 import { posix } from "node:path";
 import { defineTool } from "eve/tools";
 import { z } from "zod";
-import { BundleId, putCreativeImage } from "../../lib/bundle";
+import { putCreativeImage } from "../../lib/bundle";
+import { BundleId } from "../../lib/bundle-schema";
 
 // Runs in the app runtime, not the sandbox: it reads the upload through the sandbox API and
 // writes it to Blob, so the sandbox needs no network access and never sees Blob credentials.

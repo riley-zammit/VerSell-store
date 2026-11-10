@@ -88,7 +88,7 @@ export type Cart = {
     updatedAt: string
 }
 
-export type CartResult = { cart: Cart } | { error: string }
+export type CartResult = { cart: Cart } | { error: CartErrorCode }
 
 // What the client cart list needs from a server line. Slim, so whole products don't cross into the client.
 export type CartLine = {
@@ -114,18 +114,24 @@ export enum CartField {
     Quantity = 'quantity',
 }
 
-// Why an add failed. The no-JS add carries it in the /cart URL, so it's a closed set rather than the API's text.
-export enum AddError {
+// Why a cart action failed. The no-JS forms carry it in the /cart URL, so it's a closed set rather than the API's text.
+export enum CartErrorCode {
     InvalidQuantity = 'invalid-quantity',
     ProductUnavailable = 'product-unavailable',
+    ItemMissing = 'item-missing',
     OutOfStock = 'out-of-stock',
-    Failed = 'add-failed',
+    NotEnoughStock = 'not-enough-stock',
+    AddFailed = 'add-failed',
+    UpdateFailed = 'update-failed',
 }
 
-// Shared by the drawer (client) and the /cart page (server), so it lives outside both.
-export const addErrorMessages: Record<AddError, string> = {
-    [AddError.InvalidQuantity]: 'Enter a whole number of at least 1.',
-    [AddError.ProductUnavailable]: 'That product is no longer available.',
-    [AddError.OutOfStock]: 'That product is out of stock.',
-    [AddError.Failed]: 'We couldn’t add that item. Try again.',
+// Shared by the cart client components and the /cart page (server), so it lives outside both.
+export const cartErrorMessages: Record<CartErrorCode, string> = {
+    [CartErrorCode.InvalidQuantity]: 'Enter a whole number for the quantity.',
+    [CartErrorCode.ProductUnavailable]: 'That product is no longer available.',
+    [CartErrorCode.ItemMissing]: 'That item isn’t in your cart anymore.',
+    [CartErrorCode.OutOfStock]: 'That product is out of stock.',
+    [CartErrorCode.NotEnoughStock]: 'We don’t have that many in stock.',
+    [CartErrorCode.AddFailed]: 'We couldn’t add that item. Try again.',
+    [CartErrorCode.UpdateFailed]: 'We couldn’t update the quantity. Try again.',
 }

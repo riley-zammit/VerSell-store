@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import { withEve } from "eve/next";
 
 const nextConfig: NextConfig = {
   experimental: {
@@ -34,4 +33,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withEve(nextConfig);
+export default nextConfig;

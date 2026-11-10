@@ -1,6 +1,7 @@
 import { defineTool } from "eve/tools";
 import { z } from "zod";
-import { BundleId, putMockupImage, setMockup } from "../../../../lib/bundle";
+import { putMockupImage, setMockup } from "../../../../lib/bundle";
+import { BundleId } from "../../../../lib/bundle-schema";
 import { MAX_IMAGE_BYTES, mediaTypeForPath } from "../../../lib/images";
 
 // The only tool that changes the customer's page. Drafts and edits stay private until the

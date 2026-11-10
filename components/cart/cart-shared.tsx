@@ -5,12 +5,12 @@ import { useState, useTransition, type FormEvent } from 'react'
 
 import { useCart, useShownCart } from '@/components/cart/cart-provider'
 import { NavLink } from '@/components/nav-link'
-import { setCartQuantityAndRedirect } from '@/lib/cart-actions'
+import { setCartQuantityAndRedirect } from '@/actions/cart'
 import { formatPrice } from '@/lib/format'
 import { CartField, type CartLine } from '@/lib/types'
 
 // Reads the client cart, which suspends until the first load, so render it inside Suspense. Still renders to HTML
-// on the server, so the /cart page works without JS. `error` is the /cart page's failed no-JS add.
+// on the server, so the /cart page works without JS. `error` is the /cart page's failed no-JS add or quantity change.
 export function CartLines({ variant, error = null }: { variant: 'page' | 'drawer'; error?: string | null }) {
     const { cart, pending } = useShownCart()
     const pad = variant === 'drawer' ? 'px-5' : ''

@@ -9,11 +9,13 @@ import { MockupLoader } from '@/app/bundle/[id]/mockup-loader'
 import { RememberBundle } from '@/app/bundle/[id]/remember-bundle'
 import { CheckoutButton } from '@/app/bundle/[id]/checkout-button'
 import { NavLink } from '@/components/nav-link'
-import { BundleStatus, getBundle, getItems, getMockups, type BundleItem, type BundleProduct, type Mockup } from '@/lib/bundle'
+import { getBundle, getItems, getMockups } from '@/lib/bundle'
+import { BundleStatus, type BundleItem, type BundleProduct, type Mockup } from '@/lib/bundle-schema'
 import { formatMoney } from '@/lib/format'
 
 export const metadata: Metadata = {
     title: 'Your bundle',
+    description: 'A custom swag bundle built with Eve on Versell.',
     robots: { index: false },
 }
 

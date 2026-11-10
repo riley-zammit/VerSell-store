@@ -46,7 +46,7 @@ flowchart LR
 | **AI Gateway** | Claude for the agents' reasoning; Gemini for generating mockups. |
 | **Vercel Sandbox** | A private Linux VM per agent session. The mockup subagent edits images there. |
 | **Vercel Workflow** | Under eve: makes sessions and workflow tools durable, so waits and long steps survive restarts. |
-| **Slack** | An hourly health check posts there (Vercel Cron). eve also has a Slack channel. |
+| **Slack** | An hourly health check posts there (Vercel Cron).
 
 ## Identity: what keys what
 
@@ -87,6 +87,154 @@ Redis is the source of truth for a bundle. The page never reads the agent's conv
 agent never relies on a subagent's reply text when it can read Redis.
 
 One field per slot and per item lets parallel subagents write at the same time without overwriting each other.
+
+## Data model
+
+A bundle is three Redis keys and a Blob folder, all named by the bundle id. Nothing derives that id: it's created
+once, when the concept is approved, and every other part of the system is handed it.
+
+### Entities
+
+```mermaid
+erDiagram
+    VISITOR ||--o| CHAT_SESSION : "current chat"
+    VISITOR ||--o| SHOP_TOKEN : "Shop sign-in"
+    VISITOR ||--o| CART : "same browser"
+    VISITOR }o..o{ BUNDLE : "has opened"
+    CHAT_SESSION }o..o{ BUNDLE : "works on, per message"
+    BUNDLE ||--|{ SLOT : "slots"
+    SLOT ||--o| ITEM : "found product"
+    ITEM ||--|| PRODUCT : "product"
+    ITEM ||--o| PRODUCT : "alternate"
+    ITEM ||--o| MOCKUP : "current mockup"
+    CART }o..o{ ITEM : "store items, on approval"
+
+    VISITOR {
+        uuid visitorId PK "httpOnly visitor cookie"
+    }
+    CHAT_SESSION {
+        string sessionId PK "browser localStorage"
+    }
+    SHOP_TOKEN {
+        string token "agent server memory"
+        int expiresAt
+    }
+    CART {
+        string cartToken PK "httpOnly cart-token cookie"
+    }
+    BUNDLE {
+        uuid id PK "minted by approve_bundle_concept"
+        BundleStatus status "draft | approved"
+        string concept "one-line theme"
+        string brief "topic, budget, quantity, style"
+        BundleSlot[] slots "2 to 6, embedded"
+        iso createdAt
+        iso updatedAt
+        iso approvedAt "approved only"
+    }
+    SLOT {
+        slug key PK "e.g. water-bottle"
+        string label "e.g. 20 oz insulated bottle"
+        ItemSource source "store | shop"
+    }
+    ITEM {
+        slug key PK "the slot key"
+        ItemSource source "store | shop"
+        BundleProduct product
+        BundleProduct alternate "optional runner-up"
+        string reason "why it fits the brief"
+    }
+    PRODUCT {
+        string productId
+        string variantId "optional"
+        string title
+        int priceCents
+        string currency "ISO 4217"
+        url imageUrl
+        string productUrl "/products/slug or a Shop URL"
+        string seller "optional"
+    }
+    MOCKUP {
+        slug itemKey PK "the slot key"
+        url mockupUrl "Blob"
+        url creativeUrl "Blob"
+        iso updatedAt
+    }
+```
+
+- **Slots are embedded** in the bundle record. Items and mockups live in their own hashes, keyed by slot key, so each
+  finder and customizer writes only its own field.
+- **Dotted lines aren't ownership.** The visitor's list only remembers bundle ids. The chat and the cart store no
+  bundle id at all: the chat learns it from the page on each message, and the cart gets copies of the store products.
+- **Shapes** are zod schemas in `lib/bundle-schema.ts`, shared by the agent's tools and the pages.
+
+### Storage layout
+
+```mermaid
+flowchart LR
+    subgraph Redis
+        V["visitor:{visitorId}:bundles<br/>sorted set: bundleId by time opened<br/>newest 50, expires in 1 year"]
+        B["bundle:{bundleId}<br/>string: Bundle"]
+        I["bundle:{bundleId}:items<br/>hash: slotKey → BundleItem"]
+        M["bundle:{bundleId}:mockups<br/>hash: itemKey → Mockup"]
+    end
+    subgraph Blob["Vercel Blob (public)"]
+        C["bundles/{bundleId}/creative/creative-*.png|jpg"]
+        D["bundles/{bundleId}/mockups/{itemKey}/mockup-*.png|jpg|webp<br/>every draft and published version"]
+    end
+
+    V -- "member" --> B
+    B -. "same id" .- I
+    B -. "same id" .- M
+    M -- "mockupUrl" --> D
+    M -- "creativeUrl" --> C
+```
+
+- A draft's three bundle keys share one 7-day expiry, reset on each change. Approving removes it from all three.
+- Blob never expires. Rejected drafts and replaced mockups stay in the folder, unreferenced.
+
+### Lifecycle
+
+```mermaid
+stateDiagram-v2
+    [*] --> Draft: concept approved, slots empty
+    Draft --> Draft: product saved or slots changed (expiry resets)
+    Draft --> Approved: products approved, every slot filled
+    Approved --> Approved: mockup published
+    Approved --> Draft: product saved or slots changed
+    Draft --> [*]: 7 days without changes
+```
+
+Publishing a mockup changes neither the status nor the expiry.
+
+### How the bundle id travels
+
+```mermaid
+flowchart TD
+    mint["approve_bundle_concept<br/>crypto.randomUUID()"]
+    nav["Browser: useBundleFlow<br/>router.push /bundle/{id}"]
+    page["Bundle page<br/>reads Redis by URL id"]
+    remember["RememberBundle<br/>adds to visitor's list"]
+    model["Concierge model"]
+    rootTools["get_bundle, update_bundle,<br/>finalize_bundle, save_creative"]
+    subs["product-finder, product-customizer"]
+    subTools["save_bundle_item,<br/>generate_mockup, publish_mockup"]
+    progress["Browser: finder steps, mockup loaders"]
+    cart["Browser: adds store products to cart"]
+
+    mint -- "tool output" --> nav
+    mint -- "tool output" --> model
+    nav -- "URL" --> page
+    nav -- "URL" --> remember
+    nav -- "clientContext.page, each message" --> model
+    model -- "bundleId input" --> rootTools
+    model -- "'Bundle: id' line in the task" --> subs
+    subs -- "bundleId input" --> subTools
+    subs -. "parses the 'Bundle:' line" .-> progress
+    rootTools -. "finalize_bundle's input" .-> cart
+```
+
+Every arrow carries the id explicitly, through the model or through text the browser parses.
 
 ## End-to-end: building a bundle
 

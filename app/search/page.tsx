@@ -8,7 +8,10 @@ import { SEARCH_LIMIT, searchProducts } from "@/lib/api";
 import { cacheLife } from "next/cache";
 
 
-export const metadata: Metadata = { title: "Search", openGraph: { title: "Search" } };
+export const metadata: Metadata = {
+    title: "Search",
+    description: "Search hoodies, mugs, tees, bottles, and more from the official Vercel swag store.",
+};
 
 // searchParams are read inside the results hole, so the shell prerenders.
 //alternatively we can suspend the whole page to clean up the component tree and pass plain query and page string props

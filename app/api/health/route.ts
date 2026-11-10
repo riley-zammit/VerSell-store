@@ -1,7 +1,7 @@
 import { getHealth } from '@/lib/api'
 import { postSlackMessage } from '@/lib/slack'
 
-// Pinged hourly by Vercel Cron (see vercel.json). Vercel sends CRON_SECRET as a bearer token,
+// Pinged hourly by Vercel Cron (see vercel.ts). Vercel sends CRON_SECRET as a bearer token,
 // so anyone else gets a bare 401 and nothing about the API is exposed.
 export async function GET(request: Request) {
     const secret = process.env.CRON_SECRET

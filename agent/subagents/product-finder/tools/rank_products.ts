@@ -1,7 +1,7 @@
 import { decide } from "eve/ai";
 import { defineTool } from "eve/tools";
 import { z } from "zod";
-import { BundleProduct } from "../../../../lib/bundle";
+import { BundleProduct } from "../../../../lib/bundle-schema";
 
 const Candidate = BundleProduct.extend({
     summary: z.string().describe("One line on what it is: material, size, notable features"),

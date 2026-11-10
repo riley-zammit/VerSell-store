@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { NavLink } from "@/components/nav-link";
 
-export const metadata: Metadata = { title: "About", openGraph: { title: "About" } };
+export const metadata: Metadata = {
+    title: "About",
+    description: "Versell is the official swag store for Vercel. Hoodies, mugs, tees, bottles, and more, for people who build on the web.",
+};
 
 export default function AboutPage() {
     return (

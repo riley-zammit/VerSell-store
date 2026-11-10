@@ -2,10 +2,11 @@
 
 import { cookies } from 'next/headers'
 
-import { getProduct } from './api'
-import { BundleId, getBundle, getItems, ItemSource, rememberBundle } from './bundle'
-import type { Product } from './types'
-import { isVisitorId, VISITOR_COOKIE } from './visitor'
+import { getProduct } from '@/lib/api'
+import { getBundle, getItems, rememberBundle } from '@/lib/bundle'
+import { BundleId, ItemSource } from '@/lib/bundle-schema'
+import type { Product } from '@/lib/types'
+import { isVisitorId, VISITOR_COOKIE } from '@/lib/visitor'
 
 // Adds a bundle to the visitor's list on /bundles when its page opens: one they started, or a link someone shared.
 export async function rememberOpenedBundle(bundleId: string) {
