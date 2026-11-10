@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-11-08T23:48:13.043Z",
+  "fetchedAt": "2026-11-10T23:35:26.269Z",
   "kind": "eve-model-metadata",
   "models": [
     {
@@ -439,6 +439,36 @@
           "contextWindowTokens": 1000000,
           "provider": "vertex",
           "providerModelId": "claude-fable-5-1"
+        }
+      ]
+    },
+    {
+      "slug": "anthropic/claude-fable-5.2",
+      "providers": [
+        {
+          "contextWindowTokens": 1000000,
+          "provider": "anthropic",
+          "providerModelId": "claude-fable-5-2"
+        },
+        {
+          "contextWindowTokens": 1000000,
+          "provider": "bedrock",
+          "providerModelId": "global.anthropic.claude-fable-5-2"
+        },
+        {
+          "contextWindowTokens": 1000000,
+          "provider": "vertex",
+          "providerModelId": "claude-fable-5-2"
+        }
+      ]
+    },
+    {
+      "slug": "anthropic/claude-fable-5.2-fast",
+      "providers": [
+        {
+          "contextWindowTokens": 1000000,
+          "provider": "anthropic",
+          "providerModelId": "claude-fable-5-2"
         }
       ]
     },
@@ -1783,6 +1813,21 @@
       ]
     },
     {
+      "slug": "google/gemini-4-carbon",
+      "providers": [
+        {
+          "contextWindowTokens": 1000000,
+          "provider": "google",
+          "providerModelId": "gemini-4-carbon"
+        },
+        {
+          "contextWindowTokens": 1000000,
+          "provider": "vertex",
+          "providerModelId": "gemini-4-carbon"
+        }
+      ]
+    },
+    {
       "slug": "google/gemini-nano-banana-2.1",
       "providers": [
         {
@@ -2114,6 +2159,16 @@
           "contextWindowTokens": 131072,
           "provider": "deepinfra",
           "providerModelId": "meta-llama/Llama-4-Scout-17B-16E-Instruct"
+        }
+      ]
+    },
+    {
+      "slug": "meta/muse-ember",
+      "providers": [
+        {
+          "contextWindowTokens": 1048576,
+          "provider": "meta",
+          "providerModelId": "muse-ember-1.0"
         }
       ]
     },
@@ -2757,6 +2812,11 @@
         },
         {
           "contextWindowTokens": 1048576,
+          "provider": "pareto",
+          "providerModelId": "moonshotai/kimi-k3.1-pro"
+        },
+        {
+          "contextWindowTokens": 1048576,
           "provider": "relace",
           "providerModelId": "moonshotai/kimi-k3.1-pro"
         },
@@ -2804,6 +2864,36 @@
           "contextWindowTokens": 81920,
           "provider": "morph",
           "providerModelId": "morph-v3-large"
+        }
+      ]
+    },
+    {
+      "slug": "nace-ai/drex-max-finance",
+      "providers": [
+        {
+          "contextWindowTokens": 262144,
+          "provider": "nace-ai",
+          "providerModelId": "drex-max-finance"
+        }
+      ]
+    },
+    {
+      "slug": "nace-ai/drex-max-v1.1",
+      "providers": [
+        {
+          "contextWindowTokens": 262144,
+          "provider": "nace-ai",
+          "providerModelId": "drex-max-v1.1"
+        }
+      ]
+    },
+    {
+      "slug": "nace-ai/drex-v2.0",
+      "providers": [
+        {
+          "contextWindowTokens": 262144,
+          "provider": "nace-ai",
+          "providerModelId": "drex-v2.0"
         }
       ]
     },
@@ -5029,6 +5119,11 @@
           "contextWindowTokens": 1048576,
           "provider": "morph",
           "providerModelId": "morph-glm53flash"
+        },
+        {
+          "contextWindowTokens": 1048576,
+          "provider": "nebius",
+          "providerModelId": "zai-org/GLM-5.3-Flash"
         },
         {
           "contextWindowTokens": 1000000,

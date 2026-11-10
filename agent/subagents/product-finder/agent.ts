@@ -10,6 +10,9 @@ export default defineAgent({
     For a different product in that slot, continue its task with the change. This subagent returns a short explainer string which the orchestrator should
     pass along to the customer.
   `,
+  // It reads untrusted merchant text, so it gets only its own tools and the allow-listed Shop catalog (through
+  // eve__tool, which defaultTools doesn't remove). No bash, files, or web.
+  defaultTools: false,
   model: "anthropic/claude-sonnet-5.5",
   reasoning: "medium",
 });

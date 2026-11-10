@@ -20,17 +20,9 @@ export const environment = VercelSandbox.environment({
   },
 });
 
-// Only the npm and PyPI registries are reachable, so the agent can add a library it needs.
+// No network: customer feedback reaches this agent almost word for word and it runs code, so a hijacked
+// run must not be able to download or send anything. The toolbox above is baked into the snapshot instead.
 // Images still come in and go out through load_image and publish_mockup in the app runtime,
 // so the Blob and Redis credentials never enter the sandbox.
-export default defineSandbox(() =>
-  environment.open({
-    networkPolicy: {
-      allow: {
-        "registry.npmjs.org": [], 
-        "pypi.org": [],
-        "files.pythonhosted.org": [],
-      },
-    },
-  }),
-);
+// Applies only when a session's sandbox is created; existing sandboxes keep their policy.
+export default defineSandbox(() => environment.open({ networkPolicy: "deny-all" }));

@@ -1375,7 +1375,7 @@ const guid = /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9
 /** Returns a regex for validating an RFC 9562/4122 UUID.
 *
 * @param version Optionally specify a version 1-8. If no version is specified, all versions are supported. */
-const uuid = (version) => {
+const uuid$1 = (version) => {
 	if (!version) return /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/;
 	return new RegExp(`^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-${version}[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$`);
 };
@@ -1942,8 +1942,8 @@ const $ZodUUID = /*@__PURE__*/ $constructor("$ZodUUID", (inst, def) => {
 			v8: 8
 		}[def.version];
 		if (v === void 0) throw new Error(`Invalid UUID version: "${def.version}"`);
-		def.pattern ?? (def.pattern = uuid(v));
-	} else def.pattern ?? (def.pattern = uuid());
+		def.pattern ?? (def.pattern = uuid$1(v));
+	} else def.pattern ?? (def.pattern = uuid$1());
 	$ZodStringFormat.init(inst, def);
 });
 const $ZodEmail = /*@__PURE__*/ $constructor("$ZodEmail", (inst, def) => {
@@ -5713,6 +5713,9 @@ const ZodUUID = /*@__PURE__*/ $constructor("ZodUUID", (inst, def) => {
 	$ZodUUID.init(inst, def);
 	ZodStringFormat.init(inst, def);
 });
+function uuid(params) {
+	return /* @__PURE__ */ _uuid(ZodUUID, params);
+}
 const ZodURL = /*@__PURE__*/ $constructor("ZodURL", (inst, def) => {
 	$ZodURL.init(inst, def);
 	ZodStringFormat.init(inst, def);
@@ -13828,4 +13831,4 @@ async function getGatewayAuthToken(options) {
 function assertGatewayClientSecretServerEnvironment() {
 	if (typeof globalThis.window !== "undefined") throw new Error("AI Gateway client secrets must be minted server-side: minting needs your Gateway credential, which must never reach the browser. Call gateway.experimental_realtime.getToken(), gateway.experimental_transcription.getToken(), or gateway.experimental_speech.getToken() from your server and pass the returned token to the client.");
 }
-export { AISDKError, APICallError, DecisionRefusalError, DecisionUnsupportedQuestionTypeError, DelayedPromise, DownloadError, EMBEDDING_MODEL_MAX_INPUT_BYTES_PER_CALL, EMBEDDING_MODEL_PROVIDER_OPTIONS_TRANSFORMER, EmptyResponseBodyError, GatewayAuthenticationError, GatewayError, InvalidPromptError, InvalidResponseDataError, JSONParseError, LoadAPIKeyError, LoadSettingError, NoContentGeneratedError, NoSuchModelError, NoSuchProviderReferenceError, TooManyEmbeddingValuesForCallError, TypeValidationError, UnsupportedFunctionalityError, _enum, _instanceof, _null, array, asArray, asSchema, boolean, cancelResponseBody, convertAsyncIteratorToReadableStream, convertBase64ToUint8Array, convertUint8ArrayToBase64, createGateway, createIdGenerator, custom, delay, detectMediaType, discriminatedUnion, dynamicTool, executeTool, fetchUntrustedUrl, filterNullable, gateway, generateId, getErrorMessage, getRuntimeEnvironmentUserAgent, getToolCaller, getWebSocketConstructor, isAbortError, isBuffer, isExecutableTool, isFullMediaType, isJSONArray, isJSONObject, isNonNullable, isProviderReference, isProviderStreamError, isUrlSupported, jsonSchema, lazy, lazySchema, literal, looseObject, never, normalizeHeaders, number, object, parseJsonEventStream, readResponseWithSizeLimit, readWebSocketMessageText, record, require_token_error, require_token_util, resolve, retryWithExponentialBackoff, safeParseJSON, safeValidateTypes, string, toWebSocketUrl, tool, toolCaller, union, unknown, url, validateTypes, waitForWebSocketBufferDrain, withUserAgentSuffix, zodSchema };
+export { AISDKError, APICallError, DecisionRefusalError, DecisionUnsupportedQuestionTypeError, DelayedPromise, DownloadError, EMBEDDING_MODEL_MAX_INPUT_BYTES_PER_CALL, EMBEDDING_MODEL_PROVIDER_OPTIONS_TRANSFORMER, EmptyResponseBodyError, GatewayAuthenticationError, GatewayError, InvalidPromptError, InvalidResponseDataError, JSONParseError, LoadAPIKeyError, LoadSettingError, NoContentGeneratedError, NoSuchModelError, NoSuchProviderReferenceError, TooManyEmbeddingValuesForCallError, TypeValidationError, UnsupportedFunctionalityError, _enum, _instanceof, _null, array, asArray, asSchema, boolean, cancelResponseBody, convertAsyncIteratorToReadableStream, convertBase64ToUint8Array, convertUint8ArrayToBase64, createGateway, createIdGenerator, custom, delay, detectMediaType, discriminatedUnion, dynamicTool, executeTool, fetchUntrustedUrl, filterNullable, gateway, generateId, getErrorMessage, getRuntimeEnvironmentUserAgent, getToolCaller, getWebSocketConstructor, isAbortError, isBuffer, isExecutableTool, isFullMediaType, isJSONArray, isJSONObject, isNonNullable, isProviderReference, isProviderStreamError, isUrlSupported, jsonSchema, lazy, lazySchema, literal, looseObject, never, normalizeHeaders, number, object, parseJsonEventStream, readResponseWithSizeLimit, readWebSocketMessageText, record, require_token_error, require_token_util, resolve, retryWithExponentialBackoff, safeParseJSON, safeValidateTypes, string, toWebSocketUrl, tool, toolCaller, union, unknown, url, uuid, validateTypes, waitForWebSocketBufferDrain, withUserAgentSuffix, zodSchema };

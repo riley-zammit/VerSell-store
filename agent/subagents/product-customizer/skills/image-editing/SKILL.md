@@ -42,7 +42,7 @@ Outputs must be `.png`, `.jpg`, or `.webp`.
 - **ImageMagick 6:** `convert`, `identify`, `mogrify`, `composite` (there's no `magick` command).
 - **Python 3:** Pillow and NumPy. Run scripts with `python3`.
 - **Node 24:** `sharp`, installed in `~/image-tools`. Write Node scripts there (`cd ~/image-tools && node edit.mjs`) so `import sharp from "sharp"` resolves.
-- **Network:** only the npm and PyPI registries. If you need another library, `npm install` it in `~/image-tools`, or `pip install --user --break-system-packages <name>`.
+- **Network:** none. You can't install packages or download anything, so do the edit with the tools above.
 
 # ImageMagick starting points
 
