@@ -8,10 +8,11 @@ import { formatMoney } from "../../lib/format";
 // The browser watches for this call to return approved, then adds the bundle's VerSell products (from the call's
 // bundleId) to the customer's cart. The cart is a cookie only the browser has.
 export default defineWorkflowTool({
-    description:
-        "Show the customer the finished products and wait for them to approve or ask for changes. Call it once " +
-        "every product-finder is done. Approving saves the bundle for good and puts its VerSell products in the " +
-        "customer's cart.",
+    description: `
+        Show the customer the finished products and wait for them to approve or ask for changes.
+        Call it once every product-finder is done.
+        Approving saves the bundle for good and puts its VerSell products in the customer's cart.
+    `,
     inputSchema: z.object({
         bundleId: BundleId,
     }),

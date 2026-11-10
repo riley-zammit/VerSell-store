@@ -56,8 +56,8 @@ async function SearchResults({ searchParams }: Pick<PageProps<"/search">, "searc
         <>
             <Heading>{query ? `Results for “${query}”` : "All products"}</Heading>
             <ul className={gridClassName}>
-                {result.products.map((p, i) => (
-                    <ProductCard key={p.id} product={p} eager={i < 3 /* first row on desktop */} />
+                {result.products.map((p) => (
+                    <ProductCard key={p.id} product={p} />
                 ))}
             </ul>
             <Pagination page={page} pagination={result.pagination} pageHref={pageHref} />

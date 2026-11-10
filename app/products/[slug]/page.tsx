@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { AddToCartForm } from "@/components/cart/add-to-cart-form";
@@ -9,6 +8,8 @@ import { formatPrice } from "@/lib/format";
 import { siteOpenGraph } from "@/lib/metadata";
 import type { Product } from "@/lib/types";
 import { cacheLife } from "next/cache";
+
+import { ProductGallery } from "./product-gallery";
 
 /* 
     Mocking a large product catalog here; We don't want to generate a large number of static params at build time, 
@@ -52,11 +53,7 @@ export default async function Page({ params }: PageProps<"/products/[slug]">) {
 
     return (
         <article className="grid gap-8 md:grid-cols-2 md:gap-12">
-            <div className="surface-card p-2.5">
-                <div className="relative aspect-square overflow-hidden rounded-[17px] bg-background">
-                    <Image src={images[0]} alt={name} fill preload sizes="(min-width: 768px) 50vw, 100vw" className="object-cover mix-blend-multiply" />
-                </div>
-            </div>
+            <ProductGallery name={name} images={images} />
             <div className="md:pt-6">
                 <h1 className="text-4xl md:text-5xl">{name}</h1>
                 <p className="mt-4 font-sans text-2xl font-bold tracking-tighter md:text-3xl">{formatPrice(price)}</p>

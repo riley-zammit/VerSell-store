@@ -4,10 +4,11 @@ import { updateBundle } from "../../lib/bundle";
 import { BundleId, BundleSlot } from "../../lib/bundle-schema";
 
 export default defineTool({
-    description:
-        "Change the bundle's slots: add slots (then start a product-finder for each), remove slots, or swap a " +
-        "slot's product for its alternate. To find a different product for a slot, continue that slot's " +
-        "product-finder task instead. Any change means the customer approves the bundle again.",
+    description: `
+        Change the bundle's slots: add slots (then start a product-finder for each), remove slots, or swap a slot's product for its alternate.
+        To find a different product for a slot, continue that slot's product-finder task instead.
+        Any change means the customer approves the bundle again.
+    `,
     inputSchema: z.object({
         bundleId: BundleId,
         add: z.array(BundleSlot).default([]).describe("New, empty slots"),

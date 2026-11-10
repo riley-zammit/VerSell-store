@@ -4,11 +4,13 @@ import { getBundle, getItems, getMockups, getRememberedBundleIds } from "../../l
 import { BundleId } from "../../lib/bundle-schema";
 
 export default defineTool({
-    description:
-        "Read a bundle: status, slots, each slot's product (with its image URL and alternate), and each item's " +
-        "current mockup. A slot missing from `items` is still being found. Use it before briefing " +
-        "product-customizer, instead of relying on a subagent's reply text. Without a bundle id, it lists the " +
-        "bundles this customer has opened, newest first.",
+    description: `
+        Read a bundle: status, slots, each slot's product (with its image URL and alternate), and each item's current mockup.
+        A slot missing from \`items\` is still being found.
+        Use it before briefing product-customizer, instead of relying on a subagent's reply text.
+        Without a bundle id, it lists the bundles this customer has opened, newest first.
+        To get all bundles, call without an {id}.
+    `,
     inputSchema: z.object({
         bundleId: BundleId.optional(),
     }),

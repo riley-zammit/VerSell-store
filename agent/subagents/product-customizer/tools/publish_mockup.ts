@@ -7,10 +7,11 @@ import { MAX_IMAGE_BYTES, mediaTypeForPath } from "../../../lib/images";
 // The only tool that changes the customer's page. Drafts and edits stay private until the
 // customizer has checked them, so the customer never sees a try that got thrown away.
 export default defineTool({
-    description:
-        "Make a checked image the item's current mockup, which the customer sees right away. Pass either " +
-        "`draftUrl` (a draft from generate_mockup) or `path` (an edited image in the sandbox). Only publish once " +
-        "you've checked the image and it looks right.",
+    description: `
+        Make a checked image the item's current mockup, which the customer sees right away.
+        Pass either \`draftUrl\` (a draft from generate_mockup) or \`path\` (an edited image in the sandbox).
+        Only publish once you've checked the image and it looks right.
+    `,
     inputSchema: z.object({
         bundleId: BundleId.describe("The bundle id from the `Bundle:` line of your task"),
         itemKey: z.string().min(1),

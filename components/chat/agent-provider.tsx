@@ -61,7 +61,7 @@ export function AgentContextProvider({ children }: { children: ReactNode }) {
     return <AgentContext.Provider value={agent}>{children}</AgentContext.Provider>
 }
 
-// The visitor's last chat, on any page.
+// Session-based - local storage. The visitor's last chat, on any page. 
 function readSavedSession(): ClientSessionState | undefined {
     if (typeof window === 'undefined') {
         return undefined

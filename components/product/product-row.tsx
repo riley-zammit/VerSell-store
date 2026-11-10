@@ -14,7 +14,7 @@ const rowProps = (slots: number) => ({
 const rowSizes = (slots: number) => `(min-width: 1152px) ${Math.round(1120 / slots)}px, (min-width: 640px) ${Math.round(100 / slots)}vw, 100vw`
 
 /** First `slots` products for a /products query string (e.g. 'category=mugs'), plus "See all" (to `href`) when there are more. */
-export async function ProductRow({ query, href, slots }: { query: string; href: string; slots: number }) {
+export async function ProductRow({ query, href, slots, prefetch=true }: { query: string; href: string; slots: number; prefetch?: boolean }) {
     // Cache: Reusable component. 
     'use cache: remote'
     cacheLife('catalog')
@@ -26,7 +26,7 @@ export async function ProductRow({ query, href, slots }: { query: string; href: 
         <>
             <ul {...rowProps(slots)}>
                 {products.map((p) => (
-                    <ProductCard key={p.id} product={p} sizes={rowSizes(slots)} />
+                    <ProductCard key={p.id} product={p} sizes={rowSizes(slots)} prefetch={prefetch}/>
                 ))}
             </ul>
             {pagination.total > slots && (

@@ -12,6 +12,7 @@ import { NavLink } from '@/components/nav-link'
 import { getBundle, getItems, getMockups } from '@/lib/bundle'
 import { BundleStatus, type BundleItem, type BundleProduct, type Mockup } from '@/lib/bundle-schema'
 import { formatMoney } from '@/lib/format'
+import { cacheLife } from 'next/cache'
 
 export const metadata: Metadata = {
     title: 'Your bundle',
@@ -27,6 +28,7 @@ const itemSizes = '(min-width: 1280px) 25vw, (min-width: 1024px) 30vw, (min-widt
 // ChatDockSpace makes room for the docked chat from the first paint, so the chat docking shifts nothing. The page fades
 // in as the chat grows into its dock.
 export default function BundlePage({ params }: PageProps<'/bundle/[id]'>) {
+
     return (
         <section className="transition-opacity duration-300 starting:opacity-0 motion-reduce:transition-none">
             <ChatDockSpace />
@@ -36,9 +38,8 @@ export default function BundlePage({ params }: PageProps<'/bundle/[id]'>) {
             {/* What isn't production-ready yet. In the shell, so it's prerendered and shifts nothing. */}
             <p className="mt-4 rounded-2xl bg-amber-100 px-4 py-3 text-sm text-amber-950" role="note">
                 <strong className="font-sans">This feature is in beta.</strong> Your bundles are tied to this browser,
-                so clearing your cookies removes them from Your bundles. Anyone with the link can see and change this
-                bundle. Drafts are deleted after 7 days without changes. You may need to sign in to Shop again.
-                VerSell checkout doesn’t place real orders.
+                so clearing your storage removes them from Your bundles. Anyone with the link can see and change this
+                bundle.
             </p>
             <h1 className="mt-4 text-4xl md:text-5xl">Your bundle</h1>
             <BundleActivityLine />

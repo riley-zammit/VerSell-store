@@ -11,7 +11,7 @@ import { CartField, type Product } from '@/lib/types'
 
 export const FINDER_AGENT = 'product-finder'
 export const CUSTOMIZER_AGENT = 'product-customizer'
-const CONCEPT_TOOL = 'approve_bundle_concept'
+const CONCEPT_TOOL = 'request_concept_approval'
 const FINALIZE_TOOL = 'finalize_bundle'
 // The subagents' tools that change what the bundle page shows: a finder saving its slot's product, and a customizer
 // publishing a mockup. generate_mockup only makes a draft, which the customer doesn't see.

@@ -7,11 +7,12 @@ import { BundleSlot, ItemSource } from "../../lib/bundle-schema";
 // The pause is durable, so the customer can take as long as they like to answer.
 // Two buttons only, no text box: the changes themselves come as an ordinary chat message.
 export default defineWorkflowTool({
-    description:
-        "Show the customer a high-level bundle concept and wait for them to approve it or ask for changes. " +
-        "Approving saves a new bundle with its slots still empty and returns its id; then start one product-finder " +
-        "per slot. Earlier bundles stay as they are; use update_bundle to change one instead. " +
-        "Name the kinds of products, not specific products or prices.",
+    description: `
+        Show the customer a high-level bundle concept and wait for them to approve it or ask for changes.
+        Approving saves a new bundle with its slots still empty and returns its id; then start one product-finder per slot.
+        Earlier bundles stay as they are; use update_bundle to change one instead.
+        Name the kinds of products, not specific products or prices.
+    `,
     inputSchema: z.object({
         concept: z.string().describe("One sentence on the theme, e.g. 'A desk-ready welcome kit for new engineers.'"),
         brief: z.string().min(1).describe("The topic, plus any budget, quantity, ship-to country, or style the customer mentioned"),

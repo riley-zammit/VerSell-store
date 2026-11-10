@@ -5,22 +5,19 @@ import { apiFetch, Category } from "../../../../lib/swag-api/client";
 import type { Product } from "../../../../lib/types";
 
 export default defineTool({
-    description:
-        "Search the VerSell store's own catalog (bottles, cups, and mugs). Results are already in the shape " +
-        "save_bundle_item expects for `product`, plus a description.",
+    description: `
+        Search the VerSell store's own catalog.
+        Results are already in the shape save_bundle_item expects for \`product\`, plus a description.
+    `,
     inputSchema: z.object({
-        query: z.string().optional().describe("Words to match, e.g. 'insulated'. Omit to list everything."),
-        category: z.enum(Category).optional(),
+        query: z.string().optional().describe("Search terms, e.g. 'insulated'. Omit to list everything."),
         limit: z.number().int().min(1).max(20).default(10),
     }),
-    label: { start: ({ query, category }) => `Searching the store for ${query ?? category ?? "products"}` },
-    async execute({ query, category, limit }) {
+    label: { start: ({ query }) => `Searching the store for ${query ?? "products"}` },
+    async execute({ query, limit }) {
         const params = new URLSearchParams({ limit: String(limit) });
         if (query) {
             params.set("search", query);
-        }
-        if (category) {
-            params.set("category", category);
         }
         const { data } = await apiFetch<Product[]>(`/products?${params}`);
         return data.map((product) => ({

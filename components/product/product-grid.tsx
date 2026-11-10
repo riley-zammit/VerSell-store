@@ -30,7 +30,8 @@ export async function ProductGrid({ category, page }: { category?: string; page:
         <>
             <ul className={gridClassName}>
                 {products.map((p) => (
-                    <ProductCard key={p.id} product={p} />
+                    // don't prefetch an unknown number of routes. Partial prefetching + cache will fetch enough of the shell
+                    <ProductCard key={p.id} product={p} /> 
                 ))}
             </ul>
             <Pagination page={page} pagination={pagination} pageHref={pageHref} />

@@ -25,10 +25,12 @@ const inputSchema = z.object({
 // It only makes a draft. Gemini's first try is often off, and the customer's page would show
 // every rejected try, so the customizer checks the draft and publishes it with publish_mockup.
 export default defineWorkflowTool({
-    description:
-        "Generate a draft mockup of the creative printed on the product. The customer doesn't see it until you " +
-        "publish it with publish_mockup. Use it for the first mockup, and for feedback that editing can't handle " +
-        "(placement, angle, print style). Returns the draft so you can check it.",
+    description: `
+        Generate a draft mockup of the creative printed on the product.
+        The customer doesn't see it until you publish it with publish_mockup.
+        Use it for the first mockup, and for feedback that editing can't handle (placement, angle, print style).
+        Returns the draft so you can check it.
+    `,
     inputSchema,
     label: { start: ({ productTitle }) => `Mocking up ${productTitle}` },
     async execute(input, ctx) {

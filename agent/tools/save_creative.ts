@@ -7,9 +7,11 @@ import { BundleId } from "../../lib/bundle-schema";
 // Runs in the app runtime, not the sandbox: it reads the upload through the sandbox API and
 // writes it to Blob, so the sandbox needs no network access and never sees Blob credentials.
 export default defineTool({
-    description:
-        "Save the logo or artwork the customer attached, so product-customizer can use it. Pass the path from " +
-        "the image's \"Attached file\" label. Returns the creative URL to send to product-customizer.",
+    description: `
+        Save the logo or artwork the customer attached, so product-customizer can use it.
+        Pass the path from the image's "Attached file" label.
+        Returns the creative URL to send to product-customizer.
+    `,
     inputSchema: z.object({
         bundleId: BundleId,
         path: z.string().min(1).describe("Absolute sandbox path from the attachment label, e.g. /workspace/.eve/attachments/<hash>/logo.png"),

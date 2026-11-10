@@ -11,6 +11,9 @@
 - Collection prerendering: Option to fully generate all collection pages by changing url to /[collection-slug]/[page]. ProductGrid already doesn't care about how we get the page, 
 so changing this here wouldn't affect other layouts. Decision: Let's not do this because we want to keep optionality for a huge catalog and we'd have to hit the API for each page at build. Right now the Grid is cached remotely by page so the added build time isn't really buying us much... but it's worth testing out to confirm if that network hop to the cache is really detrimental.
 
+# Prefetching
+- Use partial prefetch `true` to resolve dynamic routes when quantity of routes is known or small. Use `auto` when it's unknown or larger (product grid)
+
 # Caching layer
 - Original instinct was to cache at the data layer. Going to move this into components because it provides finer-grain control. Data layer is more flexible but we're not building a general-purpose WYSIWYG here, we're building a highly-optimized site. (We're building a ferrari not a minivan!) Might shift to caching to data layer if we were to allow non-developers to edit the UI via a pagebuilder, or potentially needed the API call in a client component.
 - Cache locally for mostly static components (since remote has an added cost of a network hop), cache remotely when the component cost is high (API call)
@@ -41,6 +44,11 @@ so changing this here wouldn't affect other layouts. Decision: Let's not do this
 - Pull out eve as its own Vercel Service to a) reduce coupling to the storefront, b) more closely align with production deployment shape, c) to more easily reason about the e2e architecture and d) more easily allow for future additions
 - Tie a bundle to a specific conversation ID. Eve manages context, so there's no benefit to allowing a new conversation within a bundle. This also removes some complexity which comes from either a) keying bundles to a session cookie and b) fetching related sessions, possibly multiple, per bundle.
 - Use redis because bundles are short-lived and drafts can expire. Also we only ever query by ID - no complex schema management needed.
+
+## Subagents
+### Propose-products
+- Needs to know about bundle ID. Easier this way to delegate multiple subagents and have the parent simply pass feedback, rather than need to know about populating the UI
+
 
 ## Features
 Bundle builder and customizer. 
