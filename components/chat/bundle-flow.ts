@@ -13,6 +13,7 @@ export const FINDER_AGENT = 'product-finder'
 export const CUSTOMIZER_AGENT = 'product-customizer'
 const CONCEPT_TOOL = 'request_concept_approval'
 const FINALIZE_TOOL = 'finalize_bundle'
+const CART_TOOL = 'go_to_cart'
 // The subagents' tools that change what the bundle page shows: a finder saving its slot's product, and a customizer
 // publishing a mockup. generate_mockup only makes a draft, which the customer doesn't see.
 const PAGE_CHANGING_TOOLS = ['save_bundle_item', 'publish_mockup']
@@ -34,7 +35,8 @@ export function readTaskLine(call: CallObservation, label: string) {
 }
 
 // Moves the store along with the agent's bundle work: opens the bundle page when a concept is approved, refreshes it
-// as finders and customizers save, and adds the bundle's store products to the cart when it's finalized.
+// as finders and customizers save, adds the bundle's store products to the cart when it's finalized, and opens the
+// cart page when Eve sends the customer there.
 export function useBundleFlow(agent: UseEveAgentReturn) {
     const router = useRouter()
     const cart = useCart()
@@ -87,11 +89,15 @@ export function useBundleFlow(agent: UseEveAgentReturn) {
         }
         const approvedConcept = newCalls.find((call) => call.name === CONCEPT_TOOL && returnedApproved(call))
         const approvedProducts = newCalls.find((call) => call.name === FINALIZE_TOOL && returnedApproved(call))
+        const sentToCart = newCalls.some((call) => call.name === CART_TOOL)
 
         // The concept tool returns the new bundle's id.
         const newBundleId = (approvedConcept?.output as { bundleId?: string } | undefined)?.bundleId
         if (newBundleId) {
             router.push(`/bundle/${encodeURIComponent(newBundleId)}`)
+        } else if (sentToCart) {
+            // The Shop stores are done, so the VerSell products in the cart are all that's left to pay for.
+            router.push('/cart')
         } else if ((newCalls.length > 0 || hasPageChange) && BUNDLE_PATH.test(window.location.pathname)) {
             // The page reads Redis on the server, so a settled call, a saved product, or a saved mockup is when it
             // changes.
@@ -108,8 +114,8 @@ export function useBundleFlow(agent: UseEveAgentReturn) {
     }, [view, agents, isResuming, router, cart])
 }
 
-// One of each, through the cart's own add, so the drawer opens and shows them arriving. The customer sets quantities
-// in the cart.
+// One of each, through the cart's own add, which leaves the drawer closed: the customer stays on the bundle page, and
+// checkout ends on the cart page. The customer sets quantities in the cart.
 async function addStoreProductsToCart(bundleId: string, add: (product: Product, formData: FormData) => void) {
     const products = await getStoreProducts(bundleId)
     for (const product of products) {

@@ -73,10 +73,10 @@ export function CartProvider({ initialCart, children }: { initialCart: Promise<C
         return null
     }
 
-    // Opens the drawer and sends the add. Its progress and any error show in the drawer, never under the add form.
+    // Sends the add without opening the drawer: the add form opens it, Eve's bundle adds don't. Its progress and any
+    // error show in the drawer, never under the add form.
     const add = (product: Product, formData: FormData) => {
         setError(null)
-        setIsOpen(true)
         startTransition(async () => {
             addPendingChange({
                 type: CartChangeType.Add,

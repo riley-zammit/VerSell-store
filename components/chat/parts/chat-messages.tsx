@@ -6,12 +6,16 @@ import { useEffect, useRef } from 'react'
 
 import { ignoreAbort, useAgent, useIsHydrated } from '@/components/chat/agent-provider'
 import { useFinderSteps } from '@/components/chat/finder-steps'
+import { COMPLETE_CHECKOUT_TOOL, ShopPaymentDialog } from '@/components/chat/parts/shop-payment-dialog'
+
+// Shows a Shop checkout as a button (agent/tools/show_shop_checkout.ts).
+const SHOP_CHECKOUT_TOOL = 'show_shop_checkout'
 
 // Within this distance of the bottom counts as "at the bottom", so new text keeps it pinned there.
 const PIN_THRESHOLD_PX = 48
 
 // Markdown links to https or this site, then bare https URLs (minus trailing punctuation). The only formatting the chat
-// renders, so the Shop checkout links and the cart link Eve sends are clickable.
+// renders, so the product and page links Eve sends are clickable. Shop checkouts are buttons instead (show_shop_checkout).
 const LINK_PATTERN = /\[([^\]]+)\]\(((?:https?:\/\/|\/)[^)\s]+)\)|(https?:\/\/[^\s)]*[^\s).,;:!?])/g
 
 export function ChatMessages() {
@@ -51,11 +55,11 @@ export function ChatMessages() {
             ) : (
                 messages.map((message) => {
                     // Tool calls are logged to the console (AgentContextProvider), not shown. A call only appears here for a
-                    // finder's progress or a question about it. Reasoning isn't shown either.
+                    // finder's progress, a question about it, or a Shop checkout button. Reasoning isn't shown either.
                     const visibleParts = message.parts.filter((part) => {
                         if (part.type === 'tool') {
                             const hasFinderStep = finderSteps.some(({ callId }) => callId === part.callId)
-                            return hasFinderStep || part.interaction !== undefined
+                            return hasFinderStep || part.interaction !== undefined || part.name === SHOP_CHECKOUT_TOOL
                         }
                         return part.type !== 'reasoning'
                     })
@@ -91,6 +95,29 @@ export function ChatMessages() {
                                                 key={part.interactionId}
                                                 respond={agent.respond}
                                             />
+                                        )
+                                    }
+                                    if (part.type === 'tool' && part.name === COMPLETE_CHECKOUT_TOOL && part.interaction) {
+                                        return (
+                                            <ShopPaymentDialog
+                                                disabled={isResuming}
+                                                input={part.input}
+                                                interaction={part.interaction}
+                                                key={part.callId}
+                                            />
+                                        )
+                                    }
+                                    if (part.type === 'tool' && part.name === SHOP_CHECKOUT_TOOL) {
+                                        // Rendered once its input has finished streaming, so the URL is whole.
+                                        const checkout = part.input as { store: string; checkoutUrl: string } | undefined
+                                        if (!checkout) {
+                                            return null
+                                        }
+                                        return (
+                                            // A new tab, so the chat stays here while the customer checks out.
+                                            <a className="button-dark" href={checkout.checkoutUrl} key={part.callId} rel="noreferrer" target="_blank">
+                                                Check out at {checkout.store}
+                                            </a>
                                         )
                                     }
                                     if (part.type === 'tool') {
@@ -187,7 +214,7 @@ function InteractionPrompt({
                 <p>{signIn.instructions ?? interaction.request.prompt}</p>
                 {signIn.userCode ? <code className="mt-2 block">{signIn.userCode}</code> : null}
                 {signIn.url ? (
-                    <a className="mt-3 inline-block font-sans font-semibold underline" href={signIn.url} rel="noreferrer" target="_blank">
+                    <a className="button-dark mt-3" href={signIn.url} rel="noreferrer" target="_blank">
                         Sign in
                     </a>
                 ) : null}

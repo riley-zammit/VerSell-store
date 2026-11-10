@@ -5,7 +5,7 @@ import { addToCartAndRedirect } from '@/actions/cart'
 import { CartField, type Product } from '@/lib/types'
 
 export function AddToCartForm({ product, inventory, disabled = false, }: { product: Product; inventory:number | null; disabled?: boolean }) {
-    const { adding, add } = useCart()
+    const { adding, add, openCart } = useCart()
 
     return (
         // Before hydration the form posts natively and lands on the /cart page, with any error in the URL.
@@ -16,6 +16,7 @@ export function AddToCartForm({ product, inventory, disabled = false, }: { produ
             onSubmit={(event) => {
                 // Opens the drawer the sets the add. JS-enabled fallback
                 event.preventDefault()
+                openCart()
                 add(product, new FormData(event.currentTarget))
             }}
         >
