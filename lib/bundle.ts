@@ -1,7 +1,8 @@
-import { Redis } from '@upstash/redis'
+import type { Redis } from '@upstash/redis'
 import { put } from '@vercel/blob'
 
 import { Bundle, BundleItem, BundleStatus, Mockup, type BundleSlot } from './bundle-schema'
+import { redis } from './redis'
 import { visitorCookieOptions } from './visitor'
 
 // Bundles: the record lives in Redis, images live in Blob.
@@ -22,19 +23,6 @@ const mockupsKey = (id: string) => `bundle:${id}:mockups`
 const visitorBundlesKey = (visitorId: string) => `visitor:${visitorId}:bundles`
 
 const MAX_REMEMBERED_BUNDLES = 50
-
-// Created on first use so importing this file never needs the Redis env vars.
-// The Upstash connection uses the REDIS_STORAGE_ prefix, so Redis.fromEnv() wouldn't find it.
-let client: Redis | undefined
-function redis() {
-    if (!client) {
-        client = new Redis({
-            url: process.env.REDIS_STORAGE_KV_REST_API_URL!,
-            token: process.env.REDIS_STORAGE_KV_REST_API_TOKEN!,
-        })
-    }
-    return client
-}
 
 export async function getBundle(id: string) {
     const value = await redis().get(bundleKey(id))
