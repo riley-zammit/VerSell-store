@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>VerSell bundle builder: architecture</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 24px 16px;
+            background: #fafafa;
+            font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        .flows {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            max-width: 1000px;
+        }
+        .flows button {
+            font: inherit;
+            font-size: 13px;
+            padding: 6px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 999px;
+            background: #fff;
+            color: #334155;
+            cursor: pointer;
+        }
+        .flows button[aria-pressed="true"] {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: #fff;
+        }
+        .layout {
+            display: flex;
+            align-items: flex-start;
+            gap: 24px;
+            width: 100%;
+            max-width: 1400px;
+        }
+        svg {
+            flex: 1;
+            min-width: 0;
+            height: auto;
+        }
+        .panel {
+            position: sticky;
+            top: 24px;
+            width: 360px;
+            flex-shrink: 0;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            color: #334155;
+        }
+        .panel h2 {
+            margin: 0 0 8px;
+            font-size: 16px;
+            color: #111;
+        }
+        .summary {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.45;
+        }
+        .steps {
+            list-style: none;
+            margin: 16px 0 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .steps li {
+            display: flex;
+            gap: 10px;
+            margin: -6px;
+            padding: 6px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: opacity 150ms, background 150ms;
+        }
+        .steps li:hover {
+            background: #f8fafc;
+        }
+        .steps li.selected {
+            background: #eff6ff;
+        }
+        .steps li.faded {
+            opacity: 0.45;
+        }
+        .step-number {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            display: grid;
+            place-items: center;
+        }
+        .step-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #111;
+        }
+        .tag {
+            display: inline-block;
+            white-space: nowrap;
+            margin: 0 6px;
+            padding: 1px 6px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 600;
+            vertical-align: 1px;
+        }
+        .tag-state {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .tag-effect {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .tag-waits {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+        .legend {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin: 10px 0 0;
+            font-size: 12px;
+            color: #64748b;
+        }
+        .legend .tag {
+            margin-left: 0;
+        }
+        .step-detail {
+            margin-top: 2px;
+            font-size: 12px;
+            line-height: 1.4;
+            color: #64748b;
+        }
+
+        /* Diagram */
+        .box {
+            fill: #fff;
+            stroke: #111;
+            stroke-width: 1.5;
+        }
+        .external {
+            fill: #f1f5f9;
+            stroke: #475569;
+            stroke-dasharray: 5 4;
+        }
+        .group {
+            fill: none;
+            stroke: #94a3b8;
+            stroke-width: 1.5;
+            stroke-dasharray: 6 5;
+        }
+        .provider {
+            fill: #eff6ff;
+            stroke: #93c5fd;
+            stroke-width: 1.5;
+        }
+        .provider-label {
+            font-size: 12px;
+            font-weight: 600;
+            fill: #1d4ed8;
+        }
+        .provider-sub {
+            font-size: 11px;
+            text-anchor: end;
+            fill: #3b82f6;
+        }
+        .group-label {
+            font-size: 14px;
+            font-weight: 600;
+            fill: #64748b;
+        }
+        .title {
+            font-size: 17px;
+            font-weight: 600;
+            text-anchor: middle;
+            fill: #111;
+        }
+        .sub {
+            font-size: 12px;
+            text-anchor: middle;
+            fill: #64748b;
+        }
+        .edge {
+            fill: none;
+            stroke: #334155;
+            stroke-width: 1.5;
+        }
+        .label {
+            font-size: 11px;
+            fill: #334155;
+            paint-order: stroke;
+            stroke: #fafafa;
+            stroke-width: 4px;
+            stroke-linejoin: round;
+        }
+
+        /* A flow is on: fade everything it doesn't touch */
+        .node,
+        .edge,
+        .base-label {
+            transition: opacity 200ms;
+        }
+        svg.flow-active .edge,
+        svg.flow-active .node.dim {
+            opacity: 0.15;
+        }
+        svg.flow-active .base-label {
+            opacity: 0;
+        }
+        .flow-path {
+            fill: none;
+            stroke: #2563eb;
+            stroke-width: 3;
+        }
+        .chevron {
+            fill: #2563eb;
+            stroke: #fafafa;
+            stroke-width: 1.5;
+        }
+        .badge circle {
+            fill: #2563eb;
+            stroke: #fafafa;
+            stroke-width: 2;
+        }
+        /* The browser's own requests, made in reaction to a tool that triggers a client effect. */
+        .flow-path.browser {
+            stroke: #0d9488;
+        }
+        .chevron.browser,
+        .badge.browser circle {
+            fill: #0d9488;
+        }
+        .step-number.browser {
+            background: #0d9488;
+        }
+        .badge text {
+            font-size: 10px;
+            font-weight: 600;
+            fill: #fff;
+            text-anchor: middle;
+            dominant-baseline: central;
+        }
+    </style>
+</head>
+<body>
+<div class="flows" id="flows"></div>
+
+<div class="layout">
+<svg id="diagram" viewBox="0 0 1080 900" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#334155" />
+        </marker>
+        <marker id="arrow-flow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#2563eb" />
+        </marker>
+        <marker id="arrow-browser" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#0d9488" />
+        </marker>
+    </defs>
+
+    <!--
+        The browser's AgentContextProvider wraps the agent: it streams the main session and follows every subagent's
+        child session while they run, which is how the bundle page knows when to refresh.
+    -->
+    <rect class="provider" x="270" y="108" width="320" height="612" rx="20" />
+    <text class="provider-label" x="284" y="127">AgentContextProvider</text>
+    <text class="provider-sub" x="578" y="714">follows every session live</text>
+
+    <!-- The agent: orchestrator and both subagents, stacked. Only this box talks to the AI Gateway. -->
+    <rect class="group" x="290" y="140" width="280" height="560" rx="16" />
+    <text class="group-label" x="306" y="164">Agent · eve</text>
+
+    <!--
+        Edges first, so boxes sit on top. Each id is e-<from>-<to> (matching the node ids), and the path runs
+        from -> to. data-lx/ly is where a flow's step numbers go.
+    -->
+    <g id="edges">
+        <path id="e-site-swag" class="edge" d="M328,55 H222" marker-start="url(#arrow)" marker-end="url(#arrow)" data-lx="240" data-ly="48" />
+        <path id="e-site-orch" class="edge" d="M430,102 V188" marker-start="url(#arrow)" marker-end="url(#arrow)" data-lx="438" data-ly="150" />
+        <path id="e-redis-site" class="edge" d="M750,358 V80 H532" marker-start="url(#arrow)" marker-end="url(#arrow)" data-lx="600" data-ly="74" />
+        <path id="e-orch-redis" class="edge" d="M532,215 H660 V380 H678" marker-start="url(#arrow)" marker-end="url(#arrow)" data-lx="546" data-ly="208" />
+        <path id="e-finder-redis" class="edge" d="M532,410 H678" marker-start="url(#arrow)" marker-end="url(#arrow)" data-lx="546" data-ly="403" />
+        <path id="e-cust-redis" class="edge" d="M532,590 H660 V440 H678" marker-end="url(#arrow)" data-lx="546" data-ly="583" />
+        <path id="e-orch-blob" class="edge" d="M532,245 H610 V150 H975 V368" marker-end="url(#arrow)" data-lx="840" data-ly="143" />
+        <path id="e-cust-blob" class="edge" d="M532,615 H610 V720 H975 V452" marker-start="url(#arrow)" marker-end="url(#arrow)" data-lx="820" data-ly="714" />
+        <path id="e-orch-finder" class="edge" d="M430,272 V368" marker-start="url(#arrow)" marker-end="url(#arrow)" data-lx="438" data-ly="324" />
+        <path id="e-orch-cust" class="edge" d="M360,272 V290 H310 V570 H328" marker-start="url(#arrow)" marker-end="url(#arrow)" data-lx="314" data-ly="510" />
+        <path id="e-orch-shop" class="edge" d="M328,230 L222,258" marker-end="url(#arrow)" data-lx="232" data-ly="236" />
+        <path id="e-finder-shop" class="edge" d="M328,405 L222,292" marker-start="url(#arrow)" marker-end="url(#arrow)" data-lx="276" data-ly="320" />
+        <path id="e-finder-swag" class="edge" d="M328,430 H250 V84 H222" marker-start="url(#arrow)" marker-end="url(#arrow)" data-lx="256" data-ly="204" />
+        <path id="e-agent-gw" class="edge" d="M430,702 V768" marker-end="url(#arrow)" data-lx="438" data-ly="740" />
+    </g>
+
+    <!-- What each connection carries. Hidden while a flow is on; the panel lists the flow's tool calls instead. -->
+    <g id="base-labels">
+        <text class="label base-label" x="232" y="48">catalog, cart</text>
+        <text class="label base-label" x="438" y="168">eve channel:</text>
+        <text class="label base-label" x="438" y="181">messages + page path</text>
+        <text class="label base-label" x="600" y="74">bundle pages</text>
+        <text class="label base-label" x="546" y="208">bundles, Shop tokens</text>
+        <text class="label base-label" x="546" y="403">bundle items</text>
+        <text class="label base-label" x="546" y="583">mockups</text>
+        <text class="label base-label" x="840" y="143">creative</text>
+        <text class="label base-label" x="820" y="714">mockup images</text>
+        <text class="label base-label" x="438" y="324">task ×N</text>
+        <text class="label base-label" x="314" y="510">task ×N</text>
+        <text class="label base-label" x="232" y="236">checkout</text>
+        <text class="label base-label" x="262" y="336">Shop catalog</text>
+        <text class="label base-label" x="256" y="204">store catalog</text>
+        <text class="label base-label" x="438" y="740">model calls</text>
+    </g>
+
+    <!-- Boxes. Each id is n-<name>, matching the edge ids. -->
+    <g class="node" id="n-site">
+        <rect class="box" x="330" y="30" width="200" height="70" rx="10" />
+        <text class="title" x="430" y="60">Site</text>
+        <text class="sub" x="430" y="80">Next.js · store + chat</text>
+    </g>
+
+    <g class="node" id="n-swag">
+        <rect class="box external" x="40" y="30" width="180" height="70" rx="10" />
+        <text class="title" x="130" y="60">Swag API</text>
+        <text class="sub" x="130" y="80">store catalog + cart</text>
+    </g>
+
+    <g class="node" id="n-shop">
+        <rect class="box external" x="40" y="230" width="180" height="80" rx="10" />
+        <text class="title" x="130" y="264">Shop MCP</text>
+        <text class="sub" x="130" y="284">mcp.shop.com</text>
+    </g>
+
+    <g class="node" id="n-orch">
+        <rect class="box" x="330" y="190" width="200" height="80" rx="10" />
+        <text class="title" x="430" y="224">Orchestrator</text>
+        <text class="sub" x="430" y="244">Claude Opus</text>
+    </g>
+
+    <g class="node" id="n-finder">
+        <rect class="box" x="330" y="370" width="200" height="80" rx="10" />
+        <text class="title" x="430" y="404">Product finder</text>
+        <text class="sub" x="430" y="424">subagent · Claude Sonnet</text>
+    </g>
+
+    <g class="node" id="n-cust">
+        <rect class="box" x="330" y="550" width="200" height="80" rx="10" />
+        <text class="title" x="430" y="584">Product customizer</text>
+        <text class="sub" x="430" y="604">subagent · Claude Sonnet</text>
+    </g>
+
+    <g class="node" id="n-redis">
+        <rect class="box" x="680" y="360" width="140" height="100" rx="10" />
+        <text class="title" x="750" y="404">Redis</text>
+        <text class="sub" x="750" y="424">Upstash</text>
+    </g>
+
+    <g class="node" id="n-blob">
+        <rect class="box" x="900" y="370" width="150" height="80" rx="10" />
+        <text class="title" x="975" y="404">Vercel Blob</text>
+        <text class="sub" x="975" y="424">creatives, mockups</text>
+    </g>
+
+    <g class="node" id="n-gw">
+        <rect class="box" x="270" y="770" width="320" height="100" rx="10" />
+        <text class="title" x="430" y="802">AI Gateway</text>
+        <text class="sub" x="430" y="826">Claude Opus 5.5 · Claude Sonnet 5.5</text>
+        <text class="sub" x="430" y="846">Gemini 3.1 Flash Image · Jev</text>
+    </g>
+
+    <!-- Filled in by the script for the selected flow -->
+    <g id="flow-paths"></g>
+    <g id="flow-badges"></g>
+</svg>
+
+<aside class="panel">
+    <h2 id="panel-title">Data flows</h2>
+    <p class="summary" id="summary">Pick a flow to trace its path through the system.</p>
+    <div class="legend">
+        <div><span class="tag tag-effect">Triggers client effect</span> the browser reacts when this tool settles</div>
+        <div><span class="tag tag-state">Client state change</span> changes what the browser holds or shows</div>
+        <div><span class="tag tag-waits">Waits</span> the agent pauses for an answer</div>
+        <div>Click a step to show only its path; click it again for the whole flow.</div>
+    </div>
+    <ol class="steps" id="steps"></ol>
+</aside>
+</div>
+
+<script>
+    // Each hop is [edge, direction, title, detail, tags?]. Tags: "effect" on a tool whose settled call makes the
+    // browser act (components/chat/bundle-flow.ts), "state" on the step where the browser's state changes (navigation,
+    // refresh, cart, localStorage), "waits" when the agent pauses. "fwd" follows the edge's from -> to; "back" is the reverse.
+    // A hop points the way its important data moves (search results flow back to the searcher, a save flows
+    // into the store). Responses and UI state effects are left out. Order follows pres/bundle-steps.md.
+    const FLOWS = [
+        {
+            name: "0 · Page load",
+            summary: "proxy.ts gives a new browser its visitor id cookie. If localStorage has an eve-session cursor, the chat picks the conversation back up.",
+            hops: [
+                ["site-orch", "back", "Replay saved session", "On page load, AgentContextProvider reads the eve-session cursor from localStorage and resumes that conversation from Eve. Replayed calls are marked seen, so a reload never reopens a page or re-adds to the cart.", ["state"]],
+            ],
+        },
+        {
+            name: "1 · First message",
+            summary: "agent.send creates Eve's main session, owned by the visitor id. Every message carries the current page path.",
+            hops: [
+                ["site-orch", "fwd", "agent.send", "The customer sends from the chat. It carries the text plus clientContext.page, and the eve channel authenticates the visitor cookie as the session owner. The new session cursor is saved to localStorage.", ["state"]],
+            ],
+        },
+        {
+            name: "2 · Concept approval",
+            summary: "The concept is approved in chat, then saved as a draft bundle. This is where the bundle id is created.",
+            hops: [
+                ["orch-redis", "fwd", "request_concept_approval", "Workflow tool. Shows the concept and slots, then pauses on ctx.ask until the customer clicks Approve or Make changes. Approve runs startBundle, which writes bundle:<id> with the brief and slots and a 7-day expiry. The returned bundle id makes the browser open /bundle/<id>.", ["waits", "effect"]],
+                ["redis-site", "fwd", "Bundle page renders", "When the tool returns approved, the browser pushes /bundle/<id> (its shell was prefetched during the wait). The page reads the bundle from Redis uncached, since finders save into it while it's open.", ["state"]],
+            ],
+        },
+        {
+            name: "3 · Product finder ×N",
+            summary: "One finder task per slot, all at once. Each searches Shop and the store, ranks with Jev, and saves its pick to the bundle.",
+            hops: [
+                ["orch-finder", "fwd", "Start finder task", "One task per slot, all in one step. The first message starts with Bundle: <id> and Slot: <key>, then the label, source, and guidance. The orchestrator's turn waits for every task to finish before it calls the model again.", ["waits"]],
+                ["finder-redis", "back", "Shop token", "shopAuth loads the visitor's Shop token from Redis for every Shop MCP call. The sign-in is per visitor, shared across sessions."],
+                ["finder-shop", "back", "search_catalog", "Shopify's global catalog. The connection's allow-list only exposes search_catalog, lookup_catalog and get_product."],
+                ["finder-swag", "back", "search_store_products", "Searches VerSell's own products through the Swag API. Read-only."],
+                ["finder-redis", "fwd", "save_bundle_item", "After rank_products asks Jev to pick (the top two become best and alternate): HSET bundle:<id>:items[slot]. Drops the slot's old mockup if the product changed, and resets the 7-day expiry. When it settles, the browser refreshes the bundle page.", ["effect"]],
+                ["redis-site", "fwd", "Item appears on the page", "The provider follows each finder's child session. When save_bundle_item settles, the browser calls router.refresh and the page re-reads items from Redis.", ["state"]],
+            ],
+        },
+        {
+            name: "4 · finalize_bundle",
+            summary: "The customer approves the finished products. The bundle stops expiring, and its VerSell products go in the cart.",
+            hops: [
+                ["orch-redis", "back", "finalize_bundle", "Workflow tool. Reads the bundle and its items, shows the total, then pauses on ctx.ask until the customer clicks Approve or Make changes. An approved result makes the browser add the VerSell products to the cart.", ["waits", "effect"]],
+                ["orch-redis", "fwd", "approveBundle", "Runs on Approve. Marks the bundle approved and PERSISTs bundle:<id>, its items and its mockups, so nothing expires. Every slot needs a product first."],
+                ["redis-site", "fwd", "getStoreProducts", "When finalize_bundle returns approved, the browser calls this server action. It reads the bundle's store items and looks each one up by slug."],
+                ["site-swag", "fwd", "Add to cart", "The browser adds the VerSell products to the visitor's cart. The cart token lives in an httpOnly cookie only the browser has.", ["state"]],
+            ],
+        },
+        {
+            name: "5 · Changes",
+            summary: "Eve gets the bundle id from the page path. A different product continues the finder's task; adding, dropping or swapping slots uses update_bundle.",
+            hops: [
+                ["site-orch", "fwd", "Message + page path", "The customer sends a change from the chat. clientContext.page names the bundle on /bundle/<id>; otherwise Eve takes the id from conversation history."],
+                ["orch-finder", "fwd", "Continue finder task", "Same taskId and child session, so the finder remembers its bundle and slot. The turn waits for the task to finish.", ["waits"]],
+                ["finder-redis", "fwd", "save_bundle_item", "Overwrites that slot's item and resets the expiry. When it settles, the browser refreshes the bundle page.", ["effect"]],
+                ["orch-redis", "fwd", "update_bundle", "Adds or removes slots and promotes alternates. Rewrites slots, items and mockups, and turns the bundle back into a 7-day draft. When it settles, the browser refreshes the bundle page.", ["effect"]],
+                ["redis-site", "fwd", "Page updates", "When the call settles, the browser calls router.refresh and the page re-reads the changed bundle.", ["state"]],
+            ],
+        },
+        {
+            name: "6 · Creative",
+            summary: "The customer's logo goes from the chat into Blob, where the customizers can reach it.",
+            hops: [
+                ["site-orch", "fwd", "Upload creative", "The customer attaches it with the chat's paperclip. PNG or JPEG up to 3 MB, sent inline. It lands in the main session's sandbox at .eve/attachments."],
+                ["orch-blob", "fwd", "save_creative", "App-runtime tool. Reads the file from the no-network sandbox and puts it at bundles/<id>/creative/…, so the sandbox never sees Blob credentials."],
+            ],
+        },
+        {
+            name: "7 · get_bundle",
+            summary: "Eve reads a bundle back from Redis, or lists the visitor's bundles.",
+            hops: [
+                ["site-orch", "fwd", "Message", "The customer asks about a bundle in the chat. The page path names it if they're on one."],
+                ["orch-redis", "back", "get_bundle", "With an id: the bundle, its items and its mockups. Without one: the session owner's bundles from visitor:<id>:bundles."],
+            ],
+        },
+        {
+            name: "8 · Product customizer ×N",
+            summary: "One customizer task per product, each with its own no-network sandbox. Gemini draws the mockup; the customizer checks it, edits if needed, and publishes.",
+            hops: [
+                ["orch-cust", "fwd", "Start customizer task", "One task per product, all at once. Bundle: and Item: lines, then the product title, product image URL, creative URL and placement notes. The orchestrator's turn waits for every task to finish.", ["waits"]],
+                ["cust-blob", "back", "generate_mockup: inputs", "Downloads the product photo and the customer's creative."],
+                ["cust-blob", "fwd", "generate_mockup: draft", "Gemini draws the mockup from both images and a print prompt. putMockupImage saves it at bundles/<id>/mockups/<item>/… with a new path per version, so the CDN never serves a stale copy."],
+                ["cust-blob", "back", "load_image", "Copies a Blob image into the sandbox for edits with ImageMagick, Pillow or sharp. Only *.blob.vercel-storage.com URLs."],
+                ["cust-blob", "fwd", "publish_mockup: upload", "If the final image is a sandbox edit, uploads it. A draft URL must be under this bundle and item's path."],
+                ["cust-redis", "fwd", "publish_mockup: record", "HSET bundle:<id>:mockups[item]. One field per item, so parallel customizers never overwrite each other. Keeps the bundle's expiry. When it settles, the browser refreshes the bundle page.", ["effect"]],
+                ["redis-site", "fwd", "Mockup appears on the page", "The provider follows each customizer's child session. When publish_mockup settles, the browser calls router.refresh and the page re-reads mockups from Redis.", ["state"]],
+            ],
+        },
+        {
+            name: "9 · Checkout",
+            summary: "The checkout button sends a message, so the page path names the bundle. Eve checks out the Shop items with the visitor's Shop wallet, then sends them to /cart.",
+            hops: [
+                ["site-orch", "fwd", "Checkout button", "The bundle page's Checkout button opens the chat and sends \"I'm ready to check out.\" The page path tells Eve which bundle.", ["state"]],
+                ["orch-redis", "back", "get_bundle", "Reads the bundle's items to find the Shop products."],
+                ["orch-redis", "back", "Shop token", "shopAuth loads the visitor's Shop token. With no token, it starts Shop's device sign-in, and the turn waits until the customer approves on Shop.", ["waits"]],
+                ["orch-shop", "fwd", "create / update_checkout", "One checkout per Shop store, one store at a time, with the bundle's items and a saved address from get_account."],
+                ["orch-shop", "fwd", "complete_checkout", "Needs user approval in code: the chat shows a payment window and the call waits until the customer pays or cancels. Then the order is placed.", ["waits"]],
+                ["site-swag", "back", "go_to_cart", "When this tool settles, the browser pushes /cart, which loads the VerSell cart from the Swag API.", ["state", "effect"]],
+            ],
+        },
+    ];
+
+    const TAG_NAMES = {
+        effect: "Triggers client effect",
+        state: "Client state change",
+        waits: "Waits",
+    };
+
+    // Only the browser uses these edges: it re-reads the page or loads the cart after a tool triggers a client effect.
+    const BROWSER_EDGES = new Set(["redis-site", "site-swag"]);
+
+    const SVG_NS = "http://www.w3.org/2000/svg";
+    // How far apart the two lanes of an edge used both ways are drawn.
+    const LANE_OFFSET = 5;
+    const BADGE_RADIUS = 9;
+    const BADGE_GAP = 2;
+    // Conveyor: arrowheads ride along each highlighted line at this speed and spacing.
+    const CHEVRON_SPEED = 50;
+    const CHEVRON_SPACING = 40;
+
+    const diagram = document.getElementById("diagram");
+    const flowPaths = document.getElementById("flow-paths");
+    const flowBadges = document.getElementById("flow-badges");
+    const panelTitle = document.getElementById("panel-title");
+    const summary = document.getElementById("summary");
+    const steps = document.getElementById("steps");
+    const buttonRow = document.getElementById("flows");
+
+    let activeIndex = null;
+    // A step picked in the panel; null shows the whole flow.
+    let activeStep = null;
+
+    const buttons = FLOWS.map((flow, index) => {
+        const button = document.createElement("button");
+        button.textContent = flow.name;
+        button.setAttribute("aria-pressed", "false");
+        button.addEventListener("click", () => {
+            const isActive = activeIndex === index;
+            selectFlow(isActive ? null : index);
+        });
+        buttonRow.append(button);
+        return button;
+    });
+
+    function selectFlow(index) {
+        activeIndex = index;
+        activeStep = null;
+        flowPaths.replaceChildren();
+        flowBadges.replaceChildren();
+        steps.replaceChildren();
+
+        for (const [buttonIndex, button] of buttons.entries()) {
+            button.setAttribute("aria-pressed", String(buttonIndex === index));
+        }
+
+        if (index === null) {
+            diagram.classList.remove("flow-active");
+            panelTitle.textContent = "Data flows";
+            summary.textContent = "Pick a flow to trace its path through the system.";
+            for (const node of diagram.querySelectorAll(".node")) {
+                node.classList.remove("dim");
+            }
+            return;
+        }
+
+        const flow = FLOWS[index];
+        diagram.classList.add("flow-active");
+        panelTitle.textContent = flow.name;
+        summary.textContent = flow.summary;
+
+        listSteps(flow.hops);
+        drawFlow();
+    }
+
+    function selectStep(stepIndex) {
+        activeStep = activeStep === stepIndex ? null : stepIndex;
+        drawFlow();
+    }
+
+    // Draws the active flow, or only its selected step. Badges keep their number in the whole flow.
+    function drawFlow() {
+        flowPaths.replaceChildren();
+        flowBadges.replaceChildren();
+        const hops = FLOWS[activeIndex].hops;
+        const shownHops = activeStep === null ? hops : [hops[activeStep]];
+
+        drawPaths(shownHops);
+        dimUntouchedNodes(shownHops);
+        drawBadges(shownHops, hops);
+
+        for (const [stepIndex, item] of [...steps.children].entries()) {
+            const isSelected = stepIndex === activeStep;
+            item.classList.toggle("selected", isSelected);
+            item.classList.toggle("faded", activeStep !== null && !isSelected);
+        }
+    }
+
+    // A solid line per edge and direction, with arrowheads riding along it like a conveyor belt.
+    // An edge used both ways gets two lanes, nudged apart.
+    function drawPaths(hops) {
+        const directionsByEdge = new Map();
+        for (const [edgeId, direction] of hops) {
+            const directions = directionsByEdge.get(edgeId) ?? new Set();
+            directions.add(direction);
+            directionsByEdge.set(edgeId, directions);
+        }
+
+        for (const [edgeId, directions] of directionsByEdge) {
+            const edge = document.getElementById(`e-${edgeId}`);
+            const isTwoWay = directions.size === 2;
+            for (const direction of directions) {
+                const lane = document.createElementNS(SVG_NS, "g");
+                if (isTwoWay) {
+                    const side = direction === "fwd" ? 1 : -1;
+                    lane.setAttribute("transform", laneShift(edge, side));
+                }
+
+                const path = document.createElementNS(SVG_NS, "path");
+                path.id = `flow-${edgeId}-${direction}`;
+                path.setAttribute("d", edge.getAttribute("d"));
+                path.classList.add("flow-path");
+                const isBrowser = BROWSER_EDGES.has(edgeId);
+                const marker = direction === "fwd" ? "marker-end" : "marker-start";
+                path.setAttribute(marker, isBrowser ? "url(#arrow-browser)" : "url(#arrow-flow)");
+                path.classList.toggle("browser", isBrowser);
+                lane.append(path);
+
+                for (const chevron of makeChevrons(path, edge.getTotalLength(), direction)) {
+                    chevron.classList.toggle("browser", isBrowser);
+                    lane.append(chevron);
+                }
+                flowPaths.append(lane);
+            }
+        }
+    }
+
+    // Evenly spaced arrowheads that loop along the path forever. Negative begin times stagger them,
+    // so the line is already full of moving arrows the moment it appears.
+    function makeChevrons(path, length, direction) {
+        const count = Math.max(2, Math.floor(length / CHEVRON_SPACING));
+        const duration = length / CHEVRON_SPEED;
+        const chevrons = [];
+        for (let index = 0; index < count; index += 1) {
+            const chevron = document.createElementNS(SVG_NS, "path");
+            chevron.classList.add("chevron");
+            chevron.setAttribute("d", "M-5,-6 L6,0 L-5,6 Z");
+
+            const motion = document.createElementNS(SVG_NS, "animateMotion");
+            motion.setAttribute("dur", `${duration}s`);
+            motion.setAttribute("begin", `${-(index * duration) / count}s`);
+            motion.setAttribute("repeatCount", "indefinite");
+            motion.setAttribute("calcMode", "linear");
+            if (direction === "fwd") {
+                motion.setAttribute("rotate", "auto");
+            } else {
+                motion.setAttribute("rotate", "auto-reverse");
+                motion.setAttribute("keyPoints", "1;0");
+                motion.setAttribute("keyTimes", "0;1");
+            }
+
+            const mpath = document.createElementNS(SVG_NS, "mpath");
+            mpath.setAttribute("href", `#${path.id}`);
+            motion.append(mpath);
+            chevron.append(motion);
+            chevrons.push(chevron);
+        }
+        return chevrons;
+    }
+
+    // Shifts a path sideways, perpendicular to the line from its start to its end.
+    function laneShift(edge, side) {
+        const start = edge.getPointAtLength(0);
+        const end = edge.getPointAtLength(edge.getTotalLength());
+        const length = Math.hypot(end.x - start.x, end.y - start.y);
+        const normalX = -(end.y - start.y) / length;
+        const normalY = (end.x - start.x) / length;
+        const shiftX = normalX * LANE_OFFSET * side;
+        const shiftY = normalY * LANE_OFFSET * side;
+        return `translate(${shiftX} ${shiftY})`;
+    }
+
+    function dimUntouchedNodes(hops) {
+        const touched = new Set();
+        for (const [edgeId] of hops) {
+            const [from, to] = edgeId.split("-");
+            touched.add(`n-${from}`);
+            touched.add(`n-${to}`);
+        }
+        for (const node of diagram.querySelectorAll(".node")) {
+            node.classList.toggle("dim", !touched.has(node.id));
+        }
+    }
+
+    // A numbered badge at each edge's label spot. Repeat hops on one edge sit in a row, in order, extending
+    // away from the line (right of start-anchored spots, left of end-anchored ones).
+    function drawBadges(hops, allHops) {
+        const totalByEdge = new Map();
+        for (const [edgeId] of hops) {
+            totalByEdge.set(edgeId, (totalByEdge.get(edgeId) ?? 0) + 1);
+        }
+
+        const countByEdge = new Map();
+        const spacing = BADGE_RADIUS * 2 + BADGE_GAP;
+        for (const hop of hops) {
+            const [edgeId] = hop;
+            const edge = document.getElementById(`e-${edgeId}`);
+            const repeat = countByEdge.get(edgeId) ?? 0;
+            countByEdge.set(edgeId, repeat + 1);
+
+            const labelX = Number(edge.dataset.lx);
+            const rowStartX = edge.dataset.anchor === "end"
+                ? labelX - totalByEdge.get(edgeId) * spacing + BADGE_GAP
+                : labelX;
+            const x = rowStartX + BADGE_RADIUS + repeat * spacing;
+            const y = Number(edge.dataset.ly) - 4;
+
+            const badge = document.createElementNS(SVG_NS, "g");
+            badge.classList.add("badge");
+            badge.classList.toggle("browser", BROWSER_EDGES.has(edgeId));
+            const circle = document.createElementNS(SVG_NS, "circle");
+            circle.setAttribute("cx", x);
+            circle.setAttribute("cy", y);
+            circle.setAttribute("r", BADGE_RADIUS);
+            const number = document.createElementNS(SVG_NS, "text");
+            number.setAttribute("x", x);
+            number.setAttribute("y", y);
+            number.textContent = allHops.indexOf(hop) + 1;
+            badge.append(circle, number);
+            flowBadges.append(badge);
+        }
+    }
+
+    function listSteps(hops) {
+        for (const [hopIndex, [, , title, detail, tags = []]] of hops.entries()) {
+            const item = document.createElement("li");
+            const number = document.createElement("span");
+            number.className = "step-number";
+            number.classList.toggle("browser", BROWSER_EDGES.has(hops[hopIndex][0]));
+            number.textContent = hopIndex + 1;
+
+            const text = document.createElement("div");
+            const titleLine = document.createElement("div");
+            titleLine.className = "step-title";
+            titleLine.textContent = title;
+            for (const tag of tags) {
+                const pill = document.createElement("span");
+                pill.className = `tag tag-${tag}`;
+                pill.textContent = TAG_NAMES[tag];
+                titleLine.append(pill);
+            }
+            text.append(titleLine);
+            if (detail) {
+                const detailLine = document.createElement("div");
+                detailLine.className = "step-detail";
+                detailLine.textContent = detail;
+                text.append(detailLine);
+            }
+
+            item.append(number, text);
+            item.addEventListener("click", () => {
+                selectStep(hopIndex);
+            });
+            steps.append(item);
+        }
+    }
+</script>
+</body>
+</html>
