@@ -33,6 +33,9 @@ export function Header() {
                                 <path d="M3 3l10 10M13 3L3 13" />
                             </svg>
                         </button>
+                        <NavLink href="/architecture" className={linkClass}>
+                            Architecture
+                        </NavLink>
                         <NavLink href="/" className={linkClass}>
                             Home
                         </NavLink>
